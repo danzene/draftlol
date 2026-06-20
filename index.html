@@ -279,6 +279,22 @@
   .mitem .mname{font-family:'Oswald';font-size:10px;color:var(--txt3);text-align:center;max-width:50px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .mitem .mlvl{font-size:10px;color:var(--gold2);font-family:'Oswald'}
   .section-label{font-family:'Oswald';font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px}
+
+  /* ── ONLINE LOBBY ──────────────────────────────────────────────── */
+  .text-inp{width:100%;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;color:var(--txt);font-family:'Inter',sans-serif;font-size:15px;outline:none;transition:border-color .15s}
+  .text-inp:focus{border-color:var(--gold)}
+  .text-inp::placeholder{color:var(--txt3)}
+  .lobby-code-wrap{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:16px 20px;margin:16px 0}
+  .lobby-code{font-family:'Oswald';font-size:40px;font-weight:700;letter-spacing:10px;color:var(--gold2);flex:1;text-align:center}
+  .lobby-players{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+  .lplayer{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:10px 14px}
+  .lplayer .lpname{flex:1;font-weight:500}
+  .lptag{font-family:'Oswald';font-size:11px;letter-spacing:.4px;text-transform:uppercase;padding:2px 9px;border-radius:999px;background:var(--bg3);color:var(--txt2)}
+  .lptag.host{background:rgba(200,161,74,.18);color:var(--gold2)}
+  .lptag.bot{background:rgba(79,143,226,.14);color:#80aeec}
+  .lptag.you{background:rgba(95,214,168,.14);color:var(--win)}
+  .lobby-msg{text-align:center;color:var(--txt2);font-size:13px;margin:8px 0}
+  .inp-err{color:var(--red);font-size:13px;min-height:18px;margin-top:4px}
 </style>
 </head>
 <body>
@@ -379,15 +395,67 @@
         <label>Adversários</label>
         <div class="seg" id="segOpp">
           <button data-v="bots" class="on">Bots <span class="sub">jogue sozinho</span></button>
-          <button data-v="online" onclick="openOnlineInfo()">Amigos <span class="sub">online · em breve</span></button>
+          <button data-v="online">Amigos <span class="sub">online · real</span></button>
         </div>
       </div>
 
-      <div id="roomCode" style="margin:6px 0 20px;text-align:center"></div>
+      <div id="roomCode" style="margin:6px 0 12px;text-align:center"></div>
+
+      <div id="createNameWrap" class="opt-group hidden">
+        <label>Seu nome na sala</label>
+        <input type="text" id="hostName" class="text-inp" placeholder="Como quer ser chamado?" maxlength="16">
+      </div>
 
       <div class="foot">
         <button class="btn btn-ghost" onclick="goHome()">Voltar</button>
-        <button class="btn btn-gold grow ready" onclick="launchTournament()">Começar campeonato</button>
+        <button id="ftBots" class="btn btn-gold grow ready" onclick="launchTournament()">Começar campeonato</button>
+        <button id="ftJoin" class="btn btn-ghost hidden" onclick="showJoinRoom()">Entrar em sala</button>
+        <button id="ftCreate" class="btn btn-gold hidden" onclick="createOnlineRoom()">Criar sala</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOIN ROOM -->
+  <div id="v-join" class="hidden">
+    <div class="panel">
+      <div class="draft-head"><div class="title disp">Entrar em sala</div></div>
+      <div class="opt-group">
+        <label>Seu nome</label>
+        <input type="text" id="joinName" class="text-inp" placeholder="Como quer ser chamado?" maxlength="16">
+      </div>
+      <div class="opt-group">
+        <label>Código da sala</label>
+        <input type="text" id="joinCode" class="text-inp" placeholder="Ex: K7F2A" maxlength="6"
+               style="text-transform:uppercase;letter-spacing:6px;font-family:'Oswald';font-size:22px">
+      </div>
+      <div class="inp-err" id="joinErr"></div>
+      <div class="foot">
+        <button class="btn btn-ghost" onclick="goHome()">Cancelar</button>
+        <button class="btn btn-gold grow" onclick="joinRoom()">Entrar na sala</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOBBY -->
+  <div id="v-lobby" class="hidden">
+    <div class="panel">
+      <div class="draft-head">
+        <div class="title disp">Sala online</div>
+        <div id="lobbyChips" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+      </div>
+
+      <div class="lobby-code-wrap">
+        <div class="lobby-code" id="lobbyCode"></div>
+        <button id="copyCodeBtn" class="btn btn-ghost btn-sm" onclick="copyCode()">📋 Copiar</button>
+      </div>
+
+      <div class="lobby-players" id="lobbyPlayers"></div>
+      <div class="lobby-msg" id="lobbyMsg"></div>
+
+      <div class="foot">
+        <button class="btn btn-ghost" onclick="leaveLobby()">Sair</button>
+        <button id="lobbyBotBtn" class="btn btn-ghost" onclick="fillBots()" style="display:none">+ Preencher bots</button>
+        <button id="lobbyStartBtn" class="btn btn-gold grow" onclick="startOnlineDraft()" style="display:none" disabled>Iniciar draft</button>
       </div>
     </div>
   </div>
@@ -836,9 +904,13 @@ function renderNav(){
 }
 
 /* ---------- roteador ---------- */
-const VIEWS=['v-loading','v-home','v-create','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info'];
-function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});}
-function goHome(){clearTimeout(liveTimer);tour=null;draft=null;sd=null;show('v-home');}
+const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info'];
+function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(id==='v-create')_updateCreateFooter();}
+function goHome(){
+  clearTimeout(liveTimer);tour=null;draft=null;sd=null;
+  _lobbyCleanup();
+  show('v-home');
+}
 function openOnlineInfo(){show('v-online-info');}
 function openBlindInfo(){createCfg.mode='blind';quickStart(true);}
 
@@ -1476,9 +1548,273 @@ function renderProfile(data){
   box.classList.remove('hidden');
 }
 
+/* =======================================================================
+   ONLINE MULTIPLAYER — Supabase (Fases 2-4)
+   ======================================================================= */
+
+/* ---------- estado global online ---------- */
+let sb=null;           // supabase client
+let myPlayerId=null;   // auth.uid() (anon session)
+let myPlayerName=null; // nome escolhido na sessão
+let currentRoom=null;  // código da sala atual
+let isRoomHost=false;  // é o host desta sala?
+let lobbyChannel=null; // canal realtime do lobby
+let draftChannel=null; // canal realtime do draft
+let heartbeatTimer=null;
+
+const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+
+/* ---------- carregamento dinâmico do SDK ---------- */
+function loadSupabase(){
+  return new Promise((res,rej)=>{
+    if(window.supabase){res();return;}
+    const s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js';
+    s.onload=res; s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function initSupabase(){
+  try{
+    await loadSupabase();
+    // Busca URL e anon key do nosso api/config.js (nunca hardcode)
+    const cfg=await fetch('/api/config').then(r=>{if(!r.ok)throw 0;return r.json();});
+    sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey,{
+      auth:{persistSession:true,autoRefreshToken:true}
+    });
+    const {data,error}=await sb.auth.signInAnonymously();
+    if(error)throw error;
+    myPlayerId=data.user.id;
+    console.log('[DraftLoL] Supabase OK, uid=',myPlayerId);
+  }catch(e){
+    console.warn('[DraftLoL] Supabase não configurado — modo online desabilitado.',e?.message||e);
+    sb=null;
+    // Desabilitar botão online na UI
+    document.querySelectorAll('#segOpp button[data-v="online"]').forEach(b=>{
+      b.disabled=true;b.title='Backend não configurado';b.style.opacity='.4';
+    });
+  }
+}
+
+/* ---------- utilitários ---------- */
+function genRoomCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // sem 0/O/1/I para evitar confusão
+  return Array.from({length:5},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+function _lobbyCleanup(){
+  if(lobbyChannel){sb?.removeChannel(lobbyChannel);lobbyChannel=null;}
+  if(draftChannel){sb?.removeChannel(draftChannel);draftChannel=null;}
+  if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}
+  currentRoom=null;isRoomHost=false;
+}
+
+function _startHeartbeat(){
+  if(heartbeatTimer)clearInterval(heartbeatTimer);
+  heartbeatTimer=setInterval(async()=>{
+    if(myPlayerId&&currentRoom&&sb)
+      await sb.from('room_players').update({last_seen:new Date().toISOString()}).eq('id',myPlayerId);
+  },20000);
+}
+
+/* ---------- CRIAR SALA ---------- */
+async function createOnlineRoom(){
+  if(!sb){alert('Backend online não configurado. Adicione SUPABASE_URL e SUPABASE_ANON_KEY nas variáveis de ambiente.');return;}
+  const name=(document.getElementById('hostName').value||'').trim();
+  if(!name){alert('Digite seu nome antes de criar a sala.');return;}
+  myPlayerName=name;
+  const code=genRoomCode();
+
+  const {error:re}=await sb.from('rooms').insert({
+    code,host_player_id:myPlayerId,
+    size:createCfg.size,mode:createCfg.mode,
+    status:'lobby',player_order:[],
+    lane_idx:0,turn_pos:0,used_champions:[],rerolls_left:2,ctx_label:null
+  });
+  if(re){alert('Erro ao criar sala: '+re.message);return;}
+
+  const {error:pe}=await sb.from('room_players').insert({
+    id:myPlayerId,room_code:code,
+    name:myPlayerName,is_host:true,is_bot:false,alive:true,team_picks:[]
+  });
+  if(pe){alert('Erro ao entrar na sala: '+pe.message);return;}
+
+  await enterLobby(code,true);
+}
+
+/* ---------- ENTRAR EM SALA ---------- */
+function showJoinRoom(){
+  // preserva tamanho/modo já configurados para depois
+  show('v-join');
+  document.getElementById('joinErr').textContent='';
+}
+
+async function joinRoom(){
+  if(!sb){alert('Backend não configurado.');return;}
+  const name=(document.getElementById('joinName').value||'').trim();
+  const code=(document.getElementById('joinCode').value||'').trim().toUpperCase();
+  const errEl=document.getElementById('joinErr');
+  errEl.textContent='';
+  if(!name){errEl.textContent='Digite seu nome.';return;}
+  if(code.length<3){errEl.textContent='Digite o código da sala.';return;}
+
+  const {data:room,error:re}=await sb.from('rooms').select('*').eq('code',code).single();
+  if(re||!room){errEl.textContent='Sala não encontrada. Confirme o código.';return;}
+  if(room.status!=='lobby'){errEl.textContent='Esta sala já iniciou ou encerrou.';return;}
+
+  const {count}=await sb.from('room_players').select('*',{count:'exact',head:true}).eq('room_code',code);
+  if(count>=room.size){errEl.textContent='Sala cheia.';return;}
+
+  myPlayerName=name;
+  const {error:pe}=await sb.from('room_players').insert({
+    id:myPlayerId,room_code:code,
+    name:myPlayerName,is_host:false,is_bot:false,alive:true,team_picks:[]
+  });
+  if(pe){errEl.textContent='Erro ao entrar: '+pe.message;return;}
+
+  await enterLobby(code,false);
+}
+
+/* ---------- LOBBY ---------- */
+async function enterLobby(code,asHost){
+  currentRoom=code;isRoomHost=asHost;
+  document.getElementById('lobbyCode').textContent=code;
+  document.getElementById('lobbyBotBtn').style.display=asHost?'':'none';
+  document.getElementById('lobbyStartBtn').style.display=asHost?'':'none';
+
+  const {data:room}=await sb.from('rooms').select('size,mode').eq('code',code).single();
+  document.getElementById('lobbyChips').innerHTML=
+    `<span class="chip">${room?.size||createCfg.size} jogadores</span>`+
+    `<span class="chip">${(room?.mode||createCfg.mode)==='blind'?'às cegas':'normal'}</span>`;
+
+  _subscribeToLobby(code,room?.size||createCfg.size);
+  await _fetchLobby(code,room?.size||createCfg.size);
+  _startHeartbeat();
+  show('v-lobby');
+}
+
+function _subscribeToLobby(code,roomSize){
+  if(lobbyChannel)sb.removeChannel(lobbyChannel);
+  lobbyChannel=sb.channel('lobby:'+code)
+    .on('postgres_changes',{event:'*',schema:'public',table:'room_players',filter:'room_code=eq.'+code},
+      ()=>_fetchLobby(code,roomSize))
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'rooms',filter:'code=eq.'+code},
+      (payload)=>{
+        // Se o host iniciou o draft, navegar para o draft
+        if(payload.new?.status==='drafting'){
+          _lobbyCleanup();
+          currentRoom=code;
+          _enterOnlineDraft(payload.new);
+        }
+      })
+    .subscribe();
+}
+
+async function _fetchLobby(code,roomSize){
+  const {data:players}=await sb.from('room_players').select('*').eq('room_code',code).order('joined_at');
+  _updateLobbyUI(players||[],roomSize);
+}
+
+function _updateLobbyUI(players,roomSize){
+  document.getElementById('lobbyPlayers').innerHTML=players.map(p=>{
+    const tags=[];
+    if(p.is_host)tags.push('<span class="lptag host">Host</span>');
+    if(p.is_bot) tags.push('<span class="lptag bot">Bot</span>');
+    if(p.id===myPlayerId)tags.push('<span class="lptag you">Você</span>');
+    return `<div class="lplayer"><span class="lpname">${escHtml(p.name)}</span><span style="display:flex;gap:6px">${tags.join('')}</span></div>`;
+  }).join('');
+
+  const n=players.length,full=(n>=roomSize);
+  document.getElementById('lobbyMsg').textContent=
+    full?'Sala completa — host pode iniciar o draft!':`Aguardando jogadores... ${n}/${roomSize}`;
+
+  if(isRoomHost){
+    document.getElementById('lobbyBotBtn').style.display=full?'none':'';
+    const startBtn=document.getElementById('lobbyStartBtn');
+    startBtn.disabled=!full;
+  }
+}
+
+async function fillBots(){
+  if(!isRoomHost||!currentRoom){return;}
+  const {data:players}=await sb.from('room_players').select('id,name').eq('room_code',currentRoom);
+  const {data:room}=await sb.from('rooms').select('size').eq('code',currentRoom).single();
+  const needed=(room?.size||createCfg.size)-players.length;
+  if(needed<=0)return;
+
+  const usedNames=new Set(players.map(p=>p.name));
+  const available=BOTNAMES.filter(n=>!usedNames.has(n));
+  const bots=Array.from({length:needed},(_,i)=>({
+    id:crypto.randomUUID(),room_code:currentRoom,
+    name:available[i]||('Bot '+(i+1)),
+    is_host:false,is_bot:true,alive:true,team_picks:[]
+  }));
+  const {error}=await sb.from('room_players').insert(bots);
+  if(error)alert('Erro ao adicionar bots: '+error.message);
+}
+
+async function startOnlineDraft(){
+  if(!isRoomHost||!currentRoom)return;
+  const {data:players}=await sb.from('room_players').select('id').eq('room_code',currentRoom).order('joined_at');
+  const {data:room}=await sb.from('rooms').select('size').eq('code',currentRoom).single();
+  if(players.length<(room?.size||createCfg.size)){alert('A sala ainda não está cheia.');return;}
+
+  // Embaralha ordem dos jogadores (serpentina)
+  const ids=players.map(p=>p.id);
+  for(let i=ids.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[ids[i],ids[j]]=[ids[j],ids[i]];}
+
+  const ctx=CONTEXTS[Math.floor(Math.random()*CONTEXTS.length)];
+  const {error}=await sb.from('rooms').update({
+    status:'drafting',player_order:ids,
+    lane_idx:0,turn_pos:0,used_champions:[],rerolls_left:2,ctx_label:ctx.label
+  }).eq('code',currentRoom);
+  if(error)alert('Erro ao iniciar: '+error.message);
+  // Todos os clientes recebem status='drafting' via realtime e navegam para o draft
+}
+
+function leaveLobby(){
+  _lobbyCleanup();
+  show('v-home');
+}
+
+function copyCode(){
+  const code=currentRoom||document.getElementById('lobbyCode').textContent;
+  navigator.clipboard.writeText(code).then(()=>{
+    const btn=document.getElementById('copyCodeBtn');
+    const orig=btn.textContent;
+    btn.textContent='Copiado!';
+    setTimeout(()=>btn.textContent=orig,1500);
+  });
+}
+
+/* ---------- placeholder: navegação para o draft online (Fase 3) ---------- */
+function _enterOnlineDraft(roomState){
+  // Será implementado na Fase 3
+  // Por ora, mostra uma mensagem de que o draft iniciou
+  currentRoom=roomState.code||currentRoom;
+  alert('Draft iniciado! (Fase 3 pendente de implementação)\nSala: '+currentRoom);
+}
+
+/* ---------- modificação do bindSeg para alternar footer do create ---------- */
+function _updateCreateFooter(){
+  const isOnline=createCfg.opp==='online';
+  document.getElementById('createNameWrap').classList.toggle('hidden',!isOnline);
+  document.getElementById('ftBots').classList.toggle('hidden',isOnline);
+  document.getElementById('ftJoin').classList.toggle('hidden',!isOnline);
+  document.getElementById('ftCreate').classList.toggle('hidden',!isOnline);
+  document.getElementById('roomCode').style.display=isOnline?'none':'';
+}
+
 window.addEventListener('DOMContentLoaded',()=>{
   bindSeg('segSize','size');bindSeg('segMode','mode');bindSeg('segOpp','opp');
+  // Interceptar mudança de opp para alternar footer
+  document.querySelectorAll('#segOpp button[data-v]').forEach(btn=>{
+    btn.addEventListener('click',()=>{setTimeout(_updateCreateFooter,0);});
+  });
   updateRoomCode();
+  // Iniciar Supabase sem bloquear o carregamento do app
+  initSupabase().catch(()=>{});
   load();
 });
 </script>
