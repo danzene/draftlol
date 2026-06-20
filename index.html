@@ -360,11 +360,10 @@
         <h3>Modo às cegas</h3>
         <p>Sem winrate à mostra. Decida só pelo campeão e pelo seu instinto.</p>
       </div>
-      <div class="mode-card" onclick="openOnlineInfo()">
+      <div class="mode-card" onclick="goOnline()">
         <span class="mi">👥</span>
         <h3>Com amigos</h3>
         <p>Sala por código para jogar online com a galera.</p>
-        <span class="badge">em breve</span>
       </div>
     </div>
   </div>
@@ -912,6 +911,14 @@ function goHome(){
   show('v-home');
 }
 function openOnlineInfo(){show('v-online-info');}
+function goOnline(){
+  // Seleciona "online" no segmento de adversários e vai para v-create
+  document.querySelectorAll('#segOpp button[data-v]').forEach(b=>{
+    b.classList.toggle('on',b.dataset.v==='online');
+  });
+  createCfg.opp='online';
+  show('v-create');
+}
 function openBlindInfo(){createCfg.mode='blind';quickStart(true);}
 
 /* =======================================================================
@@ -1205,7 +1212,7 @@ const BOTNAMES=['Fakeer','Zvenn','Caps Lock','MidDiff','BotLane','Hide on Bot','
 function botName(i){return BOTNAMES[i%BOTNAMES.length];}
 
 function launchTournament(){
-  if(createCfg.opp==='online'){openOnlineInfo();return;}
+  if(createCfg.opp==='online'){goOnline();return;}
   const size=createCfg.size;
   if(OFFLINE&&size>8){
     alert(`Modo offline — lista reduzida (${FALLBACK_CHAMPS.length} campeões).\n\nCampeonato de ${size} jogadores exigiria ${size*5} campeões únicos, mas o elenco offline não tem suficientes.\n\nHospede o site ou abra com conexão para carregar os ~165 campeões reais. Por enquanto o máximo offline é 8 jogadores.`);
