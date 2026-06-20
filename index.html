@@ -1633,6 +1633,7 @@ function _startHeartbeat(){
 
 /* ---------- CRIAR SALA ---------- */
 async function createOnlineRoom(){
+  if(!sb)await initSupabase();
   if(!sb){alert('Backend online não configurado. Adicione SUPABASE_URL e SUPABASE_ANON_KEY nas variáveis de ambiente.');return;}
   const name=(document.getElementById('hostName').value||'').trim();
   if(!name){alert('Digite seu nome antes de criar a sala.');return;}
@@ -1665,7 +1666,8 @@ function showJoinRoom(){
 }
 
 async function joinRoom(){
-  if(!sb){alert('Backend não configurado.');return;}
+  if(!sb)await initSupabase();
+  if(!sb){alert('Backend não configurado. Verifique sua conexão e recarregue a página.');return;}
   const name=(document.getElementById('joinName').value||'').trim();
   const code=(document.getElementById('joinCode').value||'').trim().toUpperCase();
   const errEl=document.getElementById('joinErr');
