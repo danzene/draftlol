@@ -540,29 +540,61 @@
 
 /* ---------- vocabulário de rotas / arquétipos ---------- */
 const LANE_MAP={
-  Aatrox:['top'],Camille:['top'],Darius:['top'],Fiora:['top'],Garen:['top'],Sett:['top','support'],
-  Ornn:['top'],Malphite:['top','support'],Shen:['top'],Renekton:['top'],Jax:['top','jungle'],
-  Gnar:['top'],Mordekaiser:['top'],Riven:['top'],Illaoi:['top'],Urgot:['top'],Volibear:['top','jungle'],
-  KSante:['top'],Gwen:['top'],Yorick:['top'],Singed:['top'],Chogath:['top'],Kled:['top'],Trundle:['top','jungle'],
-  Sion:['top'],Nasus:['top'],Tryndamere:['top'],Olaf:['top','jungle'],Quinn:['top'],
-  LeeSin:['jungle'],Vi:['jungle'],Sejuani:['jungle'],Elise:['jungle'],Kindred:['jungle'],Kayn:['jungle'],
-  Khazix:['jungle'],Graves:['jungle'],Hecarim:['jungle'],Warwick:['jungle','top'],Nidalee:['jungle'],
-  Rengar:['jungle'],Viego:['jungle'],Belveth:['jungle'],Diana:['jungle','mid'],Ekko:['jungle','mid'],
-  JarvanIV:['jungle'],XinZhao:['jungle'],Nocturne:['jungle'],Evelynn:['jungle'],Amumu:['jungle','support'],
-  Zac:['jungle'],Rammus:['jungle'],Karthus:['jungle'],MasterYi:['jungle'],Skarner:['jungle'],
-  Ahri:['mid'],Yasuo:['mid','top'],Zed:['mid'],Orianna:['mid'],Syndra:['mid'],Azir:['mid'],Akali:['mid','top'],
-  Sylas:['mid'],Viktor:['mid'],Vex:['mid'],Yone:['mid','top'],Katarina:['mid'],Fizz:['mid'],Galio:['mid','support'],
-  Anivia:['mid'],Cassiopeia:['mid'],Veigar:['mid','support'],Lux:['mid','support'],TwistedFate:['mid'],
-  Leblanc:['mid'],Talon:['mid'],Qiyana:['mid'],Malzahar:['mid'],Annie:['mid','support'],Kassadin:['mid'],
-  Jinx:['adc'],Caitlyn:['adc'],Ezreal:['adc'],Vayne:['adc','top'],Tristana:['adc','mid'],Sivir:['adc'],
-  Aphelios:['adc'],Jhin:['adc'],Kaisa:['adc'],Lucian:['adc','mid'],Xayah:['adc'],Zeri:['adc'],
-  Ashe:['adc','support'],MissFortune:['adc','support'],Draven:['adc'],Samira:['adc'],Kalista:['adc'],
-  Twitch:['adc','jungle'],Varus:['adc','mid'],KogMaw:['adc'],Senna:['support','adc'],Nilah:['adc'],
-  Thresh:['support'],Lulu:['support'],Nautilus:['support'],Leona:['support'],Janna:['support'],Karma:['support','mid'],
-  Pyke:['support'],Rakan:['support'],Nami:['support'],Soraka:['support'],Braum:['support'],Blitzcrank:['support'],
-  Morgana:['support','mid'],Bard:['support'],Yuumi:['support'],Alistar:['support'],Renata:['support'],
-  Milio:['support'],Zilean:['support','mid'],Taric:['support'],Maokai:['support','top','jungle'],Brand:['support','mid'],
-  Swain:['support','mid'],Xerath:['support','mid'],VelKoz:['support','mid']
+/* ── TOP ────────────────────────────────────────────────── */
+Aatrox:['top'],Ambessa:['top','jungle'],Camille:['top'],Chogath:['top'],
+Darius:['top'],DrMundo:['top','jungle'],Fiora:['top'],Gangplank:['top','mid'],
+Garen:['top'],Gnar:['top'],Gragas:['top','jungle','support'],Gwen:['top'],
+Heimerdinger:['top','mid','support'],Illaoi:['top'],Irelia:['top','mid'],
+Jax:['top','jungle'],Jayce:['top','mid'],Kennen:['top','mid'],Kled:['top'],
+KSante:['top'],Malphite:['top','support'],Maokai:['top','support','jungle'],
+Mordekaiser:['top'],Nasus:['top'],Olaf:['top','jungle'],Ornn:['top'],
+Pantheon:['top','support','mid'],Poppy:['top','support','jungle'],
+Quinn:['top'],Renekton:['top'],Riven:['top'],Rumble:['top','mid'],
+Sett:['top','support'],Shen:['top'],Sion:['top'],Singed:['top'],
+TahmKench:['top','support'],Teemo:['top'],Trundle:['top','jungle'],
+Tryndamere:['top','jungle'],Urgot:['top'],Vladimir:['top','mid'],
+Volibear:['top','jungle'],Warwick:['jungle','top'],Wukong:['top','jungle'],
+Yorick:['top'],
+/* ── JUNGLE ─────────────────────────────────────────────── */
+Amumu:['jungle','support'],Aurora:['top','mid'],Belveth:['jungle'],
+Briar:['jungle'],Diana:['jungle','mid'],Ekko:['jungle','mid'],
+Elise:['jungle'],Evelynn:['jungle'],Fiddlesticks:['jungle','support'],
+Graves:['jungle'],Hecarim:['jungle'],Ivern:['jungle','support'],
+JarvanIV:['jungle'],Kayn:['jungle'],Khazix:['jungle'],Kindred:['jungle'],
+Karthus:['jungle','mid'],LeeSin:['jungle'],Lillia:['jungle'],
+MasterYi:['jungle'],Nidalee:['jungle'],Nocturne:['jungle'],Nunu:['jungle'],
+Rammus:['jungle'],RekSai:['jungle'],Rengar:['jungle','top'],
+Sejuani:['jungle'],Shyvana:['jungle'],Skarner:['jungle'],
+Taliyah:['jungle','mid'],Udyr:['jungle'],Viego:['jungle'],
+Vi:['jungle'],XinZhao:['jungle'],Zac:['jungle'],
+/* ── MID ─────────────────────────────────────────────────── */
+Ahri:['mid'],Akali:['mid','top'],Akshan:['adc','mid'],Anivia:['mid'],
+Annie:['mid','support'],AurelionSol:['mid'],Azir:['mid'],
+Cassiopeia:['mid'],Corki:['mid','adc'],Fizz:['mid'],Galio:['mid','support'],
+Hwei:['mid','support'],Kassadin:['mid'],Katarina:['mid'],
+Leblanc:['mid'],Lissandra:['mid'],Lux:['mid','support'],Malzahar:['mid'],
+Naafiri:['mid','jungle'],Neeko:['mid','support'],Orianna:['mid'],
+Qiyana:['mid','jungle'],Ryze:['mid'],Smolder:['adc','mid'],
+Sylas:['mid','jungle'],Syndra:['mid'],Talon:['mid','jungle'],
+TwistedFate:['mid'],Veigar:['mid','support'],Vex:['mid'],Viktor:['mid'],
+Yasuo:['mid','top'],Yone:['mid','top'],Zed:['mid','top'],
+/* ── ADC ─────────────────────────────────────────────────── */
+Aphelios:['adc'],Ashe:['adc','support'],Caitlyn:['adc'],Draven:['adc'],
+Ezreal:['adc'],Jhin:['adc'],Jinx:['adc'],Kaisa:['adc'],Kalista:['adc'],
+KogMaw:['adc'],Lucian:['adc','mid'],MissFortune:['adc'],Nilah:['adc'],
+Samira:['adc'],Senna:['support','adc'],Seraphine:['support','adc','mid'],
+Sivir:['adc'],Tristana:['adc','mid'],Twitch:['adc','jungle'],
+Varus:['adc','mid'],Vayne:['adc','top'],Xayah:['adc'],Zeri:['adc'],
+/* ── SUPPORT ─────────────────────────────────────────────── */
+Alistar:['support'],Bard:['support'],Blitzcrank:['support'],
+Brand:['support','mid'],Braum:['support'],Janna:['support'],
+Karma:['support','mid'],Leona:['support'],Lulu:['support'],
+Milio:['support'],Morgana:['support','mid'],Nami:['support'],
+Nautilus:['support'],Pyke:['support'],Rakan:['support'],Renata:['support'],
+Sona:['support'],Soraka:['support'],Swain:['support','mid'],
+Taric:['support'],Thresh:['support'],VelKoz:['support','mid'],
+Xerath:['support','mid'],Yuumi:['support'],Zilean:['support','mid'],
+Zyra:['support'],
 };
 const ALL_ROLES=['top','jungle','mid','adc','support'];
 const ROLE_LABELS={top:'Topo',jungle:'Selva',mid:'Meio',adc:'Atirador',support:'Suporte'};
@@ -583,15 +615,15 @@ const archCat=a=>ARCH_CAT[a]||'scale';
 
 function eligibleRoles(c){
   if(LANE_MAP[c.id]) return LANE_MAP[c.id];
-  const t=c.tags||[],r=new Set();
-  if(t.includes('Marksman'))r.add('adc');
-  if(t.includes('Support'))r.add('support');
-  if(t.includes('Assassin'))r.add('mid');
-  if(t.includes('Mage')){r.add('mid');if(t.includes('Support'))r.add('support');}
-  if(t.includes('Tank')){r.add('top');r.add('support');r.add('jungle');}
-  if(t.includes('Fighter')){r.add('top');r.add('jungle');}
-  if(r.size===0)r.add('mid');
-  return [...r];
+  // strict fallback for champions not in LANE_MAP (new patches)
+  const t=c.tags||[];
+  if(t.includes('Marksman')&&!t.includes('Support')) return ['adc'];
+  if(t.includes('Support')&&!t.includes('Fighter')&&!t.includes('Tank')) return ['support'];
+  if(t.includes('Assassin')&&!t.includes('Fighter')) return ['mid','jungle'];
+  if(t.includes('Mage')&&!t.includes('Support')&&!t.includes('Fighter')) return ['mid'];
+  if(t.includes('Tank')&&!t.includes('Fighter')) return ['top','support'];
+  if(t.includes('Fighter')) return ['top','jungle'];
+  return ['mid'];
 }
 
 /* ---------- PRNG determinístico ---------- */
@@ -610,6 +642,34 @@ const CONTEXTS=[
   {label:'Worlds Play-in',mods:{engage:3,peel:2,scaling:2}},
   {label:'Ranked Flex Ouro',mods:{sustain:3,dive:2,scaling:-1}}
 ];
+
+/* ---------- matriz de counter por arquétipo ---------- */
+// Quanto A tem de vantagem sobre B no laning/teamfight.
+// Positivo = A bate B; escala ±3 (3=hard counter, 0=neutro)
+const ARCH_CTR={
+  engage:   {engage:0, dive:0,  burst:-1, poke:2,  sustain:0,  peel:-1, scaling:1, teamfight:-1},
+  dive:     {engage:0, dive:0,  burst:0,  poke:1,  sustain:-1, peel:-2, scaling:1, teamfight:-1},
+  burst:    {engage:1, dive:0,  burst:0,  poke:1,  sustain:-2, peel:-1, scaling:1, teamfight:-1},
+  poke:     {engage:-2,dive:-1, burst:-1, poke:0,  sustain:1,  peel:0,  scaling:1, teamfight:-1},
+  sustain:  {engage:0, dive:1,  burst:2,  poke:-1, sustain:0,  peel:0,  scaling:-1,teamfight:0},
+  peel:     {engage:1, dive:2,  burst:1,  poke:0,  sustain:0,  peel:0,  scaling:0, teamfight:1},
+  scaling:  {engage:-1,dive:-1, burst:-1, poke:-1, sustain:1,  peel:0,  scaling:0, teamfight:1},
+  teamfight:{engage:1, dive:1,  burst:1,  poke:1,  sustain:0,  peel:-1, scaling:-1,teamfight:0},
+};
+// Bônus de matchup total: lane a lane (peso maior) + composição geral (peso menor)
+function compMatchupBonus(teamA,teamB){
+  let bonus=0;
+  const len=Math.min(teamA.length,teamB.length);
+  for(let i=0;i<len;i++){
+    const a=teamA[i],b=teamB[i];
+    if(!a||!b)continue;
+    bonus+=(ARCH_CTR[a.arch]?.[b.arch]||0)*0.10; // matchup da rota (0.10 por rota)
+  }
+  teamA.forEach(a=>teamB.forEach(b=>{
+    bonus+=(ARCH_CTR[a.arch]?.[b.arch]||0)*0.012; // matchup da composição geral
+  }));
+  return bonus;
+}
 
 /* ---------- fallback offline ---------- */
 const FB=[
@@ -771,8 +831,9 @@ function estStats(champ,ctxLabel){
   const pr=4+Math.round(rnd()*16);
   return {wr:+wr.toFixed(1),pr};
 }
-function poolForRole(role,ctx,salt){
-  const cands=CHAMPS.filter(c=>c.roles.includes(role));
+function poolForRole(role,ctx,salt,exclude=new Set()){
+  let cands=CHAMPS.filter(c=>c.roles.includes(role)&&!exclude.has(c.id));
+  if(cands.length<3)cands=CHAMPS.filter(c=>c.roles.includes(role)); // fallback sem exclusão
   const rnd=seeded(role+'|'+ctx.label+'|'+salt);
   const weighted=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
   return weighted.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,cat:archCat(x.c.arch)};});
@@ -794,7 +855,12 @@ function startDraft(opts){
   const ctx=opts.ctx||pick(Math.random,CONTEXTS);
   draft={ctx,mode:opts.mode||'normal',onComplete:opts.onComplete,
     pools:{},picks:{},rerolledFlag:{},rerollsLeft:2,salt:Math.random().toString(36).slice(2,7)};
-  ALL_ROLES.forEach(r=>{draft.picks[r]=null;draft.rerolledFlag[r]=false;draft.pools[r]=poolForRole(r,ctx,draft.salt+r);});
+  const globalUsed=new Set();
+  ALL_ROLES.forEach(r=>{
+    draft.picks[r]=null;draft.rerolledFlag[r]=false;
+    draft.pools[r]=poolForRole(r,ctx,draft.salt+r,globalUsed);
+    draft.pools[r].forEach(c=>globalUsed.add(c.id));
+  });
   document.getElementById('draftTitle').textContent=opts.title||'Seu draft';
   document.getElementById('draftCtx').innerHTML=`<span class="chip">${ctx.label}</span>`+(draft.mode==='blind'?`<span class="chip" style="border-color:var(--goldDim);color:var(--gold2)">às cegas</span>`:'');
   const back=document.getElementById('draftBack');
@@ -846,7 +912,9 @@ function selectPick(role,i){
 function reroll(role){
   if(draft.rerollsLeft<=0||draft.rerolledFlag[role])return;
   draft.rerolledFlag[role]=true;draft.rerollsLeft--;draft.picks[role]=null;
-  draft.pools[role]=poolForRole(role,draft.ctx,'rr'+Math.random());
+  const exclude=new Set();
+  ALL_ROLES.forEach(r=>{if(r!==role)draft.pools[r].forEach(c=>exclude.add(c.id));});
+  draft.pools[role]=poolForRole(role,draft.ctx,'rr'+Math.random(),exclude);
   renderGrid(role);renderSlots();updateSyn();updateConfirm();updateRerollPill();
   const b=document.getElementById('rr-'+role);b.disabled=true;b.style.opacity=.35;
   if(draft.rerollsLeft<=0)ALL_ROLES.forEach(r=>{const x=document.getElementById('rr-'+r);if(x){x.disabled=true;x.style.opacity=.35;}});
@@ -915,7 +983,8 @@ function genTimeline(teamA,teamB,synA){
   const obj={a:{d:0,h:0,b:0,t:0},b:{d:0,h:0,b:0,t:0}};
   const rnd=seeded(Math.random());
   const phaseOf=m=>m<14?'early':m<25?'mid':'late';
-  const pAwin=m=>{const ph=phaseOf(m);const da=pa[ph]+sA/40,db=pb[ph]+sB/40;return 1/(1+Math.exp(-((da-db)*0.09+lead/18000)));};
+  const matchupBonus=compMatchupBonus(teamA,teamB);
+  const pAwin=m=>{const ph=phaseOf(m);const da=pa[ph]+sA/40,db=pb[ph]+sB/40;return 1/(1+Math.exp(-((da-db)*0.09+lead/18000+matchupBonus)));};
   const beats=[
     {m:2,t:'firstblood'},{m:5,t:'dragon'},{m:8,t:'skirmish'},{m:10,t:'herald'},
     {m:13,t:'tower'},{m:16,t:'dragon'},{m:18,t:'teamfight'},{m:21,t:'tower'},
@@ -1052,7 +1121,7 @@ function snakeBotPick(lane,ctx,used){
 function startSnakeDraft(players,mode,onComplete){
   const ctx=pick(Math.random,CONTEXTS);
   sd={players,lanes:ALL_ROLES.slice(),laneIdx:0,queue:players.map((_,i)=>i),turnPos:0,
-    used:{top:new Set(),jungle:new Set(),mid:new Set(),adc:new Set(),support:new Set()},
+    used:new Set(),
     rerollsLeft:2,ctx,mode,opts:null,onComplete,_fast:false};
   document.getElementById('snakeTitle').textContent='Draft do campeonato';
   document.getElementById('snakeCtx').innerHTML=`<span class="chip">${ctx.label}</span>`+(mode==='blind'?`<span class="chip" style="border-color:var(--goldDim);color:var(--gold2)">às cegas</span>`:'')+`<span class="chip">${players.length} jogadores</span>`;
@@ -1075,13 +1144,13 @@ function snakeProcess(){
   renderSnake(pIdx,lane);
   if(player.isYou){
     sd._fast=false;
-    sd.opts=snakePool(lane,sd.ctx,sd.used[lane]);
+    sd.opts=snakePool(lane,sd.ctx,sd.used);
     renderSnakeOptions(lane);
   }else{
     document.getElementById('snakeOptions').innerHTML='';
     document.getElementById('snakeControls').innerHTML='';
-    const champ=snakeBotPick(lane,sd.ctx,sd.used[lane]);
-    player.teamArr[sd.laneIdx]=champ;sd.used[lane].add(champ.id);
+    const champ=snakeBotPick(lane,sd.ctx,sd.used);
+    player.teamArr[sd.laneIdx]=champ;sd.used.add(champ.id);
     const delay=sd._fast?0:Math.max(150,500-sd.players.length*16);
     liveTimer=setTimeout(snakeAdvance,delay);
   }
@@ -1091,7 +1160,7 @@ function snakeSelect(i){
   if(!sd.opts)return;
   const lane=sd.lanes[sd.laneIdx];const champ=sd.opts[i];
   const you=sd.players.find(p=>p.isYou);
-  you.teamArr[sd.laneIdx]=champ;sd.used[lane].add(champ.id);
+  you.teamArr[sd.laneIdx]=champ;sd.used.add(champ.id);
   sd.opts=null;
   document.getElementById('snakeOptions').innerHTML='';
   document.getElementById('snakeControls').innerHTML='';
@@ -1101,7 +1170,7 @@ function snakeReroll(){
   if(sd.rerollsLeft<=0||!sd.opts)return;
   sd.rerollsLeft--;
   const lane=sd.lanes[sd.laneIdx];
-  sd.opts=snakePool(lane,sd.ctx,sd.used[lane]);
+  sd.opts=snakePool(lane,sd.ctx,sd.used);
   renderSnakeOptions(lane);
 }
 function snakeSkipToMe(){
@@ -1116,8 +1185,8 @@ function snakeSkipToMe(){
     }
     const pIdx=sd.queue[sd.turnPos];const player=sd.players[pIdx];const lane=sd.lanes[sd.laneIdx];
     if(player.isYou){snakeProcess();return;}
-    const champ=snakeBotPick(lane,sd.ctx,sd.used[lane]);
-    player.teamArr[sd.laneIdx]=champ;sd.used[lane].add(champ.id);
+    const champ=snakeBotPick(lane,sd.ctx,sd.used);
+    player.teamArr[sd.laneIdx]=champ;sd.used.add(champ.id);
     sd.turnPos++;
   }
   snakeDone();
