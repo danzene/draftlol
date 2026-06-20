@@ -1,0 +1,45 @@
+name: Update champion stats
+
+on:
+  schedule:
+    # Toda segunda-feira às 06:00 UTC
+    - cron: '0 6 * * 1'
+  # Permite rodar manualmente em Actions → Run workflow
+  workflow_dispatch:
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # necessário para o git push final
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Collect champion stats via Riot API
+        # RIOT_API_KEY lida de GitHub Actions Secrets — NUNCA aparece em log.
+        # Para cadastrar: repositório → Settings → Secrets and variables →
+        # Actions → New repository secret → Name: RIOT_API_KEY → Value: RGAPI-xxx
+        run: node scripts/collect-stats.js
+        env:
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+        # O script nunca imprime a chave — mas por segurança adicional,
+        # mascaramos qualquer ocorrência acidental nos logs:
+        # (o GitHub já faz isso automaticamente para secrets referenciados via ${{ secrets.* }})
+
+      - name: Commit stats if changed
+        run: |
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/stats-snapshot.json
+          # Só commita se o arquivo mudou de verdade
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update champion stats [skip ci]"
+            git push
+          else
+            echo "Sem mudanças nos dados — nenhum commit necessário."
+          fi
