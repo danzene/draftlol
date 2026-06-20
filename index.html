@@ -1094,12 +1094,12 @@ const TXT={
 const EICON={firstblood:'⚔',dragon:'🐉',herald:'👁',tower:'🏰',skirmish:'⚡',teamfight:'💥',baron:'🦂',nexus:'🏁',ace:'⭐'};
 
 function teamSyn(team){return synScore(team.map(c=>c.cat))||66;}
-function genTimeline(teamA,teamB,synA){
+function genTimeline(teamA,teamB,synA,seed){
   const pa=teamPower(teamA),pb=teamPower(teamB);
   const sA=(synA||teamSyn(teamA)),sB=teamSyn(teamB);
   let lead=0,aK=0,bK=0,aceA=false,aceB=false;
   const obj={a:{d:0,h:0,b:0,t:0},b:{d:0,h:0,b:0,t:0}};
-  const rnd=seeded(Math.random());
+  const rnd=seeded(seed!=null?seed:Math.random());
   const phaseOf=m=>m<14?'early':m<25?'mid':'late';
   const matchupBonus=compMatchupBonus(teamA,teamB);
   const pAwin=m=>{const ph=phaseOf(m);const da=pa[ph]+sA/40,db=pb[ph]+sB/40;return 1/(1+Math.exp(-((da-db)*0.09+lead/18000+matchupBonus)));};
@@ -1144,7 +1144,7 @@ function setMomentum(lead){const pct=clamp(50+lead/120,5,95);document.getElement
 
 function runLiveSim(o){
   // o: {a,b,aName,bName,synA,ctxLabel,onDone}
-  const sim=genTimeline(o.a,o.b,o.synA);
+  const sim=genTimeline(o.a,o.b,o.synA,o.seed);
   liveSimState={o,sim,res:{...sim,a:o.a,b:o.b,aName:o.aName,bName:o.bName}};
   // setup UI
   const carry=o.a[3]||o.a[2];
@@ -1399,6 +1399,12 @@ function updateBrkButton(){
   else if(youAlive){btn.textContent='Avançar rodada';btn.classList.add('ready');btn.style.opacity=1;btn.style.pointerEvents='auto';}
   else {btn.textContent='Ver final';btn.classList.add('ready');btn.style.opacity=1;btn.style.pointerEvents='auto';}
 }
+function _matchSeed(aId,bId,roundIdx){
+  if(!tour?.isOnline||!myPlayerId)return null;
+  const ra=aId==='you'?myPlayerId:aId;
+  const rb=bId==='you'?myPlayerId:bId;
+  return hashStr(`${ra}|${rb}|${roundIdx}`);
+}
 function advanceTournament(){
   const rd=tour.rounds[tour.roundIdx];
   const yourMatch=rd.find(m=>involvesYou(m)&&!m.played);
@@ -1418,9 +1424,11 @@ function advanceTournament(){
 function playYourMatch(mt){
   const oppId=mt.a==='you'?mt.b:mt.a;
   const opp=partById(oppId);const you=partById('you');
-  const ctx=pick(Math.random,CONTEXTS);
+  const seed=_matchSeed(mt.a,mt.b,tour.roundIdx);
+  const rndCtx=seed!=null?seeded(seed):Math.random;
+  const ctx=pick(rndCtx,CONTEXTS);
   const synA=teamSyn(you.teamArr);
-  runLiveSim({a:you.teamArr,b:opp.teamArr,aName:'Você',bName:opp.name,synA,ctxLabel:ctx.label,
+  runLiveSim({a:you.teamArr,b:opp.teamArr,aName:'Você',bName:opp.name,synA,ctxLabel:ctx.label,seed,
     onDone:(res)=>{
       mt.played=true;
       if(res.win){mt.winner='you';mt.score=[res.aK,res.bK];opp.alive=false;opp.place=tour.placeCounter;}
@@ -1432,11 +1440,13 @@ function playYourMatch(mt){
 function resolveBotMatch(mt){
   const A=partById(mt.a),B=partById(mt.b);
   const pa=teamPower(A.teamArr),pb=teamPower(B.teamArr);
-  const sa=pa.early+pa.mid+pa.late+teamSyn(A.teamArr)/20+Math.random()*6;
-  const sb=pb.early+pb.mid+pb.late+teamSyn(B.teamArr)/20+Math.random()*6;
+  const seed=_matchSeed(mt.a,mt.b,tour.roundIdx);
+  const rnd=seed!=null?seeded(seed):Math.random;
+  const sa=pa.early+pa.mid+pa.late+teamSyn(A.teamArr)/20+rnd()*6;
+  const sb=pb.early+pb.mid+pb.late+teamSyn(B.teamArr)/20+rnd()*6;
   const aWins=sa>=sb;
   const winId=aWins?mt.a:mt.b,loseId=aWins?mt.b:mt.a;
-  const ks=rint(Math.random,18,40),ls=rint(Math.random,8,ks-3);
+  const ks=rint(rnd,18,40),ls=rint(rnd,8,ks-3);
   mt.played=true;mt.winner=winId;mt.score=aWins?[ks,ls]:[ls,ks];
   partById(loseId).alive=false;partById(loseId).place=tour.placeCounter;
 }
@@ -1840,7 +1850,7 @@ async function _enterOnlineDraft(roomState){
   const playerOrder=roomState.player_order;
   const players=playerOrder.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
 
-  od={room:roomState,players,ctx,opts:null,rerollCount:0};
+  od={room:roomState,players,ctx,opts:null,rerollCount:0,myRerollsLeft:2};
 
   document.getElementById('snakeTitle').textContent='Draft Online';
   document.getElementById('snakeCtx').innerHTML=
@@ -1906,7 +1916,7 @@ function _renderOd(){
   if(isMyTurn){
     const used=new Set(room.used_champions||[]);
     od.opts=onlineSnakePool(lane,ctx,used,currentRoom,room.lane_idx,room.turn_pos,od.rerollCount);
-    const rerolls=room.rerolls_left;
+    const rerolls=od.myRerollsLeft;
     document.getElementById('snakeOptions').innerHTML=od.opts.map((c,i)=>{
       const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
       const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
@@ -1940,15 +1950,13 @@ async function _onlineSelect(i){
   if(error){alert('Erro ao pickear: '+error.message);_renderOd();}
 }
 
-async function _onlineReroll(){
-  if(!od||od.room.rerolls_left<=0)return;
-  const{error}=await sb.rpc('use_reroll',{p_room_code:currentRoom});
-  if(error){alert('Erro no reroll: '+error.message);return;}
-  od.rerollCount++;od.room.rerolls_left--;
+function _onlineReroll(){
+  if(!od||od.myRerollsLeft<=0)return;
+  od.myRerollsLeft--;od.rerollCount++;
   const lane=ALL_ROLES[od.room.lane_idx];
   const used=new Set(od.room.used_champions||[]);
   od.opts=onlineSnakePool(lane,od.ctx,used,currentRoom,od.room.lane_idx,od.room.turn_pos,od.rerollCount);
-  const rerolls=od.room.rerolls_left;
+  const rerolls=od.myRerollsLeft;
   const blind=od.room.mode==='blind';
   document.getElementById('snakeOptions').innerHTML=od.opts.map((c,i)=>{
     const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
@@ -1999,7 +2007,7 @@ async function _onOnlineDraftComplete(){
   const r1=[];
   for(let i=0;i<parts.length;i+=2)
     r1.push({a:parts[i].id,b:parts[i+1]?.id||null,winner:null,score:null,played:false});
-  tour={size:parts.length,mode:room.mode||'normal',parts,rounds:[r1],roundIdx:0,placeCounter:parts.length,ctx};
+  tour={size:parts.length,mode:room.mode||'normal',parts,rounds:[r1],roundIdx:0,placeCounter:parts.length,ctx,isOnline:true};
   renderBracket();show('v-bracket');updateBrkButton();
 }
 
