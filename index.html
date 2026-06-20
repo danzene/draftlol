@@ -828,6 +828,7 @@ const FALLBACK_CHAMPS=FB.map(([id,name,tags,info],idx)=>({id,name,tags,key:Strin
 const FALLBACK_PATCH='14.24.1';
 
 /* ---------- estado ---------- */
+const EVENT_PACE_MS=1000; // base de tempo entre eventos da simulação; ajuste aqui para calibrar ritmo
 let CHAMPS=null,PATCH=null,OFFLINE=false;
 let CHAMP_BY_KEY={};
 let POWER_NORM={mean:5,std:1};
@@ -935,6 +936,12 @@ async function load(){
   document.getElementById('v-loading').classList.add('hidden');
   renderNav();
   if(location.hash.length>4){try{openShared();return;}catch(e){}}
+  const savedRoom=sessionStorage.getItem('draftlol_room');
+  if(savedRoom){
+    let sbWait=0;
+    while(!sb&&sbWait++<20)await new Promise(r=>setTimeout(r,300));
+    if(sb){await tryRejoinRoom(savedRoom);return;}
+  }
   show('v-home');
 }
 
@@ -1238,8 +1245,9 @@ function pulseMapEvent(type,winA,carry){
 }
 
 function runLiveSim(o){
-  // o: {a,b,aName,bName,synA,ctxLabel,onDone}
-  const sim=genTimeline(o.a,o.b,o.synA,o.seed);
+  // o: {a,b,aName,bName,synA,seed,onDone,sim?,autoAdvance?}
+  // o.sim pode ser passado pré-calculado (do banco) para reprodução fiel
+  const sim=o.sim||genTimeline(o.a,o.b,o.synA,o.seed);
   liveSimState={o,sim,res:{...sim,a:o.a,b:o.b,aName:o.aName,bName:o.bName}};
   // setup UI
   const carry=o.a[3]||o.a[2];
@@ -1277,7 +1285,7 @@ function playStep(i){
   feed.insertBefore(div,feed.firstChild);
   while(feed.children.length>6)feed.removeChild(feed.lastChild);
   pulseMapEvent(e.type,e.winA,e.carry);
-  const delay=e.type==='nexus'?1500:(e.type==='teamfight'||e.type==='baron'||e.cls==='ace'?1080:760);
+  const delay=e.type==='nexus'?EVENT_PACE_MS*2:(e.type==='teamfight'||e.type==='baron'||e.cls==='ace'?Math.round(EVENT_PACE_MS*1.5):EVENT_PACE_MS);
   liveTimer=setTimeout(()=>playStep(i+1),delay);
 }
 function skipMatch(){
@@ -1299,7 +1307,10 @@ function endLiveSim(){
   document.getElementById('vscore').textContent=`${sim.aK} / ${sim.bK}`;
   document.getElementById('vace').innerHTML=(sim.aceA&&sim.win)?'<div class="ace">ACE!</div>':'';
   ovl.classList.remove('hidden');
-  document.getElementById('vcont').onclick=()=>{o.onDone(liveSimState.res);};
+  const advance=()=>{clearTimeout(liveTimer);liveTimer=null;ovl.classList.add('hidden');o.onDone(liveSimState.res);};
+  document.getElementById('vcont').textContent=o.autoAdvance?'Pular ⏭':'Continuar';
+  document.getElementById('vcont').onclick=advance;
+  if(o.autoAdvance)liveTimer=setTimeout(advance,o.autoAdvance);
 }
 
 /* =======================================================================
@@ -1468,11 +1479,12 @@ function renderBracket(){
   wrap.innerHTML=tour.rounds.map((rd,ri)=>`
     <div class="bround">
       <div class="rtitle">${roundTitle(ri,totalRounds)}</div>
-      ${rd.map(mt=>matchHTML(mt,ri)).join('')}
+      ${rd.map((mt,mi)=>matchHTML(mt,ri,mi)).join('')}
     </div>`).join('');
 }
-function matchHTML(mt,ri){
-  const live=(ri===tour.roundIdx && involvesYou(mt) && !mt.played);
+function matchHTML(mt,ri,mi=0){
+  const isCurOnline=tour.isOnline&&tour._currentMatch&&tour._currentMatch.round===ri&&tour._currentMatch.idx===mi;
+  const live=isCurOnline||(ri===tour.roundIdx&&!tour.isOnline&&involvesYou(mt)&&!mt.played);
   return `<div class="match ${live?'live':''}">
     ${seedHTML(mt.a,mt,'a')}
     ${seedHTML(mt.b,mt,'b')}
@@ -1489,12 +1501,16 @@ function seedHTML(pid,mt,side){
 function involvesYou(mt){return mt.a==='you'||mt.b==='you';}
 function updateBrkButton(){
   const btn=document.getElementById('brkNext');
+  if(tour.isOnline){
+    btn.textContent='Chaveamento automático';btn.classList.remove('ready');
+    btn.style.opacity=.35;btn.style.pointerEvents='none';return;
+  }
   const youAlive=partById('you').alive;
   const rd=tour.rounds[tour.roundIdx];
   const yourMatch=rd&&rd.find(m=>involvesYou(m)&&!m.played);
   if(yourMatch){btn.textContent='Jogar sua partida';btn.classList.add('ready');btn.style.opacity=1;btn.style.pointerEvents='auto';}
   else if(youAlive){btn.textContent='Avançar rodada';btn.classList.add('ready');btn.style.opacity=1;btn.style.pointerEvents='auto';}
-  else {btn.textContent='Ver final';btn.classList.add('ready');btn.style.opacity=1;btn.style.pointerEvents='auto';}
+  else{btn.textContent='Ver final';btn.classList.add('ready');btn.style.opacity=1;btn.style.pointerEvents='auto';}
 }
 function _matchSeed(aId,bId,roundIdx){
   if(!tour?.isOnline||!myPlayerId)return null;
@@ -1734,6 +1750,7 @@ function _lobbyCleanup(){
   if(draftChannel){sb?.removeChannel(draftChannel);draftChannel=null;}
   if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}
   if(botPickTimer){clearTimeout(botPickTimer);botPickTimer=null;}
+  sessionStorage.removeItem('draftlol_room');
   od=null;currentRoom=null;isRoomHost=false;
 }
 
@@ -1810,6 +1827,7 @@ async function joinRoom(){
 /* ---------- LOBBY ---------- */
 async function enterLobby(code,asHost){
   currentRoom=code;isRoomHost=asHost;
+  sessionStorage.setItem('draftlol_room',code);
   document.getElementById('lobbyCode').textContent=code;
   document.getElementById('lobbyBotBtn').style.display=asHost?'':'none';
   document.getElementById('lobbyStartBtn').style.display=asHost?'':'none';
@@ -2092,28 +2110,203 @@ function _maybePickBot(){
 
 async function _onOnlineDraftComplete(){
   if(draftChannel){sb.removeChannel(draftChannel);draftChannel=null;}
-  const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',currentRoom);
-  const{data:room}=await sb.from('rooms').select('*').eq('code',currentRoom).single();
+  const code=currentRoom;
+  const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',code);
+  const{data:room}=await sb.from('rooms').select('*').eq('code',code).single();
   if(!rawPlayers||!room)return;
-  const playerOrder=room.player_order||rawPlayers.map(p=>p.id);
-  const ctx=od?.ctx||CONTEXTS[0];
-  const ordered=playerOrder.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
 
-  // Usa 'you' como id local para compatibilidade com o bracket existente
+  const playerOrder=room.player_order||rawPlayers.map(p=>p.id);
+  const ctx=od?.ctx||CONTEXTS.find(c=>c.label===room.ctx_label)||CONTEXTS[0];
+  od=null;
+
+  const ordered=playerOrder.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
   const parts=ordered.map(p=>({
     id:p.id===myPlayerId?'you':p.id,
-    name:p.name,
-    isYou:p.id===myPlayerId,
+    realId:p.id,
+    name:p.name,isYou:p.id===myPlayerId,
     alive:true,place:null,
     teamArr:Array.isArray(p.team_picks)?p.team_picks:[null,null,null,null,null]
   }));
 
-  od=null;
-  const r1=[];
-  for(let i=0;i<parts.length;i+=2)
-    r1.push({a:parts[i].id,b:parts[i+1]?.id||null,winner:null,score:null,played:false});
-  tour={size:parts.length,mode:room.mode||'normal',parts,rounds:[r1],roundIdx:0,placeCounter:parts.length,ctx,isOnline:true};
+  tour={size:parts.length,mode:room.mode||'normal',parts,rounds:[],roundIdx:0,
+        placeCounter:parts.length,ctx,isOnline:true,_bracketPlaying:false,_currentMatch:null};
   renderBracket();show('v-bracket');updateBrkButton();
+
+  // Se já resolvido (ex.: reload durante reprodução), só reproduzir
+  if(room.bracket_resolved){await _loadAndPlayBracket(code);return;}
+
+  // Subscreve ao evento bracket_resolved (todos os clientes, inclusive o futuro resolver)
+  _subscribeToBracketResolved(code);
+
+  // Se outro cliente já está resolvendo, só aguardar
+  if(room.bracket_resolving)return;
+
+  // Tenta reivindicar o lock atômico
+  const{data:won,error:claimErr}=await sb.rpc('claim_bracket_resolve',{p_room_code:code});
+  if(claimErr||!won)return; // outro cliente ganhou a corrida
+
+  // Somos o resolver — calcular tudo e salvar
+  try{await _resolveAndSave(parts,ctx,code);}
+  catch(e){console.error('[DraftLoL] _resolveAndSave falhou:',e);}
+}
+
+/* ---------- resolver: calcula todas as partidas e salva no banco ---------- */
+async function _resolveAndSave(parts,ctx,roomCode){
+  const allMatchData=[];
+  let roundParts=[...parts];
+  let roundIdx=0;
+
+  while(roundParts.length>1){
+    const nextWinners=[];
+    for(let i=0;i<roundParts.length;i+=2){
+      const pA=roundParts[i],pB=roundParts[i+1];
+      if(!pB){nextWinners.push(pA);continue;}
+      const realA=pA.realId,realB=pB.realId;
+      // Ordenação canônica: UUID menor = teamA (mesma lógica de youIsA)
+      const aIsCanon=realA<realB;
+      const teamA=aIsCanon?pA.teamArr:pB.teamArr;
+      const teamB=aIsCanon?pB.teamArr:pA.teamArr;
+      const nameA=aIsCanon?pA.name:pB.name;
+      const nameB=aIsCanon?pB.name:pA.name;
+      const seedNum=hashStr(`${realA}|${realB}|${roundIdx}`);
+      const matchCtx=pick(seeded(seedNum),CONTEXTS);
+      const synA=teamSyn(teamA);
+      const sim=genTimeline(teamA,teamB,synA,seedNum);
+      const pAWon=aIsCanon?sim.win:!sim.win;
+      const winner=pAWon?pA:pB;
+      allMatchData.push({
+        round:roundIdx,match_idx:i/2,
+        player_a:realA,player_b:realB,
+        seed:String(seedNum),ctx_label:matchCtx.label,
+        timeline:{tl:sim.tl,win:sim.win,aK:sim.aK,bK:sim.bK,aceA:sim.aceA,aceB:sim.aceB,
+                  teamA,teamB,aName:nameA,bName:nameB,synA},
+        winner:winner.realId,
+        score_a:aIsCanon?sim.aK:sim.bK,
+        score_b:aIsCanon?sim.bK:sim.aK
+      });
+      nextWinners.push(winner);
+    }
+    roundParts=nextWinners;
+    roundIdx++;
+  }
+
+  const{error}=await sb.rpc('save_bracket_results',{p_room_code:roomCode,p_matches:allMatchData});
+  if(error)throw error;
+  // Realtime dispara bracket_resolved=true para todos (inclusive nós mesmos)
+}
+
+/* ---------- subscrição: não-resolvers aguardam bracket_resolved ---------- */
+function _subscribeToBracketResolved(code){
+  if(draftChannel){sb.removeChannel(draftChannel);draftChannel=null;}
+  draftChannel=sb.channel('brkres:'+code)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'rooms',filter:'code=eq.'+code},
+      async(payload)=>{
+        if(payload.new?.bracket_resolved){
+          if(draftChannel){sb.removeChannel(draftChannel);draftChannel=null;}
+          await _loadAndPlayBracket(code);
+        }
+      })
+    .subscribe();
+}
+
+/* ---------- carrega partidas do banco e inicia reprodução automática ---------- */
+async function _loadAndPlayBracket(roomCode){
+  if(tour?._bracketPlaying)return;
+  if(tour)tour._bracketPlaying=true;
+  const{data:matches}=await sb.from('matches').select('*')
+    .eq('room_code',roomCode).order('round').order('match_idx');
+  if(!matches?.length)return;
+  await _autoPlayAllMatches(matches);
+}
+
+/* ---------- reprodução sequencial de todas as partidas ---------- */
+async function _autoPlayAllMatches(matches){
+  const sorted=[...matches].sort((a,b)=>a.round-b.round||a.match_idx-b.match_idx);
+  tour.rounds=[];tour._currentMatch=null;
+
+  for(const m of sorted){
+    while(tour.rounds.length<=m.round)tour.rounds.push([]);
+    const aId=_realIdToPartId(m.player_a),bId=_realIdToPartId(m.player_b);
+    const winId=_realIdToPartId(m.winner);
+    tour.rounds[m.round][m.match_idx]={a:aId,b:bId,winner:null,score:null,played:false};
+    tour.roundIdx=m.round;
+    tour._currentMatch={round:m.round,idx:m.match_idx};
+    renderBracket();show('v-bracket');updateBrkButton();
+    await _sleep(1200);
+
+    await _playOneStoredMatch(m);
+
+    tour.rounds[m.round][m.match_idx].winner=winId;
+    tour.rounds[m.round][m.match_idx].score=[m.score_a,m.score_b];
+    tour.rounds[m.round][m.match_idx].played=true;
+    const loseId=winId===aId?bId:aId;
+    const losePart=partById(loseId);if(losePart)losePart.alive=false;
+    tour._currentMatch=null;
+    renderBracket();show('v-bracket');
+    await _sleep(2000);
+  }
+
+  _computeStandings(sorted);
+  const last=sorted[sorted.length-1];
+  finishTournament(_realIdToPartId(last.winner));
+}
+
+function _playOneStoredMatch(m){
+  return new Promise(resolve=>{
+    const tl=m.timeline;
+    if(!tl){resolve();return;}
+    runLiveSim({
+      a:tl.teamA||[],b:tl.teamB||[],
+      aName:tl.aName||'Time A',bName:tl.bName||'Time B',
+      synA:tl.synA||60,
+      sim:{tl:tl.tl||[],win:!!tl.win,aK:tl.aK||0,bK:tl.bK||0,aceA:!!tl.aceA,aceB:!!tl.aceB},
+      autoAdvance:2500,
+      onDone:()=>resolve()
+    });
+  });
+}
+
+function _computeStandings(sortedMatches){
+  tour.parts.forEach(p=>{p.alive=true;p.place=null;});
+  let placeCounter=tour.size,lastRound=-1;
+  sortedMatches.forEach(m=>{
+    if(m.round!==lastRound){if(lastRound>=0)placeCounter=Math.ceil(placeCounter/2);lastRound=m.round;}
+    const winId=_realIdToPartId(m.winner);
+    const aId=_realIdToPartId(m.player_a),bId=_realIdToPartId(m.player_b);
+    const loseId=winId===aId?bId:aId;
+    const lp=partById(loseId);if(lp){lp.alive=false;lp.place=placeCounter;}
+  });
+  const last=sortedMatches[sortedMatches.length-1];
+  const champ=partById(_realIdToPartId(last.winner));if(champ)champ.place=1;
+}
+
+function _realIdToPartId(uuid){return uuid===myPlayerId?'you':uuid;}
+function _sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+/* ---------- recuperação ao recarregar a página ---------- */
+async function tryRejoinRoom(code){
+  if(!sb)return;
+  const{data:room}=await sb.from('rooms').select('*').eq('code',code).single();
+  if(!room||room.status==='finished'){sessionStorage.removeItem('draftlol_room');show('v-home');return;}
+  currentRoom=code;isRoomHost=room.host_player_id===myPlayerId;
+  const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',code);
+  const playerOrder=room.player_order||(rawPlayers||[]).map(p=>p.id);
+  const ctx=CONTEXTS.find(c=>c.label===room.ctx_label)||CONTEXTS[0];
+  const ordered=playerOrder.map(pid=>(rawPlayers||[]).find(p=>p.id===pid)).filter(Boolean);
+  const parts=ordered.map(p=>({
+    id:p.id===myPlayerId?'you':p.id,realId:p.id,
+    name:p.name,isYou:p.id===myPlayerId,alive:true,place:null,
+    teamArr:Array.isArray(p.team_picks)?p.team_picks:[null,null,null,null,null]
+  }));
+  tour={size:parts.length,mode:room.mode||'normal',parts,rounds:[],roundIdx:0,
+        placeCounter:parts.length,ctx,isOnline:true,_bracketPlaying:false,_currentMatch:null};
+  if(room.status==='bracket'||room.bracket_resolved){
+    renderBracket();show('v-bracket');updateBrkButton();
+    if(room.bracket_resolved){await _loadAndPlayBracket(code);}
+    else{_subscribeToBracketResolved(code);}
+  }else if(room.status==='drafting'){
+    await _enterOnlineDraft(room);
+  }else{sessionStorage.removeItem('draftlol_room');show('v-home');}
 }
 
 /* ---------- modificação do bindSeg para alternar footer do create ---------- */
