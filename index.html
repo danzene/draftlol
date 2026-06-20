@@ -1718,8 +1718,10 @@ function _subscribeToLobby(code,roomSize){
       (payload)=>{
         // Se o host iniciou o draft, navegar para o draft
         if(payload.new?.status==='drafting'){
+          const wasHost=isRoomHost; // preserva antes do cleanup zerar
           _lobbyCleanup();
           currentRoom=code;
+          isRoomHost=wasHost;
           _enterOnlineDraft(payload.new);
         }
       })
