@@ -1473,9 +1473,13 @@ function roundTitle(n,total){const left=total-n;if(left===0)return 'Final';if(le
 function renderBracket(){
   const totalRounds=Math.log2(tour.size);
   document.getElementById('brkTitle').textContent=`Campeonato · ${tour.size} jogadores`;
-  const youAlive=partById('you').alive;
+  const youAlive=partById('you')?.alive??true;
   document.getElementById('brkStatus').textContent=youAlive?'você está vivo':'você foi eliminado';
   const wrap=document.getElementById('bracket');
+  if(tour.isOnline&&tour.rounds.length===0){
+    wrap.innerHTML=`<div style="padding:32px 16px;text-align:center;color:var(--txt2)"><div class="spin"></div><div style="margin-top:12px">Calculando chaveamento…</div></div>`;
+    return;
+  }
   wrap.innerHTML=tour.rounds.map((rd,ri)=>`
     <div class="bround">
       <div class="rtitle">${roundTitle(ri,totalRounds)}</div>
@@ -2143,11 +2147,24 @@ async function _onOnlineDraftComplete(){
 
   // Tenta reivindicar o lock atômico
   const{data:won,error:claimErr}=await sb.rpc('claim_bracket_resolve',{p_room_code:code});
-  if(claimErr||!won)return; // outro cliente ganhou a corrida
+  if(claimErr){
+    // RPC não existe (migration 003 não aplicada) → mostra erro no status
+    console.error('[DraftLoL] claim_bracket_resolve falhou — verifique migration 003:',claimErr.message);
+    document.getElementById('brkStatus').textContent='erro ao calcular — aplique a migration 003';
+    document.getElementById('bracket').innerHTML=
+      `<div style="padding:24px 16px;color:var(--red);font-size:14px;text-align:center">
+        Execute a migration <b>003_bracket_resolve.sql</b> no Supabase SQL Editor e recarregue.
+       </div>`;
+    return;
+  }
+  if(!won)return; // outro cliente ganhou a corrida
 
   // Somos o resolver — calcular tudo e salvar
   try{await _resolveAndSave(parts,ctx,code);}
-  catch(e){console.error('[DraftLoL] _resolveAndSave falhou:',e);}
+  catch(e){
+    console.error('[DraftLoL] _resolveAndSave falhou:',e);
+    document.getElementById('brkStatus').textContent='erro ao salvar bracket';
+  }
 }
 
 /* ---------- resolver: calcula todas as partidas e salva no banco ---------- */
