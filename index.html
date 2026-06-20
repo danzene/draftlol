@@ -1647,10 +1647,11 @@ async function createOnlineRoom(){
   });
   if(re){alert('Erro ao criar sala: '+re.message);return;}
 
-  const {error:pe}=await sb.from('room_players').upsert({
+  await sb.from('room_players').delete().eq('id',myPlayerId); // limpa entrada anterior se existir
+  const {error:pe}=await sb.from('room_players').insert({
     id:myPlayerId,room_code:code,
     name:myPlayerName,is_host:true,is_bot:false,alive:true,team_picks:[]
-  },{onConflict:'id'});
+  });
   if(pe){alert('Erro ao entrar na sala: '+pe.message);return;}
 
   await enterLobby(code,true);
@@ -1680,10 +1681,11 @@ async function joinRoom(){
   if(count>=room.size){errEl.textContent='Sala cheia.';return;}
 
   myPlayerName=name;
-  const {error:pe}=await sb.from('room_players').upsert({
+  await sb.from('room_players').delete().eq('id',myPlayerId); // limpa entrada anterior se existir
+  const {error:pe}=await sb.from('room_players').insert({
     id:myPlayerId,room_code:code,
     name:myPlayerName,is_host:false,is_bot:false,alive:true,team_picks:[]
-  },{onConflict:'id'});
+  });
   if(pe){errEl.textContent='Erro ao entrar: '+pe.message;return;}
 
   await enterLobby(code,false);
@@ -1786,7 +1788,9 @@ async function startOnlineDraft(){
   // Todos os clientes recebem status='drafting' via realtime e navegam para o draft
 }
 
-function leaveLobby(){
+async function leaveLobby(){
+  if(myPlayerId&&currentRoom&&sb)
+    await sb.from('room_players').delete().eq('id',myPlayerId);
   _lobbyCleanup();
   show('v-home');
 }
