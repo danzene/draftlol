@@ -112,7 +112,7 @@
   .role-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
   .role-head .nm{display:flex;align-items:center;gap:8px;font-family:'Oswald';font-size:16px;text-transform:uppercase;color:var(--txt)}
   .role-head .nm .ic{color:var(--gold);font-size:17px}
-  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   .card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:12px;cursor:pointer;transition:border-color .12s,transform .12s,background .12s;position:relative;text-align:center}
   .card:hover{border-color:var(--line2);transform:translateY(-2px)}
   .card.sel{border-color:var(--gold);background:var(--bg3)}
@@ -250,6 +250,7 @@
     .card .cn{font-size:13px} .card .pic{width:46px;height:46px}
     .rost .minip{width:30px;height:30px}
     .mteam .kills{font-size:22px}
+    .grid3{grid-template-columns:repeat(2,1fr)}
   }
 
   /* locked card (choice already made for this role) */
@@ -295,6 +296,20 @@
   .lptag.you{background:rgba(95,214,168,.14);color:var(--win)}
   .lobby-msg{text-align:center;color:var(--txt2);font-size:13px;margin:8px 0}
   .inp-err{color:var(--red);font-size:13px;min-height:18px;margin-top:4px}
+
+  /* ── RIFT MAP ──────────────────────────────────────────────────────── */
+  .rift-map-wrap{position:relative;width:min(100%,320px);aspect-ratio:1;margin:0 auto 14px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#080d16}
+  .rift-svg{display:block;position:absolute;inset:0;width:100%;height:100%}
+  #riftCA,#riftCB,#riftFX{position:absolute;inset:0;pointer-events:none}
+  .rift-icon{position:absolute;width:28px;height:28px;border-radius:50%;overflow:hidden;border:2px solid;transform:translate(-50%,-50%);z-index:2;transition:transform .12s}
+  .rift-icon img{width:100%;height:100%;object-fit:cover;display:block}
+  .rift-icon.team-a{border-color:#5f9be8;box-shadow:0 0 5px rgba(95,155,232,.4)}
+  .rift-icon.team-b{border-color:#e24f4f;box-shadow:0 0 5px rgba(226,79,79,.4)}
+  @keyframes icon-pulse{0%,100%{transform:translate(-50%,-50%) scale(1)}45%{transform:translate(-50%,-50%) scale(1.5);filter:brightness(1.7)}}
+  .rift-icon.active{animation:icon-pulse .55s ease-in-out}
+  .map-flash{position:absolute;width:60px;height:60px;border-radius:50%;border:2px solid;transform:translate(-50%,-50%) scale(.1);pointer-events:none;z-index:5;animation:map-ring .75s ease-out forwards}
+  @keyframes map-ring{0%{transform:translate(-50%,-50%) scale(.1);opacity:.9}100%{transform:translate(-50%,-50%) scale(2.4);opacity:0}}
+  @media(max-width:560px){.rift-map-wrap{width:min(100%,270px)}.rift-icon{width:22px;height:22px}.map-flash{width:46px;height:46px}}
 </style>
 </head>
 <body>
@@ -523,10 +538,37 @@
           <div class="mtimer num" id="mtimer">0:00</div>
           <div class="mteam b"><span class="kills num" id="bK">0</span><span class="tn" id="bName">Rival</span></div>
         </div>
-        <div class="rosters">
-          <div class="rost a" id="rostA"></div>
-          <div class="rost b" id="rostB"></div>
+        <!-- Rift Map -->
+        <div class="rift-map-wrap" id="riftMap">
+          <svg class="rift-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="400" fill="#080d16"/>
+            <ellipse cx="112" cy="262" rx="66" ry="52" fill="#060912" opacity=".9"/>
+            <ellipse cx="288" cy="138" rx="66" ry="52" fill="#060912" opacity=".9"/>
+            <polygon points="107,0 0,107 293,400 400,293" fill="#09182a" opacity=".88"/>
+            <path d="M48,352 L352,352 L352,48" stroke="#14213c" stroke-width="44" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+            <path d="M48,352 L48,48 L352,48" stroke="#14213c" stroke-width="44" fill="none" stroke-linecap="square" stroke-linejoin="miter"/>
+            <line x1="52" y1="348" x2="348" y2="52" stroke="#14213c" stroke-width="44" stroke-linecap="round"/>
+            <circle cx="52" cy="348" r="30" fill="#0b1d3a" stroke="#4f8fe2" stroke-width="2.5"/>
+            <circle cx="52" cy="348" r="8" fill="#5f9be8" opacity=".75"/>
+            <circle cx="348" cy="52" r="30" fill="#3a0b0b" stroke="#e24f4f" stroke-width="2.5"/>
+            <circle cx="348" cy="52" r="8" fill="#e24f4f" opacity=".75"/>
+            <circle cx="278" cy="278" r="14" fill="#120820" stroke="#9a60d8" stroke-width="1.8"/>
+            <circle cx="278" cy="278" r="4" fill="#9a60d8" opacity=".7"/>
+            <circle cx="122" cy="122" r="14" fill="#201408" stroke="#d4a040" stroke-width="1.8"/>
+            <circle cx="122" cy="122" r="4" fill="#d4a040" opacity=".7"/>
+            <rect x="40" y="188" width="13" height="13" rx="2" fill="#2244a0" opacity=".55"/>
+            <rect x="188" y="348" width="13" height="13" rx="2" fill="#2244a0" opacity=".55"/>
+            <rect x="348" y="198" width="13" height="13" rx="2" fill="#a02222" opacity=".55"/>
+            <rect x="198" y="40" width="13" height="13" rx="2" fill="#a02222" opacity=".55"/>
+            <text x="28" y="396" font-size="9" fill="#4f8fe2" font-family="Oswald,sans-serif" letter-spacing="1">AZUL</text>
+            <text x="372" y="18" font-size="9" fill="#e24f4f" font-family="Oswald,sans-serif" letter-spacing="1" text-anchor="end">VERM</text>
+          </svg>
+          <div id="riftCA"></div>
+          <div id="riftCB"></div>
+          <div id="riftFX"></div>
         </div>
+        <!-- Hidden roster containers kept for JS compatibility -->
+        <div style="display:none"><div id="rostA"></div><div id="rostB"></div></div>
         <div class="momlabel"><span id="momA" style="color:var(--blue)">Você</span><span>vantagem de ouro</span><span id="momB" style="color:var(--red)">Rival</span></div>
         <div class="momentum"><div class="fill" id="momFill"></div><div class="mark" id="momMark"></div></div>
         <div class="objs">
@@ -953,7 +995,7 @@ function poolForRole(role,ctx,salt,exclude=new Set()){
   if(!cands.length)cands=CHAMPS.filter(c=>c.roles.includes(role));
   const rnd=seeded(role+'|'+ctx.label+'|'+salt);
   const weighted=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
-  return weighted.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
+  return weighted.slice(0,4).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
 }
 function autoDraft(ctx){
   return ALL_ROLES.map(role=>{
@@ -1130,7 +1172,7 @@ function genTimeline(teamA,teamB,synA,seed){
       case 'baron':{obj[side].b++;const k=rint(rnd,1,2);if(winA)aK+=k;else bK+=k;lead+=winA?950:-950;break;}
       case 'nexus': break;
     }
-    tl.push({m,type:b.t,winA,txt,cls,ic,lead,aK,bK,obj:JSON.parse(JSON.stringify(obj))});
+    tl.push({m,type:b.t,winA,txt,cls,ic,lead,aK,bK,obj:JSON.parse(JSON.stringify(obj)),carry});
   });
   const last=tl[tl.length-1];
   return {tl,win:last.winA,aK:last.aK,bK:last.bK,aceA,aceB};
@@ -1141,6 +1183,59 @@ function genTimeline(teamA,teamB,synA,seed){
    ======================================================================= */
 function objHTML(o){return `<span><span class="ico">🐉</span>${o.d}</span><span><span class="ico">🦂</span>${o.b}</span><span><span class="ico">🏰</span>${o.t}</span>`;}
 function setMomentum(lead){const pct=clamp(50+lead/120,5,95);document.getElementById('momFill').style.width=pct+'%';document.getElementById('momMark').style.left=pct+'%';}
+
+/* ── RIFT MAP: champion positions (% of container) by role index [top,jg,mid,adc,sup] ── */
+const RIFT_A=[{x:12,y:20},{x:22,y:47},{x:30,y:64},{x:25,y:88},{x:18,y:87}];
+const RIFT_B=[{x:88,y:80},{x:78,y:53},{x:70,y:36},{x:75,y:12},{x:82,y:13}];
+const RIFT_FLASH={
+  firstblood:{a:{x:22,y:25},b:{x:78,y:75}},
+  skirmish:  {a:{x:25,y:33},b:{x:75,y:67}},
+  tower:     {a:{x:36,y:46},b:{x:64,y:54}},
+  dragon:    {x:70,y:70},herald:{x:30,y:30},baron:{x:30,y:30},
+  teamfight: {x:50,y:50},
+  nexus:     {a:{x:13,y:87},b:{x:87,y:13}}
+};
+const RIDX={top:0,jungle:1,mid:2,adc:3,support:4};
+
+function initRiftMap(teamA,teamB){
+  const makeIcons=(team,pos,side,cid)=>{
+    const el=document.getElementById(cid);if(!el)return;
+    el.innerHTML=team.map((c,i)=>{
+      if(!c?.id)return'';
+      const p=pos[i]||{x:50,y:50};
+      return`<div class="rift-icon team-${side}" id="ri_${side}${i}" style="left:${p.x}%;top:${p.y}%"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div>`;
+    }).join('');
+  };
+  makeIcons(teamA,RIFT_A,'a','riftCA');
+  makeIcons(teamB,RIFT_B,'b','riftCB');
+  const fx=document.getElementById('riftFX');if(fx)fx.innerHTML='';
+}
+
+function pulseMapEvent(type,winA,carry){
+  const fp=RIFT_FLASH[type];
+  if(fp){
+    const pos='x' in fp?fp:(winA?fp.a:fp.b);
+    if(pos){
+      const fx=document.getElementById('riftFX');
+      if(fx){
+        const d=document.createElement('div');
+        d.className='map-flash';
+        d.style.cssText=`left:${pos.x}%;top:${pos.y}%;color:${winA?'#5f9be8':'#e24f4f'}`;
+        fx.appendChild(d);
+        d.addEventListener('animationend',()=>d.remove(),{once:true});
+      }
+    }
+  }
+  if(carry?.roles){
+    const idx=RIDX[carry.roles[0]]??2;
+    const icon=document.getElementById(`ri_${winA?'a':'b'}${idx}`);
+    if(icon){
+      icon.classList.remove('active');void icon.offsetWidth;
+      icon.classList.add('active');
+      icon.addEventListener('animationend',()=>icon.classList.remove('active'),{once:true});
+    }
+  }
+}
 
 function runLiveSim(o){
   // o: {a,b,aName,bName,synA,ctxLabel,onDone}
@@ -1162,6 +1257,7 @@ function runLiveSim(o){
   document.getElementById('ovl').classList.add('hidden');
   document.getElementById('skipBtn').classList.remove('hidden');
   show('v-match');
+  initRiftMap(o.a,o.b);
   playStep(0);
 }
 let liveSimState=null;
@@ -1180,6 +1276,7 @@ function playStep(i){
   div.innerHTML=`<span class="ic">${e.ic}</span><span class="mn">${e.m}'</span><span class="tx">${e.txt}</span>`;
   feed.insertBefore(div,feed.firstChild);
   while(feed.children.length>6)feed.removeChild(feed.lastChild);
+  pulseMapEvent(e.type,e.winA,e.carry);
   const delay=e.type==='nexus'?1500:(e.type==='teamfight'||e.type==='baron'||e.cls==='ace'?1080:760);
   liveTimer=setTimeout(()=>playStep(i+1),delay);
 }
@@ -1231,7 +1328,7 @@ function snakePool(lane,ctx,used){
   if(!cands.length)cands=CHAMPS.filter(c=>c.roles.includes(lane)); // só quando 0 únicos restam
   const rnd=seeded(lane+'|'+ctx.label+'|'+Math.random());
   const w=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
-  return w.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
+  return w.slice(0,4).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
 }
 function snakeBotPick(lane,ctx,used){
   let cands=CHAMPS.filter(c=>c.roles.includes(lane)&&!used.has(c.id));
@@ -1427,12 +1524,19 @@ function playYourMatch(mt){
   const seed=_matchSeed(mt.a,mt.b,tour.roundIdx);
   const rndCtx=seed!=null?seeded(seed):Math.random;
   const ctx=pick(rndCtx,CONTEXTS);
-  const synA=teamSyn(you.teamArr);
-  runLiveSim({a:you.teamArr,b:opp.teamArr,aName:'Você',bName:opp.name,synA,ctxLabel:ctx.label,seed,
+  // Online: canonical ordering (lower UUID = teamA) → ambos os clientes calculam o mesmo vencedor
+  const youIsA=!tour.isOnline||(myPlayerId<oppId);
+  const teamA=youIsA?you.teamArr:opp.teamArr;
+  const teamB=youIsA?opp.teamArr:you.teamArr;
+  runLiveSim({a:teamA,b:teamB,
+    aName:youIsA?'Você':opp.name,bName:youIsA?opp.name:'Você',
+    synA:youIsA?teamSyn(you.teamArr):teamSyn(opp.teamArr),ctxLabel:ctx.label,seed,
     onDone:(res)=>{
       mt.played=true;
-      if(res.win){mt.winner='you';mt.score=[res.aK,res.bK];opp.alive=false;opp.place=tour.placeCounter;}
-      else {mt.winner=oppId;mt.score=[res.bK,res.aK];you.alive=false;you.place=tour.placeCounter;}
+      const youWon=youIsA?res.win:!res.win;
+      const yk=youIsA?res.aK:res.bK,ok=youIsA?res.bK:res.aK;
+      if(youWon){mt.winner='you';mt.score=[yk,ok];opp.alive=false;opp.place=tour.placeCounter;}
+      else{mt.winner=oppId;mt.score=[ok,yk];you.alive=false;you.place=tour.placeCounter;}
       tour.placeCounter=Math.ceil(tour.placeCounter/2);
       show('v-bracket');renderBracket();updateBrkButton();
     }});
@@ -1832,7 +1936,7 @@ function onlineSnakePool(lane,ctx,used,roomCode,laneIdx,turnPos,rerollCount){
   if(!cands.length)cands=CHAMPS.filter(c=>c.roles.includes(lane));
   const rnd=seeded(`${roomCode}|${lane}|${ctx.label}|${laneIdx}|${turnPos}|${rerollCount||0}`);
   const w=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
-  return w.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return{...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
+  return w.slice(0,4).map(x=>{const s=estStats(x.c,ctx.label);return{...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
 }
 
 async function _enterOnlineDraft(roomState){
@@ -1875,11 +1979,12 @@ function _subscribeToDraft(code){
     .on('postgres_changes',{event:'UPDATE',schema:'public',table:'rooms',filter:'code=eq.'+code},
       async(payload)=>{
         if(!od)return;
+        const turnMoved=payload.new.lane_idx!==od.room.lane_idx||payload.new.turn_pos!==od.room.turn_pos;
         od.room=payload.new;
         if(payload.new.status==='bracket'){_onOnlineDraftComplete();return;}
         const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',code);
         if(rawPlayers)od.players=od.room.player_order.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
-        od.opts=null;od.rerollCount=0;
+        if(turnMoved){od.opts=null;od.rerollCount=0;}
         _renderOd();
         _maybePickBot();
       })
