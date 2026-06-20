@@ -2319,8 +2319,16 @@ async function tryRejoinRoom(code){
         placeCounter:parts.length,ctx,isOnline:true,_bracketPlaying:false,_currentMatch:null};
   if(room.status==='bracket'||room.bracket_resolved){
     renderBracket();show('v-bracket');updateBrkButton();
-    if(room.bracket_resolved){await _loadAndPlayBracket(code);}
-    else{_subscribeToBracketResolved(code);}
+    if(room.bracket_resolved){
+      await _loadAndPlayBracket(code);
+    }else{
+      // Ainda não resolvido — subscreve E tenta reivindicar o lock
+      _subscribeToBracketResolved(code);
+      if(!room.bracket_resolving){
+        const{data:won,error:ce}=await sb.rpc('claim_bracket_resolve',{p_room_code:code});
+        if(!ce&&won)try{await _resolveAndSave(parts,ctx,code);}catch(e){console.error(e);}
+      }
+    }
   }else if(room.status==='drafting'){
     await _enterOnlineDraft(room);
   }else{sessionStorage.removeItem('draftlol_room');show('v-home');}
