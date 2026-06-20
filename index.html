@@ -1241,6 +1241,9 @@ function snakeBotPick(lane,ctx,used){
   return {...c,wr:s.wr,pr:s.pr,cat:archCat(c.arch)};
 }
 function startSnakeDraft(players,mode,onComplete){
+  // Restaura botão "Pular bots" que pode ter sido escondido pelo draft online
+  const skipBtn=document.getElementById('snakeSkip');
+  if(skipBtn)skipBtn.style.display='';
   const ctx=pick(Math.random,CONTEXTS);
   sd={players,lanes:ALL_ROLES.slice(),laneIdx:0,queue:players.map((_,i)=>i),turnPos:0,
     used:new Set(),
@@ -1279,6 +1282,7 @@ function snakeProcess(){
 }
 function snakeAdvance(){sd.turnPos++;snakeProcess();}
 function snakeSelect(i){
+  if(od){_onlineSelect(i);return;}
   if(!sd.opts)return;
   const lane=sd.lanes[sd.laneIdx];const champ=sd.opts[i];
   const you=sd.players.find(p=>p.isYou);
@@ -1289,6 +1293,7 @@ function snakeSelect(i){
   snakeAdvance();
 }
 function snakeReroll(){
+  if(od){_onlineReroll();return;}
   if(sd.rerollsLeft<=0||!sd.opts)return;
   sd.rerollsLeft--;
   const lane=sd.lanes[sd.laneIdx];
@@ -1614,7 +1619,8 @@ function _lobbyCleanup(){
   if(lobbyChannel){sb?.removeChannel(lobbyChannel);lobbyChannel=null;}
   if(draftChannel){sb?.removeChannel(draftChannel);draftChannel=null;}
   if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}
-  currentRoom=null;isRoomHost=false;
+  if(botPickTimer){clearTimeout(botPickTimer);botPickTimer=null;}
+  od=null;currentRoom=null;isRoomHost=false;
 }
 
 function _startHeartbeat(){
@@ -1795,12 +1801,197 @@ function copyCode(){
   });
 }
 
-/* ---------- placeholder: navegação para o draft online (Fase 3) ---------- */
-function _enterOnlineDraft(roomState){
-  // Será implementado na Fase 3
-  // Por ora, mostra uma mensagem de que o draft iniciou
+/* =======================================================================
+   FASE 3 — DRAFT ONLINE SINCRONIZADO
+   ======================================================================= */
+
+let od=null;         // estado do draft online (separado do sd offline)
+let botPickTimer=null;
+
+// Pool determinístico: seed baseada no estado → todos os clientes geram as MESMAS opções
+function onlineSnakePool(lane,ctx,used,roomCode,laneIdx,turnPos,rerollCount){
+  let cands=CHAMPS.filter(c=>c.roles.includes(lane)&&!used.has(c.id));
+  if(!cands.length)cands=CHAMPS.filter(c=>c.roles.includes(lane));
+  const rnd=seeded(`${roomCode}|${lane}|${ctx.label}|${laneIdx}|${turnPos}|${rerollCount||0}`);
+  const w=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
+  return w.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return{...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
+}
+
+async function _enterOnlineDraft(roomState){
+  // Aguarda CHAMPS carregados (load() pode ainda estar em andamento)
+  let tries=0;
+  while(!CHAMPS&&tries++<30)await new Promise(r=>setTimeout(r,200));
+  if(!CHAMPS){alert('Campeões não carregados. Recarregue a página.');return;}
+
   currentRoom=roomState.code||currentRoom;
-  alert('Draft iniciado! (Fase 3 pendente de implementação)\nSala: '+currentRoom);
+
+  const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',currentRoom);
+  if(!rawPlayers)return;
+
+  const ctx=CONTEXTS.find(c=>c.label===roomState.ctx_label)||CONTEXTS[0];
+  const playerOrder=roomState.player_order;
+  const players=playerOrder.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
+
+  od={room:roomState,players,ctx,opts:null,rerollCount:0};
+
+  document.getElementById('snakeTitle').textContent='Draft Online';
+  document.getElementById('snakeCtx').innerHTML=
+    `<span class="chip">${ctx.label}</span>`+
+    (roomState.mode==='blind'?`<span class="chip" style="border-color:var(--goldDim);color:var(--gold2)">às cegas</span>`:'')+
+    `<span class="chip">${players.length} jog.</span>`+
+    (isRoomHost?`<span class="chip" style="background:rgba(200,161,74,.12);color:var(--gold2)">host</span>`:'');
+
+  // Esconde "Pular bots" (irrelevante no online)
+  const skipBtn=document.getElementById('snakeSkip');
+  if(skipBtn)skipBtn.style.display='none';
+
+  _subscribeToDraft(currentRoom);
+  _renderOd();
+  show('v-snake');
+  _maybePickBot();
+}
+
+function _subscribeToDraft(code){
+  if(draftChannel){sb.removeChannel(draftChannel);draftChannel=null;}
+  draftChannel=sb.channel('odraft:'+code)
+    .on('postgres_changes',{event:'UPDATE',schema:'public',table:'rooms',filter:'code=eq.'+code},
+      async(payload)=>{
+        if(!od)return;
+        od.room=payload.new;
+        if(payload.new.status==='bracket'){_onOnlineDraftComplete();return;}
+        const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',code);
+        if(rawPlayers)od.players=od.room.player_order.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
+        od.opts=null;od.rerollCount=0;
+        _renderOd();
+        _maybePickBot();
+      })
+    .subscribe();
+}
+
+function _curOdPlayer(){
+  if(!od)return null;
+  const{room,players}=od;
+  const n=players.length;
+  const idx=room.lane_idx%2===0?room.turn_pos:n-1-room.turn_pos;
+  return players[idx]||null;
+}
+
+function _renderOd(){
+  if(!od)return;
+  const{room,players,ctx}=od;
+  const lane=ALL_ROLES[room.lane_idx];
+  if(!lane)return;
+  const cur=_curOdPlayer();
+  const isMyTurn=cur&&cur.id===myPlayerId;
+  const blind=room.mode==='blind';
+  const laneLabel=ROLE_LABELS[lane],laneIc=ROLE_ICONS[lane];
+
+  const banner=document.getElementById('snakeTurn');
+  if(isMyTurn){
+    banner.className='snake-turn you';
+    banner.innerHTML=`<span class="turn-lane">${laneIc} ${laneLabel}</span><span class="turn-you">Sua vez — escolha 1 de 3</span>`;
+  }else{
+    banner.className='snake-turn';
+    banner.innerHTML=`<span class="turn-lane">${laneIc} ${laneLabel}</span><span class="turn-bot">${cur?escHtml(cur.name):'?'} está escolhendo…</span>`;
+  }
+
+  if(isMyTurn){
+    const used=new Set(room.used_champions||[]);
+    od.opts=onlineSnakePool(lane,ctx,used,currentRoom,room.lane_idx,room.turn_pos,od.rerollCount);
+    const rerolls=room.rerolls_left;
+    document.getElementById('snakeOptions').innerHTML=od.opts.map((c,i)=>{
+      const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
+      const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
+      return `<div class="card" onclick="snakeSelect(${i})"><div class="pic"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div><div class="cn">${escHtml(c.name)}</div><span class="tag ${c.cat}">${c.arch}</span>${stat}</div>`;
+    }).join('');
+    document.getElementById('snakeControls').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="snakeReroll()" ${rerolls<=0?'disabled':''}>↻ Reroll (${rerolls})</button>`;
+  }else{
+    document.getElementById('snakeOptions').innerHTML='';
+    document.getElementById('snakeControls').innerHTML='';
+  }
+
+  document.getElementById('snakeBoard').innerHTML=players.map(p=>{
+    const isCur=cur&&p.id===cur.id;
+    const picks=Array.isArray(p.team_picks)?p.team_picks:[];
+    const cells=ALL_ROLES.map((ln,li)=>{
+      const c=picks[li];
+      const isCurCell=isCur&&li===room.lane_idx;
+      if(c&&c.id)return`<div class="scell filled" title="${escHtml(c.name)}"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div>`;
+      return`<div class="scell ${isCurCell?'cur':''}">${isCurCell?'<span class="dot"></span>':ROLE_ICONS[ln]}</div>`;
+    }).join('');
+    return`<div class="srow ${p.id===myPlayerId?'you':''} ${isCur?'active':''}"><div class="sname">${escHtml(p.name)}${p.is_bot?' <span style="font-size:10px;color:var(--txt3)">[bot]</span>':''}</div><div class="scells">${cells}</div></div>`;
+  }).join('');
+}
+
+async function _onlineSelect(i){
+  if(!od||!od.opts||!currentRoom)return;
+  const champ=od.opts[i];
+  document.querySelectorAll('#snakeOptions .card').forEach(c=>c.style.pointerEvents='none');
+  document.getElementById('snakeControls').innerHTML='<span style="color:var(--txt2);font-size:13px">Enviando…</span>';
+  const{error}=await sb.rpc('make_draft_pick',{p_room_code:currentRoom,p_champion_id:champ.id,p_champion_json:champ});
+  if(error){alert('Erro ao pickear: '+error.message);_renderOd();}
+}
+
+async function _onlineReroll(){
+  if(!od||od.room.rerolls_left<=0)return;
+  const{error}=await sb.rpc('use_reroll',{p_room_code:currentRoom});
+  if(error){alert('Erro no reroll: '+error.message);return;}
+  od.rerollCount++;od.room.rerolls_left--;
+  const lane=ALL_ROLES[od.room.lane_idx];
+  const used=new Set(od.room.used_champions||[]);
+  od.opts=onlineSnakePool(lane,od.ctx,used,currentRoom,od.room.lane_idx,od.room.turn_pos,od.rerollCount);
+  const rerolls=od.room.rerolls_left;
+  const blind=od.room.mode==='blind';
+  document.getElementById('snakeOptions').innerHTML=od.opts.map((c,i)=>{
+    const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
+    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
+    return`<div class="card" onclick="snakeSelect(${i})"><div class="pic"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div><div class="cn">${escHtml(c.name)}</div><span class="tag ${c.cat}">${c.arch}</span>${stat}</div>`;
+  }).join('');
+  document.getElementById('snakeControls').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="snakeReroll()" ${rerolls<=0?'disabled':''}>↻ Reroll (${rerolls})</button>`;
+}
+
+function _maybePickBot(){
+  if(!isRoomHost||!od)return;
+  const{room,players,ctx}=od;
+  if(room.status!=='drafting')return;
+  const cur=_curOdPlayer();
+  if(!cur||!cur.is_bot)return;
+  const snapLane=room.lane_idx,snapTurn=room.turn_pos;
+  if(botPickTimer)clearTimeout(botPickTimer);
+  botPickTimer=setTimeout(async()=>{
+    if(!od||od.room.lane_idx!==snapLane||od.room.turn_pos!==snapTurn)return;
+    const lane=ALL_ROLES[snapLane];
+    const used=new Set(od.room.used_champions||[]);
+    const opts=onlineSnakePool(lane,ctx,used,currentRoom,snapLane,snapTurn,0);
+    if(!opts.length)return;
+    await sb.rpc('make_draft_pick',{p_room_code:currentRoom,p_champion_id:opts[0].id,p_champion_json:opts[0]});
+  },1200);
+}
+
+async function _onOnlineDraftComplete(){
+  if(draftChannel){sb.removeChannel(draftChannel);draftChannel=null;}
+  const{data:rawPlayers}=await sb.from('room_players').select('*').eq('room_code',currentRoom);
+  const{data:room}=await sb.from('rooms').select('*').eq('code',currentRoom).single();
+  if(!rawPlayers||!room)return;
+  const playerOrder=room.player_order||rawPlayers.map(p=>p.id);
+  const ctx=od?.ctx||CONTEXTS[0];
+  const ordered=playerOrder.map(pid=>rawPlayers.find(p=>p.id===pid)).filter(Boolean);
+
+  // Usa 'you' como id local para compatibilidade com o bracket existente
+  const parts=ordered.map(p=>({
+    id:p.id===myPlayerId?'you':p.id,
+    name:p.name,
+    isYou:p.id===myPlayerId,
+    alive:true,place:null,
+    teamArr:Array.isArray(p.team_picks)?p.team_picks:[null,null,null,null,null]
+  }));
+
+  od=null;
+  const r1=[];
+  for(let i=0;i<parts.length;i+=2)
+    r1.push({a:parts[i].id,b:parts[i+1]?.id||null,winner:null,score:null,played:false});
+  tour={size:parts.length,mode:room.mode||'normal',parts,rounds:[r1],roundIdx:0,placeCounter:parts.length,ctx};
+  renderBracket();show('v-bracket');updateBrkButton();
 }
 
 /* ---------- modificação do bindSeg para alternar footer do create ---------- */
