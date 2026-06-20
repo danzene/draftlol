@@ -430,7 +430,7 @@
       <div class="inp-err" id="joinErr"></div>
       <div class="foot">
         <button class="btn btn-ghost" onclick="goHome()">Cancelar</button>
-        <button class="btn btn-gold grow" onclick="joinRoom()">Entrar na sala</button>
+        <button class="btn btn-gold grow ready" onclick="joinRoom()">Entrar na sala</button>
       </div>
     </div>
   </div>
@@ -454,7 +454,7 @@
       <div class="foot">
         <button class="btn btn-ghost" onclick="leaveLobby()">Sair</button>
         <button id="lobbyBotBtn" class="btn btn-ghost" onclick="fillBots()" style="display:none">+ Preencher bots</button>
-        <button id="lobbyStartBtn" class="btn btn-gold grow" onclick="startOnlineDraft()" style="display:none" disabled>Iniciar draft</button>
+        <button id="lobbyStartBtn" class="btn btn-gold grow ready" onclick="startOnlineDraft()" style="display:none" disabled>Iniciar draft</button>
       </div>
     </div>
   </div>
@@ -508,7 +508,7 @@
     <div id="roles"></div>
     <div class="foot">
       <button class="btn btn-ghost" id="draftBack" onclick="goHome()">Cancelar</button>
-      <button class="btn btn-gold grow" id="confirmBtn" onclick="confirmDraft()">Confirmar e batalhar</button>
+      <button class="btn btn-gold grow ready" id="confirmBtn" onclick="confirmDraft()">Confirmar e batalhar</button>
     </div>
   </div>
 
