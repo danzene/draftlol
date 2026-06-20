@@ -128,6 +128,7 @@
   .card .st{margin-top:8px;font-family:'Oswald';font-variant-numeric:tabular-nums;font-size:12px;color:var(--txt2)}
   .card .st .pr{color:var(--txt3);font-size:11px}
   .card .st.blind{color:var(--txt3);letter-spacing:2px}
+  .card .st.real{color:var(--win)}
 
   .foot{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap}
   .foot .grow{flex:1;min-width:180px}
@@ -529,7 +530,8 @@
 
   <div class="disc">
     DraftLoL não é afiliado, endossado ou patrocinado pela Riot Games.<br>
-    Campeões via Data Dragon oficial. Winrate e pickrate são estimativas de gameplay, não estatísticas reais.
+    Campeões via Data Dragon oficial. Quando disponíveis, winrates reais são calculados a partir de amostras coletadas via Riot API.<br>
+    Dados de pro play por <a href="https://oracleselixir.com" target="_blank" rel="noopener">Oracle's Elixir</a>, disponibilizados publicamente para uso por analistas e fãs — não afiliado à Riot Games.
   </div>
 </div>
 
@@ -657,16 +659,36 @@ const ARCH_CTR={
   teamfight:{engage:1, dive:1,  burst:1,  poke:1,  sustain:0,  peel:-1, scaling:-1,teamfight:0},
 };
 // Bônus de matchup total: lane a lane (peso maior) + composição geral (peso menor)
+// Cadeia de fallback por rota: (a) dados reais ≥15 games → (b) pro play Oracle's Elixir → (c) ARCH_CTR
+const MIN_MU_GAMES=15;
+function _muBonus(muData,role,idA,idB){
+  if(!muData?.[role])return null;
+  const m1=muData[role][`${idA}-${idB}`];
+  if(m1?.games>=MIN_MU_GAMES)return(m1.winsA/m1.games-0.5)*0.6;
+  const m2=muData[role][`${idB}-${idA}`];
+  if(m2?.games>=MIN_MU_GAMES)return(0.5-m2.winsA/m2.games)*0.6;
+  return null;
+}
 function compMatchupBonus(teamA,teamB){
   let bonus=0;
+  const ROLE_ORDER=['top','jungle','mid','adc','support'];
   const len=Math.min(teamA.length,teamB.length);
   for(let i=0;i<len;i++){
     const a=teamA[i],b=teamB[i];
     if(!a||!b)continue;
-    bonus+=(ARCH_CTR[a.arch]?.[b.arch]||0)*0.10; // matchup da rota (0.10 por rota)
+    const role=ROLE_ORDER[i];
+    // (a) dados reais coletados pela Riot API
+    const real=_muBonus(STATS_SNAPSHOT?.byMatchup,role,a.id,b.id);
+    if(real!==null){bonus+=real;continue;}
+    // (b) dados de pro play (Oracle's Elixir)
+    const pro=_muBonus(PRO_MATCHUPS?.byMatchup,role,a.id,b.id);
+    if(pro!==null){bonus+=pro;continue;}
+    // (c) heurística por arquétipo
+    bonus+=(ARCH_CTR[a.arch]?.[b.arch]||0)*0.10;
   }
+  // composição geral — sempre usa ARCH_CTR (dados por par de composição completa são escassos)
   teamA.forEach(a=>teamB.forEach(b=>{
-    bonus+=(ARCH_CTR[a.arch]?.[b.arch]||0)*0.012; // matchup da composição geral
+    bonus+=(ARCH_CTR[a.arch]?.[b.arch]||0)*0.012;
   }));
   return bonus;
 }
@@ -700,6 +722,8 @@ const FALLBACK_PATCH='14.24.1';
 let CHAMPS=null,PATCH=null,OFFLINE=false;
 let CHAMP_BY_KEY={};
 let POWER_NORM={mean:5,std:1};
+let STATS_SNAPSHOT=null; // data/stats-snapshot.json — winrates reais via Riot API
+let PRO_MATCHUPS=null;   // data/pro-matchups.json   — matchups via Oracle's Elixir
 let draft=null;       // controlador do draft atual
 let sd=null;          // estado do snake draft (campeonato)
 let tour=null;        // estado do campeonato
@@ -786,6 +810,11 @@ async function load(){
     OFFLINE=true;PATCH=FALLBACK_PATCH;
     CHAMPS=FALLBACK_CHAMPS.map(c=>({...c,arch:deriveArchetype(c),roles:eligibleRoles(c),stats:synthStats(c)}));
   }
+  // carregar estatísticas reais (falha silenciosa — arquivos só existem após primeiro collect-stats)
+  [STATS_SNAPSHOT,PRO_MATCHUPS]=await Promise.all([
+    fetchJSON('data/stats-snapshot.json',3000).catch(()=>null),
+    fetchJSON('data/pro-matchups.json',3000).catch(()=>null)
+  ]);
   // build numeric-key map (used for mastery display)
   CHAMP_BY_KEY={};
   CHAMPS.forEach(c=>{if(c.key)CHAMP_BY_KEY[c.key]=c;});
@@ -817,26 +846,35 @@ function openBlindInfo(){createCfg.mode='blind';quickStart(true);}
    POOLS + ESTATÍSTICAS
    ======================================================================= */
 function estStats(champ,ctxLabel){
-  // normalise power to z-score, map to winrate centred on 50%
+  const rnd=seeded(champ.id+'|'+ctxLabel);
+  // (a) dado real: winrate medido por collect-stats.js (mínimo 30 partidas)
+  const champData=STATS_SNAPSHOT?.byChampion?.[champ.id];
+  if(champData){
+    let g=0,w=0;
+    Object.values(champData).forEach(d=>{g+=d.games;w+=d.wins;});
+    if(g>=30){
+      const wr=clamp(w/g*100,42,58);
+      return {wr:+wr.toFixed(1),pr:4+Math.round(rnd()*16),source:'real',games:g};
+    }
+  }
+  // (b) fallback: z-score baseado em atributos do Data Dragon
   const p=powerCurveStats(champ);
   const avgPower=(p.early+p.mid+p.late)/3;
   const z=(avgPower-POWER_NORM.mean)/(POWER_NORM.std||1);
-  const rnd=seeded(champ.id+'|'+ctxLabel);
-  const noise=(rnd()-0.5)*2;            // ±1 pp noise
+  const noise=(rnd()-0.5)*2;
   let wr=50+z*3+noise;
   const m=(CONTEXTS.find(c=>c.label===ctxLabel)||{mods:{}}).mods[champ.arch];
   if(m)wr+=m*0.4;
   wr=clamp(wr,44,57);
   if(isNaN(wr))wr=50;
-  const pr=4+Math.round(rnd()*16);
-  return {wr:+wr.toFixed(1),pr};
+  return {wr:+wr.toFixed(1),pr:4+Math.round(rnd()*16),source:'estimado'};
 }
 function poolForRole(role,ctx,salt,exclude=new Set()){
   let cands=CHAMPS.filter(c=>c.roles.includes(role)&&!exclude.has(c.id));
-  if(cands.length<3)cands=CHAMPS.filter(c=>c.roles.includes(role)); // fallback sem exclusão
+  if(!cands.length)cands=CHAMPS.filter(c=>c.roles.includes(role));
   const rnd=seeded(role+'|'+ctx.label+'|'+salt);
   const weighted=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
-  return weighted.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,cat:archCat(x.c.arch)};});
+  return weighted.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
 }
 function autoDraft(ctx){
   return ALL_ROLES.map(role=>{
@@ -894,7 +932,8 @@ function renderGrid(role){
   document.getElementById('grid-'+role).innerHTML=draft.pools[role].map((c,i)=>{
     const sel=draft.picks[role]===i;
     const dim=locked&&!sel;
-    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st">${c.wr}% <span class="pr">· ${c.pr}% pick</span></div>`;
+    const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
+    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
     return `<div class="card ${sel?'sel':''} ${dim?'locked-out':''}" ${dim?'':(`onclick="selectPick('${role}',${i})"`)}>
       <div class="ck">✓</div>
       <div class="pic"><img src="${IMG(c.id)}" alt="" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div>
@@ -1096,6 +1135,10 @@ function botName(i){return BOTNAMES[i%BOTNAMES.length];}
 function launchTournament(){
   if(createCfg.opp==='online'){openOnlineInfo();return;}
   const size=createCfg.size;
+  if(OFFLINE&&size>8){
+    alert(`Modo offline — lista reduzida (${FALLBACK_CHAMPS.length} campeões).\n\nCampeonato de ${size} jogadores exigiria ${size*5} campeões únicos, mas o elenco offline não tem suficientes.\n\nHospede o site ou abra com conexão para carregar os ~165 campeões reais. Por enquanto o máximo offline é 8 jogadores.`);
+    return;
+  }
   const names=[...BOTNAMES].sort(()=>Math.random()-0.5).slice(0,size-1);
   const players=[{id:'you',name:'Você',isYou:true,alive:true,place:null,teamArr:[null,null,null,null,null]}];
   names.forEach((n,i)=>players.push({id:'b'+i,name:n,isYou:false,alive:true,place:null,teamArr:[null,null,null,null,null]}));
@@ -1106,10 +1149,10 @@ function launchTournament(){
 /* ---------- SNAKE DRAFT: rota por rota, jogador por jogador (serpentina) ---------- */
 function snakePool(lane,ctx,used){
   let cands=CHAMPS.filter(c=>c.roles.includes(lane)&&!used.has(c.id));
-  if(cands.length<3)cands=CHAMPS.filter(c=>c.roles.includes(lane));
+  if(!cands.length)cands=CHAMPS.filter(c=>c.roles.includes(lane)); // só quando 0 únicos restam
   const rnd=seeded(lane+'|'+ctx.label+'|'+Math.random());
   const w=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
-  return w.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,cat:archCat(x.c.arch)};});
+  return w.slice(0,3).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
 }
 function snakeBotPick(lane,ctx,used){
   let cands=CHAMPS.filter(c=>c.roles.includes(lane)&&!used.has(c.id));
@@ -1216,7 +1259,8 @@ function renderSnake(curIdx,lane){
 function renderSnakeOptions(lane){
   const blind=sd.mode==='blind';
   document.getElementById('snakeOptions').innerHTML=sd.opts.map((c,i)=>{
-    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st">${c.wr}% <span class="pr">· ${c.pr}% pick</span></div>`;
+    const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
+    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
     return `<div class="card" onclick="snakeSelect(${i})"><div class="pic"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div><div class="cn">${c.name}</div><span class="tag ${c.cat}">${c.arch}</span>${stat}</div>`;
   }).join('');
   document.getElementById('snakeControls').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="snakeReroll()" ${sd.rerollsLeft<=0?'disabled':''}>↻ Reroll (${sd.rerollsLeft})</button>`;
