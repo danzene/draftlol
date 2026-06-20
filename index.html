@@ -1964,7 +1964,8 @@ function _maybePickBot(){
     const used=new Set(od.room.used_champions||[]);
     const opts=onlineSnakePool(lane,ctx,used,currentRoom,snapLane,snapTurn,0);
     if(!opts.length)return;
-    await sb.rpc('make_draft_pick',{p_room_code:currentRoom,p_champion_id:opts[0].id,p_champion_json:opts[0]});
+    const pick=opts[Math.abs(hashStr(cur.id+snapLane))%opts.length];
+    await sb.rpc('make_draft_pick',{p_room_code:currentRoom,p_champion_id:pick.id,p_champion_json:pick});
   },1200);
 }
 
