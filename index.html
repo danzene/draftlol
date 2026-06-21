@@ -2389,7 +2389,17 @@ function estStats(champ,ctxLabel){
       return {wr:+wr.toFixed(1),pr:4+Math.round(rnd()*16),source:'real',games:g};
     }
   }
-  // (b) fallback: z-score baseado em atributos do Data Dragon
+  // (b) pro play: winrate de partidas pro via Oracle's Elixir (mínimo 3 games)
+  const proData=PRO_MATCHUPS?.byChampion?.[champ.id];
+  if(proData){
+    let g=0,w=0;
+    Object.values(proData).forEach(d=>{g+=d.games;w+=d.wins;});
+    if(g>=3){
+      const wr=clamp(w/g*100,38,62); // faixa um pouco mais ampla que ranked (pro tem mais variância)
+      return {wr:+wr.toFixed(1),pr:4+Math.round(rnd()*16),source:'pro',games:g};
+    }
+  }
+  // (c) fallback: z-score baseado em atributos do Data Dragon
   const p=powerCurveStats(champ);
   const avgPower=(p.early+p.mid+p.late)/3;
   const z=(avgPower-POWER_NORM.mean)/(POWER_NORM.std||1);
