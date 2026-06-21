@@ -425,6 +425,33 @@
   .lu-badge.offrole{background:var(--redDim);color:var(--red)}
   .lu-off-warn{color:var(--red);font-size:10px}
   .lu-assign-row{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
+  /* JORNADA */
+  .rg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin:14px 0}
+  .rg-card{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+  .rg-card:hover{border-color:var(--gold);background:var(--bg4)}
+  .rg-id{font-family:'Oswald';font-size:22px;font-weight:700;color:var(--gold2);margin-bottom:2px}
+  .rg-label{font-size:12px;font-weight:500;margin-bottom:6px;color:var(--txt2)}
+  .rg-bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:4px}
+  .rg-fill{height:100%;background:var(--gold);border-radius:4px}
+  .rg-str{font-size:10px;color:var(--txt3)}
+  .journey-stage{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+  .j-step{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:11px 14px;display:flex;align-items:center;gap:12px}
+  .j-step.active{border-color:var(--gold);background:var(--bg4)}
+  .j-step.done{opacity:.6}
+  .j-step.locked{opacity:.32}
+  .j-step-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center}
+  .j-step-info{flex:1}
+  .j-step-title{font-family:'Oswald';font-size:15px}
+  .j-step-sub{font-size:11px;color:var(--txt3);margin-top:2px}
+  .j-trophies{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+  .j-trophy{background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:8px 12px;text-align:center;min-width:68px}
+  .j-trophy .jt-count{font-family:'Oswald';font-size:22px;color:var(--gold2)}
+  .j-trophy .jt-label{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px}
+  .rival-row{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+  .rival-card{background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:10px}
+  .rv-name{font-weight:600;font-size:13px;flex:1}
+  .rv-rec{font-size:11px;color:var(--txt3)}
+  .rv-str{font-family:'Oswald';font-size:16px;color:var(--gold2);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -773,6 +800,16 @@
     <div class="panel" id="rosterPanel"></div>
   </div>
 
+  <!-- MODO CARREIRA: escolha de região (uma vez) -->
+  <div id="v-region-select" class="hidden">
+    <div class="panel" id="regionSelectPanel"></div>
+  </div>
+
+  <!-- MODO CARREIRA: jornada plurianual -->
+  <div id="v-journey" class="hidden">
+    <div class="panel" id="journeyPanel"></div>
+  </div>
+
   <!-- MODO CARREIRA: escalação (titulares + reservas) -->
   <div id="v-lineup" class="hidden">
     <div class="panel" id="lineupPanel"></div>
@@ -802,6 +839,7 @@
 <script type="module" src="career/probability.js"></script>
 <script type="module" src="career/economy.js"></script>
 <script type="module" src="career/match.js"></script>
+<script type="module" src="career/journey.js"></script>
 
 <script>
 /* =======================================================================
@@ -1126,7 +1164,7 @@ function renderNav(){
 }
 
 /* ---------- roteador ---------- */
-const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster','v-lineup','v-career-match'];
+const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster','v-lineup','v-career-match','v-region-select','v-journey'];
 function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(id==='v-create')_updateCreateFooter();}
 function goHome(){
   clearTimeout(liveTimer);tour=null;draft=null;sd=null;
@@ -1170,6 +1208,9 @@ async function goCareer(){
   if(!_careerLoggedIn(u)){renderCareerLogin();return;}
   renderCareerLoading();
   try{await ensureCareerProfile(u);}catch(e){console.error('[DraftLoL] perfil de carreira:',e);}
+  if(careerProfile&&!careerProfile.region&&globalThis.Career&&globalThis.Career.journey){
+    openRegionSelect(u);return;
+  }
   renderCareerHome(u);
 }
 
@@ -1206,11 +1247,13 @@ function renderCareerHome(u){
      <div class="rank-chips">
        <div class="rchip">PE: <span class="tier">${p.pe||0}</span></div>
        <div class="rchip">Fichas: <span class="tier">${p.fichas||0}</span></div>
+       ${(()=>{const C=_C(),J=C&&C.journey;if(!J||!p.region)return'';const r=J.REGION_BY_ID[p.region];const ws=p.world_state||{};const stageLabel={national:'Liga Nacional',continental:'Continental',mundial:'Mundial',offseason:'Entressafra'}[ws.stage||'national']||ws.stage||'—';return`<div class="rchip">${r?r.id:'—'} · Ano ${p.career_year||1}</div><div class="rchip">Etapa: <span class="tier">${stageLabel}</span></div>`})()}
      </div>
      <div class="car-actions">
        <button class="btn btn-gold" onclick="openGacha()">🎴 Recrutar</button>
        <button class="btn btn-ghost" onclick="openRoster()">📋 Elenco</button>
        <button class="btn btn-ghost" onclick="openLineup()">⚽ Escalação</button>
+       ${p.region?`<button class="btn btn-ghost" onclick="openJourney()">🌍 Jornada</button>`:''}
        <button class="btn btn-ghost" onclick="openCareerMatch()">⚔ Partida</button>
      </div>
      <p style="color:var(--txt3);font-size:13px;margin-top:14px">Em breve: árvore de talentos e ligas.</p>
@@ -1536,7 +1579,11 @@ async function openCareerMatch(){
   const C=_C();
   const seed='match|'+careerUser.id+'|'+Date.now();
   const rng=seeded(seed);
-  const aiPlayers=C.match.buildAiRoster(C.match.AI_DIFFICULTY_DEFAULT,rng);
+  // Usa rival da jornada quando há contexto ativo, senão padrão livre
+  const jOpts=careerJourneyCtx;
+  const aiPlayers=jOpts
+    ?C.match.buildAiRoster(jOpts.rival.strength,seeded(jOpts.rival.seed))
+    :C.match.buildAiRoster(C.match.AI_DIFFICULTY_DEFAULT,rng);
   const ctx=pick(rng,CONTEXTS);
   const draftSalt=Math.random().toString(36).slice(2,8);
   careerMatchState={
@@ -1553,6 +1600,7 @@ async function openCareerMatch(){
     aiChampPicks:[null,null,null,null,null],
     _banOpts:[],
     _draftOpts:[],
+    _journeyOpts:jOpts,  // null se partida livre
   };
   renderCareerBans();
 }
@@ -1775,17 +1823,24 @@ async function handleCareerMatchDone(res){
   const rewards=C.match.matchRewards(
     s.myStarters.map(p=>p&&p._rosterRow).filter(Boolean),won
   );
+  // Salva XP dos jogadores (sempre, jornada ou livre)
   try{
     for(const u of rewards.playerUpdates){
       await sb.from('career_roster').update({xp:u.newXp,level:u.newLevel})
         .eq('user_id',careerUser.id).eq('player_id',u.player_id);
     }
+  }catch(e){console.error('[DraftLoL] savePlayerXp:',e);}
+  // Roteia para jornada se aplicável
+  if(s._journeyOpts){
+    await _handleJourneyMatchDone(won,rewards,s._journeyOpts);
+    return;
+  }
+  // Partida livre: salva PE do treinador e mostra resultado genérico
+  try{
     const newPe=(careerProfile.pe||0)+rewards.trainerPe;
     await sb.from('career_profiles').update({pe:newPe}).eq('user_id',careerUser.id);
     careerProfile.pe=newPe;
-  }catch(e){
-    console.error('[DraftLoL] saveMatchRewards:',e);
-  }
+  }catch(e){console.error('[DraftLoL] saveMatchRewards:',e);}
   await loadCareerRoster();
   show('v-career-match');
   renderCareerMatchResult(won,rewards);
@@ -2093,6 +2148,222 @@ async function _saveLineup(){
   if(!sb||!careerUser)return;
   await sb.from('career_profiles').update({lineup:careerLineup}).eq('user_id',careerUser.id);
   if(careerProfile)careerProfile.lineup=careerLineup;
+}
+
+/* =======================================================================
+   MODO CARREIRA — JORNADA PLURIANUAL (Fase 6)
+   Nacional → Continental → Mundial → Entressafra → próximo ano.
+   Região escolhida uma vez, bloqueada depois.
+   ======================================================================= */
+
+function _journeyReady(){return !!(globalThis.Career&&globalThis.Career.journey);}
+const _STAGE_LABELS={national:'Liga Nacional',continental:'Continental',mundial:'Mundial',offseason:'Entressafra'};
+
+/* ── Seleção de região (exibida uma vez na entrada da carreira) ── */
+function openRegionSelect(u){
+  show('v-region-select');
+  const J=_C()&&_C().journey;
+  const nm=(careerProfile&&careerProfile.display_name)||'Treinador';
+  const cardsHtml=(J?J.REGIONS:[]).map(r=>`
+    <div class="rg-card" onclick="selectRegion('${r.id}')">
+      <div class="rg-id">${r.id}</div>
+      <div class="rg-label">${escHtml(r.label)}</div>
+      <div class="rg-bar"><div class="rg-fill" style="width:${r.strength}%"></div></div>
+      <div class="rg-str">Força ${r.strength}/100</div>
+    </div>`).join('');
+  document.getElementById('regionSelectPanel').innerHTML=`
+    <div class="draft-head"><div class="title disp">Escolha sua Região</div></div>
+    <p style="color:var(--txt2);font-size:14px;line-height:1.6;margin-bottom:6px">
+      ${escHtml(nm)}, você representará esta região pela carreira inteira.<br>
+      <span style="color:var(--txt3);font-size:12px">A força da região define o nível inicial dos adversários. <b>Escolha não pode ser alterada.</b></span>
+    </p>
+    <div class="rg-grid">${cardsHtml}</div>
+    <div class="foot"><button class="btn btn-ghost" onclick="goCareer()">Voltar</button></div>`;
+}
+
+async function selectRegion(id){
+  if(!sb||!careerUser)return;
+  const J=_C().journey;
+  if(!J||!J.REGION_BY_ID[id])return;
+  const ws=J.initialWorldState(id);
+  try{
+    await sb.from('career_profiles')
+      .update({region:id,career_year:1,world_state:ws})
+      .eq('user_id',careerUser.id);
+    careerProfile.region=id;
+    careerProfile.career_year=1;
+    careerProfile.world_state=ws;
+  }catch(e){console.error('[DraftLoL] selectRegion:',e);}
+  goCareer();
+}
+
+/* ── Tela de jornada ─────────────────────────────────────────────── */
+async function openJourney(){
+  if(!sb||!careerUser){goCareer();return;}
+  show('v-journey');
+  if(!_journeyReady()){document.getElementById('journeyPanel').innerHTML=`<div class="roster-empty">Módulo de jornada ainda carregando. Aguarde.</div>`;return;}
+  document.getElementById('journeyPanel').innerHTML=`<div class="loading" style="padding:30px"><div class="spin"></div></div>`;
+  await ensureCareerProfile(careerUser);
+  renderJourney();
+}
+
+function renderJourney(){
+  const p=careerProfile||{};
+  const J=_C().journey;
+  const region=J.REGION_BY_ID[p.region]||{id:'?',label:'?',strength:60};
+  const year=p.career_year||1;
+  const ws=p.world_state||J.initialWorldState(p.region||'BR');
+  const stage=ws.stage||'national';
+  const tr=ws.trophies||{};
+
+  // Trofeus
+  const trophiesHtml=`<div class="j-trophies">
+    <div class="j-trophy"><div class="jt-count">${tr.nacional||tr.national||0}</div><div class="jt-label">Nacionais</div></div>
+    <div class="j-trophy"><div class="jt-count">${tr.continental||0}</div><div class="jt-label">Continentais</div></div>
+    <div class="j-trophy"><div class="jt-count">${tr.mundial||0}</div><div class="jt-label">Mundiais</div></div>
+  </div>`;
+
+  // Etapas do ciclo
+  const STEPS=[
+    {key:'national',    icon:'🏆', label:'Liga Nacional',   sub:`Represente ${region.id} e classifique para o Continental`},
+    {key:'continental', icon:'🌎', label:'Continental',      sub:`Enfrente as melhores regiões do continente`},
+    {key:'mundial',     icon:'🌐', label:'Mundial',          sub:`Chefe: campeão mundial vigente — o ápice da carreira`},
+  ];
+  const stepsHtml=STEPS.map(st=>{
+    const done=ws[st.key]&&ws[st.key].completed;
+    const active=stage===st.key;
+    const locked=!done&&!active&&stage!==st.key;
+    const won=done&&ws[st.key].won;
+    const cls=done?'done':active?'active':'locked';
+    const icon=done?(won?'✅':'❌'):active?st.icon:'🔒';
+    let actionHtml='';
+    if(active){
+      const rival=J.nextOpponent(ws,p.region,year,st.key,false);
+      actionHtml=`<button class="btn btn-gold btn-sm ready" onclick="startJourneyMatch(false)">⚔ Disputar vs ${escHtml(rival.name)}</button>`;
+    }
+    return`<div class="j-step ${cls}">
+      <div class="j-step-icon">${icon}</div>
+      <div class="j-step-info">
+        <div class="j-step-title">${st.label}${done&&won?' 🥇':done&&!won?' 🥈':''}</div>
+        <div class="j-step-sub">${st.sub}</div>
+        ${actionHtml}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Rivais recorrentes
+  const rivals=(ws.rivals||[]);
+  const rivalsHtml=rivals.length?`
+    <div style="font-size:12px;color:var(--txt3);margin:10px 0 4px;text-transform:uppercase;letter-spacing:1px">Rivais Recorrentes</div>
+    <div class="rival-row">${rivals.map(r=>`
+      <div class="rival-card">
+        <span class="rv-str">${r.strength}</span>
+        <span class="rv-name">${escHtml(r.name)}</span>
+        <span class="rv-rec">${r.winsVsMe||0}V ${r.lossesVsMe||0}D</span>
+      </div>`).join('')}
+    </div>`:'';
+
+  const offseasonHtml=stage==='offseason'?`
+    <div style="background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0;text-align:center">
+      <div style="font-family:'Oswald';font-size:16px;margin-bottom:6px">Temporada Concluída</div>
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:12px">Os rivais ficaram mais fortes. Reforce seu elenco antes do próximo ano.</div>
+      <button class="btn btn-gold ready" onclick="nextYearJourney()">Avançar para Ano ${year+1} ➡</button>
+    </div>`:'';
+
+  document.getElementById('journeyPanel').innerHTML=`
+    <div class="draft-head">
+      <div class="title disp">Jornada — Ano ${year}</div>
+      <div class="chip">${escHtml(region.label)}</div>
+    </div>
+    ${trophiesHtml}
+    <div class="journey-stage">${stepsHtml}</div>
+    ${offseasonHtml}
+    ${rivalsHtml}
+    <div style="font-size:11px;color:var(--txt3);margin:8px 0">
+      Dificuldade atual: <b>${J.aiDifficulty(year,'national',region.strength)}</b> nac · <b>${J.aiDifficulty(year,'continental',region.strength)}</b> cont · <b>${J.aiDifficulty(year,'mundial',region.strength)}</b> mundial
+    </div>
+    <div class="foot">
+      <button class="btn btn-ghost" onclick="goCareer()">Voltar</button>
+      <button class="btn btn-ghost" onclick="openLineup()">⚽ Escalação</button>
+    </div>`;
+}
+
+async function startJourneyMatch(isChef){
+  if(!_journeyReady()||!careerProfile)return;
+  const J=_C().journey;
+  const p=careerProfile;
+  const ws=p.world_state||{};
+  const stage=ws.stage||'national';
+  const rival=J.nextOpponent(ws,p.region,p.career_year||1,stage,isChef);
+  careerJourneyCtx={rival,stage,year:p.career_year||1};
+  openCareerMatch();
+}
+
+async function nextYearJourney(){
+  if(!_journeyReady()||!careerProfile)return;
+  const J=_C().journey;
+  const newWS=J.yearEnd(careerProfile.world_state||{});
+  const newYear=(careerProfile.career_year||1)+1;
+  try{
+    await sb.from('career_profiles').update({career_year:newYear,world_state:newWS}).eq('user_id',careerUser.id);
+    careerProfile.career_year=newYear;
+    careerProfile.world_state=newWS;
+  }catch(e){console.error('[DraftLoL] nextYearJourney:',e);}
+  renderJourney();
+}
+
+async function _handleJourneyMatchDone(won,baseRewards,jOpts){
+  const C=_C();
+  const jr=C.journey.stageRewards(jOpts.stage,won);
+  const totalPe=(careerProfile.pe||0)+baseRewards.trainerPe+jr.pe;
+  const totalFichas=(careerProfile.fichas||0)+jr.fichas;
+  // Avança estado da jornada
+  let newWS=C.journey.advanceStage(careerProfile.world_state||{},jOpts.stage,won);
+  // Atualiza W/L do rival recorrente
+  newWS.rivals=(newWS.rivals||[]).map(r=>{
+    if(r.id!==jOpts.rival.id)return r;
+    return won?{...r,winsVsMe:(r.winsVsMe||0)+1}:{...r,lossesVsMe:(r.lossesVsMe||0)+1};
+  });
+  try{
+    await sb.from('career_profiles')
+      .update({pe:totalPe,fichas:totalFichas,world_state:newWS})
+      .eq('user_id',careerUser.id);
+    careerProfile.pe=totalPe;
+    careerProfile.fichas=totalFichas;
+    careerProfile.world_state=newWS;
+  }catch(e){console.error('[DraftLoL] journeyMatchSave:',e);}
+  careerJourneyCtx=null;
+  await loadCareerRoster();
+  show('v-journey');
+  _renderJourneyMatchResult(won,jOpts,jr,baseRewards);
+}
+
+function _renderJourneyMatchResult(won,jOpts,jr,baseRewards){
+  const stageLabel=_STAGE_LABELS[jOpts.stage]||jOpts.stage;
+  const totalPe=baseRewards.trainerPe+jr.pe;
+  const p=careerProfile||{};
+  const ws=p.world_state||{};
+  const nextStageLabel=_STAGE_LABELS[ws.stage||'national']||ws.stage;
+  document.getElementById('journeyPanel').innerHTML=`
+    <div class="draft-head">
+      <div class="title disp" style="color:${won?'var(--win)':'var(--loss)'}">${won?'VITÓRIA':'DERROTA'}</div>
+      <div class="chip">${escHtml(stageLabel)}</div>
+    </div>
+    <div style="text-align:center;padding:16px 0">
+      <div style="font-size:15px;color:var(--txt2);margin-bottom:6px">${won?'Classificado!':'Eliminado.'}</div>
+      <div style="font-family:Oswald;font-size:13px;color:var(--txt3)">vs ${escHtml(jOpts.rival.name)} (força ${jOpts.rival.strength})</div>
+    </div>
+    <div class="cm-rewards">
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:4px">Recompensas da Jornada</div>
+      <div class="rw-val">+${totalPe} PE &nbsp; +${jr.fichas} Fichas</div>
+    </div>
+    <div style="font-size:13px;color:var(--txt2);text-align:center;margin:8px 0">
+      Próxima etapa: <b>${escHtml(nextStageLabel)}</b>
+    </div>
+    <div class="foot">
+      <button class="btn btn-ghost" onclick="goCareer()">Início</button>
+      <button class="btn btn-gold ready" onclick="renderJourney()">Ver Jornada</button>
+    </div>`;
 }
 
 /* =======================================================================
@@ -2839,8 +3110,9 @@ let careerUser=null;        // usuário da sessão (anônimo ou Google)
 let careerProfile=null;     // linha de career_profiles do usuário logado
 let careerRoster=null;      // linhas de career_roster (elenco) do usuário
 let careerMatchState=null;  // estado da partida de carreira em andamento
-let careerLineup={bench:[]};  // escalação {top,jungle,mid,adc,support,bench:[]}
-const OFF_ROLE_PENALTY=0.80;  // 🎚️ multiplicador de atributos ao escalar fora da rota natural
+let careerLineup={bench:[]};      // escalação {top,jungle,mid,adc,support,bench:[]}
+let careerJourneyCtx=null;        // contexto ativo de partida de jornada {rival,stage,year}
+const OFF_ROLE_PENALTY=0.80;      // 🎚️ multiplicador de atributos ao escalar fora da rota natural
 
 const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
