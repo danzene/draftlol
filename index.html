@@ -369,6 +369,34 @@
   .mini-rev .mr-b{font-size:9px;font-family:'Oswald';letter-spacing:.3px;text-transform:uppercase;margin-top:4px;padding:1px 6px;border-radius:999px;display:inline-block;background:var(--bg4);color:var(--txt3)}
   .mini-rev .mr-b.new,.mini-rev .mr-b.star{background:var(--gold);color:#1a1306}
   .mini-rev .mr-b.tok{background:rgba(95,214,168,.16);color:var(--win)}
+  /* CAREER MATCH: bans + draft + result */
+  .ban-board{display:flex;justify-content:space-between;gap:12px;margin:10px 0;padding:10px;background:var(--bg2);border-radius:10px;border:1px solid var(--line)}
+  .ban-side{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px}
+  .ban-side-label{font-family:'Oswald';font-size:11px;letter-spacing:.8px;text-transform:uppercase}
+  .ban-slots{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+  .ban-slot{width:36px;height:36px;border-radius:6px;background:var(--bg3);border:1px dashed var(--line);overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .ban-slot.filled{border:1px solid var(--line);filter:grayscale(1);opacity:.6}
+  .ban-slot img{width:100%;height:100%;object-fit:cover}
+  .ban-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:6px;max-height:280px;overflow-y:auto;margin:10px 0;padding:2px}
+  .ban-card{border-radius:8px;background:var(--bg2);border:1px solid var(--line);padding:5px;text-align:center;cursor:pointer;transition:border-color .15s}
+  .ban-card:hover{border-color:var(--gold)}
+  .ban-card img{width:48px;height:48px;border-radius:6px;object-fit:cover}
+  .ban-card .bcn{font-size:9px;color:var(--txt2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cdr-player{background:var(--bg2);border:1px solid var(--rc,var(--line));border-radius:10px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
+  .cdr-icon{width:44px;height:44px;border-radius:50%;background:var(--bg3);border:2px solid var(--rc,var(--line));display:flex;align-items:center;justify-content:center;font-size:16px}
+  .cdr-info .cdr-name{font-family:'Oswald';font-size:16px}
+  .cdr-info .cdr-meta{font-size:12px;color:var(--txt2)}
+  .cdr-options{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:8px 0}
+  .cdr-opt{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;transition:border-color .15s;text-align:center}
+  .cdr-opt:hover{border-color:var(--gold)}
+  .cdr-opt img{width:56px;height:56px;border-radius:8px;object-fit:cover}
+  .cdr-opt .co-name{font-family:'Oswald';font-size:13px;margin-top:4px}
+  .cm-rewards{background:var(--bg2);border-radius:10px;padding:14px;margin:12px 0;text-align:center}
+  .cm-rewards .rw-val{font-family:'Oswald';font-size:26px;color:var(--gold)}
+  .cm-picks{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+  .cm-picks .cp-item{text-align:center}
+  .cm-picks .cp-item img{width:42px;height:42px;border-radius:6px}
+  .cm-picks .cp-n{font-size:9px;color:var(--txt3)}
 </style>
 </head>
 <body>
@@ -717,6 +745,11 @@
     <div class="panel" id="rosterPanel"></div>
   </div>
 
+  <!-- MODO CARREIRA: partida (bans + draft + simulação) -->
+  <div id="v-career-match" class="hidden">
+    <div class="panel" id="careerMatchPanel"></div>
+  </div>
+
   <div class="disc">
     DraftLoL não é afiliado, endossado ou patrocinado pela Riot Games.<br>
     Campeões via Data Dragon oficial. Quando disponíveis, winrates reais são calculados a partir de amostras coletadas via Riot API.<br>
@@ -735,6 +768,7 @@
 <script type="module" src="career/power.js"></script>
 <script type="module" src="career/probability.js"></script>
 <script type="module" src="career/economy.js"></script>
+<script type="module" src="career/match.js"></script>
 
 <script>
 /* =======================================================================
@@ -1059,7 +1093,7 @@ function renderNav(){
 }
 
 /* ---------- roteador ---------- */
-const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster'];
+const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster','v-career-match'];
 function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(id==='v-create')_updateCreateFooter();}
 function goHome(){
   clearTimeout(liveTimer);tour=null;draft=null;sd=null;
@@ -1143,6 +1177,7 @@ function renderCareerHome(u){
      <div class="car-actions">
        <button class="btn btn-gold" onclick="openGacha()">🎴 Recrutar</button>
        <button class="btn btn-ghost" onclick="openRoster()">📋 Elenco</button>
+       <button class="btn btn-ghost" onclick="openCareerMatch()">⚔ Partida</button>
      </div>
      <p style="color:var(--txt3);font-size:13px;margin-top:14px">Em breve: árvore de talentos e ligas.</p>
      <div class="foot">
@@ -1376,6 +1411,374 @@ async function doGachaPull10(){
     return;
   }
   renderGacha(`<div class="reveal-grid">${results.map(r=>_miniRevCard(r.p,r.badge,r.badgeCls,r.stars,r.max)).join('')}</div>`);
+}
+
+/* =======================================================================
+   MODO CARREIRA — Partida (Fase 4)
+   ======================================================================= */
+
+/* ── Adaptador: phaseScore (escala interna ~[3,25]) → 0-100 (career/power.js).
+   POWER_NORM.{mean,std} são calculados após o carregamento dos campeões em load().
+   Campeão médio → ~50; ±1σ ≈ ±15 pontos.
+
+   Valores aproximados (modo fallback sintético, fase mid L=10):
+     Vayne  (ADC agressivo)  : ~62  — bônus ranged + DPS alto elevam
+     Garen  (Fighter/Tank)   : ~44  — eHP alto mas sem bônus ranged
+     Soraka (Support/Mage)   : ~46  — magic alta, DPS físico fraco
+
+   Com dados reais do Data Dragon os valores diferem. Para verificar no console:
+     champStr0to100(CHAMPS.find(c=>c.id==='Garen'), 'mid')
+     champStr0to100(CHAMPS.find(c=>c.id==='Caitlyn'), 'late')  */
+function champStr0to100(champ,phase){
+  const L={early:3,mid:10,late:16}[phase]||10;
+  const raw=phaseScore(champ,L);
+  return clamp(50+(raw-POWER_NORM.mean)/(POWER_NORM.std||1)*15,0,100);
+}
+
+/* Empacota um campeão do jogo no formato que career/power.js espera */
+function champForCareer(champ){
+  if(!champ)return null;
+  return {
+    arch: champ.arch||'teamfight',
+    power:{
+      early:champStr0to100(champ,'early'),
+      mid:  champStr0to100(champ,'mid'),
+      late: champStr0to100(champ,'late')
+    }
+  };
+}
+
+/* Calcula poderPick de um jogador de carreira com um campeão do jogo */
+function careerPickPower(careerPlayer,champ){
+  const C=_C();
+  if(!careerPlayer||!champ)return{early:0,mid:0,late:0,avg:0};
+  return C.power.poderPick(careerPlayer,champForCareer(champ));
+}
+
+/* Escolhe o melhor titular por rota (mais estrelas > maior attr médio).
+   TODO (Fase 5): tela de escalação para o treinador escolher quem escala. */
+function pickMyStarters(rosterRows){
+  const C=_C();
+  return ['top','jungle','mid','adc','support'].map(role=>{
+    const cands=rosterRows
+      .map(row=>({row,player:C.players.getPlayerById(row.player_id)}))
+      .filter(({player})=>player&&player.role===role)
+      .sort((a,b)=>{
+        if(b.row.stars!==a.row.stars)return b.row.stars-a.row.stars;
+        const avgA=globalThis.Career.util.mean(Object.values(a.player.attrs));
+        const avgB=globalThis.Career.util.mean(Object.values(b.player.attrs));
+        return avgB-avgA;
+      });
+    if(!cands.length)return null;
+    const{row,player}=cands[0];
+    return{...player,stars:row.stars,xp:row.xp||0,level:row.level||1,_rosterRow:row};
+  });
+}
+
+async function openCareerMatch(){
+  if(!sb||!careerUser){goCareer();return;}
+  show('v-career-match');
+  if(!_careerReady()||!globalThis.Career.match){
+    document.getElementById('careerMatchPanel').innerHTML=
+      '<div class="roster-empty">Módulos de carreira ainda carregando. Aguarde e tente novamente.</div>';
+    return;
+  }
+  await loadCareerRoster();
+  if(!careerRoster||!careerRoster.length){
+    document.getElementById('careerMatchPanel').innerHTML=
+      `<div class="roster-empty">Elenco vazio — recrute jogadores antes de disputar.<br><br>
+       <button class="btn btn-gold" onclick="openGacha()">Ir para Recrutar</button></div>`;
+    return;
+  }
+  const myStarters=pickMyStarters(careerRoster);
+  const missingRoles=['top','jungle','mid','adc','support'].filter((_,i)=>!myStarters[i]);
+  if(missingRoles.length){
+    document.getElementById('careerMatchPanel').innerHTML=
+      `<div class="roster-empty">Faltam titulares para: <b>${missingRoles.map(r=>ROLE_LABELS[r]).join(', ')}</b>.<br>
+       Recrute mais jogadores no gacha.<br><br>
+       <button class="btn btn-gold" onclick="openGacha()">Ir para Recrutar</button></div>`;
+    return;
+  }
+  const C=_C();
+  const seed='match|'+careerUser.id+'|'+Date.now();
+  const rng=seeded(seed);
+  const aiPlayers=C.match.buildAiRoster(C.match.AI_DIFFICULTY_DEFAULT,rng);
+  const ctx=pick(rng,CONTEXTS);
+  const draftSalt=Math.random().toString(36).slice(2,8);
+  careerMatchState={
+    seed,rng,ctx,draftSalt,
+    phase:'bans',
+    banTurn:0,
+    myBans:[],aiBans:[],
+    allBanned:new Set(),
+    allUsed:new Set(),
+    myStarters,
+    aiPlayers,
+    roleIdx:0,
+    myChampPicks:[null,null,null,null,null],
+    aiChampPicks:[null,null,null,null,null],
+    _banOpts:[],
+    _draftOpts:[],
+  };
+  renderCareerBans();
+}
+
+/* ── FASE DE BANIMENTOS ── */
+function renderCareerBans(){
+  const s=careerMatchState;
+  if(!s){return;}
+  if(s.banTurn>=10){renderCareerDraft();return;}
+  const myTurn=(s.banTurn%2===0);
+
+  const slotHtml=(bans,max)=>{
+    let h='';
+    for(let i=0;i<max;i++){
+      const c=bans[i]?CHAMPS.find(x=>x.id===bans[i]):null;
+      h+=`<div class="ban-slot${c?' filled':''}">
+        ${c?`<img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))">`:
+          `<span style="font-size:9px;color:var(--txt3)">${i+1}</span>`}
+      </div>`;
+    }
+    return h;
+  };
+
+  const sorted=CHAMPS
+    .filter(c=>!s.allBanned.has(c.id))
+    .map(c=>({c,avg:(champStr0to100(c,'early')+champStr0to100(c,'mid')+champStr0to100(c,'late'))/3}))
+    .sort((a,b)=>b.avg-a.avg);
+  s._banOpts=sorted.map(x=>x.c);
+
+  const gridHtml=myTurn
+    ? sorted.slice(0,60).map(({c},i)=>`
+        <div class="ban-card" onclick="careerBanByIdx(${i})">
+          <img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))">
+          <div class="bcn">${escHtml(c.name)}</div>
+        </div>`).join('')
+    : `<div style="color:var(--txt2);padding:24px;text-align:center;grid-column:1/-1">IA escolhendo ban…</div>`;
+
+  document.getElementById('careerMatchPanel').innerHTML=`
+    <div class="draft-head">
+      <div class="title disp">Banimentos</div>
+      <div class="chip">${s.banTurn}/10 banidos</div>
+    </div>
+    <div class="ban-board">
+      <div class="ban-side">
+        <div class="ban-side-label" style="color:var(--blue)">Seus bans</div>
+        <div class="ban-slots">${slotHtml(s.myBans,5)}</div>
+      </div>
+      <div class="ban-side">
+        <div class="ban-side-label" style="color:var(--red)">Bans da IA</div>
+        <div class="ban-slots">${slotHtml(s.aiBans,5)}</div>
+      </div>
+    </div>
+    <div class="lobby-msg" style="margin:6px 0">
+      ${myTurn?'<b>Sua vez</b> — clique num campeão para banir':'<span style="color:var(--txt2)">IA banindo…</span>'}
+    </div>
+    <div class="ban-grid">${gridHtml}</div>
+    <div class="foot">
+      <button class="btn btn-ghost" onclick="goCareer()">Abandonar</button>
+      ${myTurn?'<button class="btn btn-ghost" onclick="skipCareerBan()">Pular ban</button>':''}
+    </div>`;
+
+  if(!myTurn)setTimeout(doAiBan,700);
+}
+
+function careerBanByIdx(idx){
+  const s=careerMatchState;
+  if(!s||s.phase!=='bans'||s.banTurn%2!==0)return;
+  const champ=s._banOpts[idx];
+  if(!champ||s.allBanned.has(champ.id))return;
+  s.myBans.push(champ.id);
+  s.allBanned.add(champ.id);
+  s.allUsed.add(champ.id);
+  s.banTurn++;
+  renderCareerBans();
+}
+
+function skipCareerBan(){
+  const s=careerMatchState;
+  if(!s||s.phase!=='bans'||s.banTurn%2!==0)return;
+  s.banTurn++;
+  renderCareerBans();
+}
+
+function doAiBan(){
+  const s=careerMatchState;
+  if(!s||s.phase!=='bans'||s.banTurn%2===0)return;
+  const C=_C();
+  const pool=CHAMPS.map(c=>({
+    id:c.id,
+    avgPower:(champStr0to100(c,'early')+champStr0to100(c,'mid')+champStr0to100(c,'late'))/3
+  }));
+  const banned=C.match.aiSelectBan(pool,s.allBanned,s.rng);
+  if(banned){
+    s.aiBans.push(banned.id);
+    s.allBanned.add(banned.id);
+    s.allUsed.add(banned.id);
+  }
+  s.banTurn++;
+  renderCareerBans();
+}
+
+/* ── FASE DE DRAFT ── */
+function renderCareerDraft(){
+  const s=careerMatchState;
+  s.phase='draft';
+  if(s.roleIdx>=5){startCareerSim();return;}
+  const roles=['top','jungle','mid','adc','support'];
+  const role=roles[s.roleIdx];
+  const myPlayer=s.myStarters[s.roleIdx];
+  const C=_C();
+  const max=C.rarity.maxStars(myPlayer.rarity);
+
+  const opts=poolForRole(role,s.ctx,s.draftSalt+role,s.allUsed);
+  s._draftOpts=opts;
+
+  const optHtml=opts.map((c,i)=>{
+    const pp=careerPickPower(myPlayer,c);
+    return `<div class="cdr-opt" onclick="careerPickChamp(${i})">
+      <img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))">
+      <div class="co-name">${escHtml(c.name)}</div>
+      <span class="tag ${c.cat}" style="font-size:10px">${c.arch}</span>
+      <div style="font-size:11px;color:var(--txt3);margin-top:3px">Poder: <b style="color:var(--gold2)">${Math.round(pp.avg)}</b></div>
+    </div>`;
+  }).join('');
+
+  const boardHtml=roles.map((r,i)=>{
+    const myC=s.myChampPicks[i],aiC=s.aiChampPicks[i];
+    const mySide=myC?`<img src="${IMG(myC.id)}" style="width:28px;height:28px;border-radius:4px" loading="lazy">`:
+      (i===s.roleIdx?'🎯':'<span style="opacity:.3">—</span>');
+    const aiSide=aiC?`<img src="${IMG(aiC.id)}" style="width:28px;height:28px;border-radius:4px" loading="lazy">`:
+      (i===s.roleIdx?'<span style="opacity:.5">?</span>':'<span style="opacity:.3">—</span>');
+    return `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)">
+      <span style="width:62px;font-size:11px;color:var(--txt2)">${ROLE_LABELS[r]}</span>
+      <div style="width:30px;text-align:center">${mySide}</div>
+      <span style="flex:1;text-align:center;font-size:10px;color:var(--txt3)">vs</span>
+      <div style="width:30px;text-align:center">${aiSide}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('careerMatchPanel').innerHTML=`
+    <div class="draft-head">
+      <div class="title disp">Draft — ${ROLE_LABELS[role]}</div>
+      <div class="chip">Rota ${s.roleIdx+1}/5</div>
+    </div>
+    <div class="cdr-player rar-${myPlayer.rarity}">
+      <div class="cdr-icon"><div class="inittile">${_pInit(myPlayer)}</div></div>
+      <div class="cdr-info">
+        <div class="cdr-name">${escHtml(myPlayer.name)}</div>
+        <div class="cdr-meta">${_rarLabel(myPlayer.rarity)} · Nv${myPlayer.level} · ${_starsHtml(myPlayer.stars,max)}</div>
+      </div>
+    </div>
+    <div style="font-size:12px;color:var(--txt2);margin-bottom:6px">Escolha o campeão para <b>${escHtml(myPlayer.name)}</b>:</div>
+    <div class="cdr-options">${optHtml}</div>
+    <div style="margin-top:12px;font-size:12px;color:var(--txt3);border-top:1px solid var(--line);padding-top:8px"><b>Rascunho atual:</b></div>
+    <div style="margin-top:6px">${boardHtml}</div>
+    <div class="foot"><button class="btn btn-ghost" onclick="goCareer()">Abandonar</button></div>`;
+}
+
+function careerPickChamp(idx){
+  const s=careerMatchState;
+  if(!s||s.phase!=='draft')return;
+  const opts=s._draftOpts;
+  if(!opts||idx<0||idx>=opts.length)return;
+  const chosen=opts[idx];
+  s.myChampPicks[s.roleIdx]=chosen;
+  s.allUsed.add(chosen.id);
+
+  // IA escolhe para a mesma rota
+  const C=_C();
+  const roles=['top','jungle','mid','adc','support'];
+  const role=roles[s.roleIdx];
+  const aiPlayer=s.aiPlayers[s.roleIdx];
+  const aiPool=poolForRole(role,s.ctx,s.draftSalt+role+'ai',s.allUsed)
+    .map(champ=>({champ,avgPickPower:careerPickPower(aiPlayer,champ).avg}));
+  const aiChosen=C.match.aiSelectPick(aiPool,s.rng);
+  if(aiChosen){s.aiChampPicks[s.roleIdx]=aiChosen;s.allUsed.add(aiChosen.id);}
+
+  s.roleIdx++;
+  renderCareerDraft();
+}
+
+/* ── SIMULAÇÃO ── */
+function startCareerSim(){
+  const s=careerMatchState;
+  const C=_C();
+  const roles=['top','jungle','mid','adc','support'];
+
+  const myCareerPicks=s.myStarters.map((player,i)=>({player,champion:champForCareer(s.myChampPicks[i])}));
+  const aiCareerPicks=s.aiPlayers.map((player,i)=>({player,champion:champForCareer(s.aiChampPicks[i])}));
+  const myPower=C.power.poderTime(myCareerPicks);
+  const aiPower=C.power.poderTime(aiCareerPicks);
+  const careerWinProb=C.probability.teamMatchProbability(myPower,aiPower,'avg');
+  const powerBias=C.match.careerPowerBias(careerWinProb);
+  s._careerWinProb=careerWinProb;
+
+  const myTeam=s.myChampPicks.map((c,i)=>c||{id:'Garen',name:roles[i],arch:'engage',cat:'aggro',roles:[roles[i]]});
+  const aiTeam=s.aiChampPicks.map((c,i)=>c||{id:'Darius',name:roles[i],arch:'dive',cat:'aggro',roles:[roles[i]]});
+  const synA=teamSyn(myTeam.filter(Boolean));
+
+  runLiveSim({
+    a:myTeam,b:aiTeam,
+    aName:'Você',bName:'Rival-IA',
+    synA,seed:s.seed,
+    powerBias,
+    onDone:handleCareerMatchDone,
+  });
+}
+
+/* ── RESULTADO E RECOMPENSAS ── */
+async function handleCareerMatchDone(res){
+  const s=careerMatchState;
+  if(!s)return;
+  const won=res.win;
+  const C=_C();
+  const rewards=C.match.matchRewards(
+    s.myStarters.map(p=>p&&p._rosterRow).filter(Boolean),won
+  );
+  try{
+    for(const u of rewards.playerUpdates){
+      await sb.from('career_roster').update({xp:u.newXp,level:u.newLevel})
+        .eq('user_id',careerUser.id).eq('player_id',u.player_id);
+    }
+    const newPe=(careerProfile.pe||0)+rewards.trainerPe;
+    await sb.from('career_profiles').update({pe:newPe}).eq('user_id',careerUser.id);
+    careerProfile.pe=newPe;
+  }catch(e){
+    console.error('[DraftLoL] saveMatchRewards:',e);
+  }
+  await loadCareerRoster();
+  show('v-career-match');
+  renderCareerMatchResult(won,rewards);
+}
+
+function renderCareerMatchResult(won,rewards){
+  const s=careerMatchState;
+  const picks=s.myChampPicks.filter(Boolean);
+  const picksHtml=picks.map(c=>`<div class="cp-item">
+    <img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))">
+    <div class="cp-n">${escHtml(c.name)}</div>
+  </div>`).join('');
+  const winPct=s._careerWinProb?Math.round(s._careerWinProb*100):50;
+  document.getElementById('careerMatchPanel').innerHTML=`
+    <div class="draft-head">
+      <div class="title disp" style="color:${won?'var(--win)':'var(--loss)'}">${won?'VITÓRIA':'DERROTA'}</div>
+    </div>
+    <div class="cm-rewards">
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:4px">Recompensas</div>
+      <div class="rw-val">+${rewards.peGained} PE</div>
+      <div style="font-size:12px;color:var(--txt3);margin-top:4px">Distribuído para os 5 jogadores em campo</div>
+    </div>
+    <div style="font-size:12px;color:var(--txt2);margin-bottom:6px">Sua composição:</div>
+    <div class="cm-picks">${picksHtml}</div>
+    <div style="font-size:11px;color:var(--txt3);text-align:center;margin:8px 0">
+      Probabilidade pelo elenco: <b>${winPct}%</b>
+    </div>
+    <div class="foot">
+      <button class="btn btn-ghost" onclick="goCareer()">Voltar à Carreira</button>
+      <button class="btn btn-gold ready" onclick="openCareerMatch()">Jogar de novo</button>
+    </div>`;
+  careerMatchState=null;
 }
 
 /* ---------- ELENCO ---------- */
@@ -1633,7 +2036,10 @@ const TXT={
 const EICON={firstblood:'⚔',dragon:'🐉',herald:'👁',tower:'🏰',skirmish:'⚡',teamfight:'💥',baron:'🦂',nexus:'🏁',ace:'⭐'};
 
 function teamSyn(team){return synScore(team.map(c=>c.cat))||66;}
-function genTimeline(teamA,teamB,synA,seed){
+function genTimeline(teamA,teamB,synA,seed,powerBias){
+  // powerBias (opcional, default 0): deslocamento logístico vindo da engine de carreira.
+  // Inclina a simulação pelo poder do elenco sem substituí-la.
+  // Quando ausente (undefined/0) o comportamento é idêntico ao modo casual.
   const pa=teamPower(teamA),pb=teamPower(teamB);
   const sA=(synA||teamSyn(teamA)),sB=teamSyn(teamB);
   let lead=0,aK=0,bK=0,aceA=false,aceB=false;
@@ -1641,7 +2047,7 @@ function genTimeline(teamA,teamB,synA,seed){
   const rnd=seeded(seed!=null?seed:Math.random());
   const phaseOf=m=>m<14?'early':m<25?'mid':'late';
   const matchupBonus=compMatchupBonus(teamA,teamB);
-  const pAwin=m=>{const ph=phaseOf(m);const da=pa[ph]+sA/40,db=pb[ph]+sB/40;return 1/(1+Math.exp(-((da-db)*0.09+lead/18000+matchupBonus)));};
+  const pAwin=m=>{const ph=phaseOf(m);const da=pa[ph]+sA/40,db=pb[ph]+sB/40;return 1/(1+Math.exp(-((da-db)*0.09+lead/18000+matchupBonus+(powerBias||0))));};
   const beats=[
     {m:2,t:'firstblood'},{m:5,t:'dragon'},{m:8,t:'skirmish'},{m:10,t:'herald'},
     {m:13,t:'tower'},{m:16,t:'dragon'},{m:18,t:'teamfight'},{m:21,t:'tower'},
@@ -1737,7 +2143,7 @@ function pulseMapEvent(type,winA,carry){
 function runLiveSim(o){
   // o: {a,b,aName,bName,synA,seed,onDone,sim?,autoAdvance?}
   // o.sim pode ser passado pré-calculado (do banco) para reprodução fiel
-  const sim=o.sim||genTimeline(o.a,o.b,o.synA,o.seed);
+  const sim=o.sim||genTimeline(o.a,o.b,o.synA,o.seed,o.powerBias);
   liveSimState={o,sim,res:{...sim,a:o.a,b:o.b,aName:o.aName,bName:o.bName}};
   // setup UI
   const carry=o.a[3]||o.a[2];
@@ -2197,9 +2603,10 @@ let isRoomHost=false;  // é o host desta sala?
 let lobbyChannel=null; // canal realtime do lobby
 let draftChannel=null; // canal realtime do draft
 let heartbeatTimer=null;
-let careerUser=null;   // usuário da sessão (anônimo ou Google)
-let careerProfile=null;// linha de career_profiles do usuário logado
-let careerRoster=null; // linhas de career_roster (elenco) do usuário
+let careerUser=null;        // usuário da sessão (anônimo ou Google)
+let careerProfile=null;     // linha de career_profiles do usuário logado
+let careerRoster=null;      // linhas de career_roster (elenco) do usuário
+let careerMatchState=null;  // estado da partida de carreira em andamento
 
 const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 

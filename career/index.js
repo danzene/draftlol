@@ -12,5 +12,6 @@ const players     = require('./players.js');
 const power       = require('./power.js');
 const probability = require('./probability.js');
 const economy     = require('./economy.js');
+const match       = require('./match.js');
 
-module.exports = { config, util, archetypes, rarity, players, power, probability, economy };
+module.exports = { config, util, archetypes, rarity, players, power, probability, economy, match };
