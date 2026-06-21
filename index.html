@@ -397,6 +397,34 @@
   .cm-picks .cp-item{text-align:center}
   .cm-picks .cp-item img{width:42px;height:42px;border-radius:6px}
   .cm-picks .cp-n{font-size:9px;color:var(--txt3)}
+  /* ESCALAÇÃO */
+  .lu-starter-row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
+  .lu-slot{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:7px 4px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:86px}
+  .lu-slot.filled{border-color:var(--gold)}
+  .lu-role{font-family:'Oswald';font-size:9px;letter-spacing:.7px;color:var(--txt3);text-transform:uppercase;white-space:nowrap;margin-bottom:2px}
+  .lu-pini{width:32px;height:32px;background:var(--bg4);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Oswald';font-weight:700;font-size:12px;color:var(--txt2)}
+  .lu-pname{font-size:9px;color:var(--txt);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:58px}
+  .lu-offrole{font-size:8px;color:var(--red);line-height:1.1}
+  .lu-slot .lu-empty-label{font-size:9px;color:var(--txt3);margin-top:8px}
+  .lu-bench-row{display:flex;gap:8px;margin-bottom:12px}
+  .lu-bench-slot{flex:1;background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:8px;text-align:center;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+  .lu-bench-slot.filled{border-color:var(--line2)}
+  .lu-power-bar{background:var(--bg3);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--txt2)}
+  .lu-power-bar.incomplete{border-color:var(--redDim)}
+  .lu-power-val{font-family:'Oswald';font-size:22px;color:var(--gold2)}
+  .lu-roster{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+  .lu-pcard{background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:border-color .15s}
+  .lu-pcard:hover{border-color:var(--line2)}
+  .lu-pcard.selected{border-color:var(--gold);background:var(--bg4)}
+  .lu-pc-wrap{display:flex;align-items:center;gap:10px}
+  .lu-pcinit{width:36px;height:36px;background:var(--bg4);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Oswald';font-weight:700;font-size:13px;color:var(--txt2);flex-shrink:0}
+  .lu-pc-info{flex:1;min-width:0}
+  .lu-pc-name{font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lu-pc-sub{font-size:11px;color:var(--txt3)}
+  .lu-badge{font-family:'Oswald';font-size:10px;letter-spacing:.4px;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:var(--blueDim);color:var(--blue);white-space:nowrap}
+  .lu-badge.offrole{background:var(--redDim);color:var(--red)}
+  .lu-off-warn{color:var(--red);font-size:10px}
+  .lu-assign-row{margin-top:8px;display:flex;flex-wrap:wrap;gap:5px}
 </style>
 </head>
 <body>
@@ -743,6 +771,11 @@
   <!-- MODO CARREIRA: elenco -->
   <div id="v-roster" class="hidden">
     <div class="panel" id="rosterPanel"></div>
+  </div>
+
+  <!-- MODO CARREIRA: escalação (titulares + reservas) -->
+  <div id="v-lineup" class="hidden">
+    <div class="panel" id="lineupPanel"></div>
   </div>
 
   <!-- MODO CARREIRA: partida (bans + draft + simulação) -->
@@ -1093,7 +1126,7 @@ function renderNav(){
 }
 
 /* ---------- roteador ---------- */
-const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster','v-career-match'];
+const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster','v-lineup','v-career-match'];
 function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(id==='v-create')_updateCreateFooter();}
 function goHome(){
   clearTimeout(liveTimer);tour=null;draft=null;sd=null;
@@ -1177,6 +1210,7 @@ function renderCareerHome(u){
      <div class="car-actions">
        <button class="btn btn-gold" onclick="openGacha()">🎴 Recrutar</button>
        <button class="btn btn-ghost" onclick="openRoster()">📋 Elenco</button>
+       <button class="btn btn-ghost" onclick="openLineup()">⚽ Escalação</button>
        <button class="btn btn-ghost" onclick="openCareerMatch()">⚔ Partida</button>
      </div>
      <p style="color:var(--txt3);font-size:13px;margin-top:14px">Em breve: árvore de talentos e ligas.</p>
@@ -1217,6 +1251,7 @@ async function ensureCareerProfile(u){
     else if(error)console.warn('[DraftLoL] pacote inicial (migration 005?):',error.message);
   }
   careerProfile=data||null;
+  careerLineup=(data&&data.lineup)?{...data.lineup,bench:(data.lineup.bench||[])}:{bench:[]};
   return careerProfile;
 }
 
@@ -1455,23 +1490,21 @@ function careerPickPower(careerPlayer,champ){
   return C.power.poderPick(careerPlayer,champForCareer(champ));
 }
 
-/* Escolhe o melhor titular por rota (mais estrelas > maior attr médio).
-   TODO (Fase 5): tela de escalação para o treinador escolher quem escala. */
+/* Monta os 5 titulares a partir da escalação salva (careerLineup).
+   Jogadores fora da rota natural são marcados com _offRole=true;
+   a penalidade de poder é aplicada em startCareerSim(). */
 function pickMyStarters(rosterRows){
   const C=_C();
-  return ['top','jungle','mid','adc','support'].map(role=>{
-    const cands=rosterRows
-      .map(row=>({row,player:C.players.getPlayerById(row.player_id)}))
-      .filter(({player})=>player&&player.role===role)
-      .sort((a,b)=>{
-        if(b.row.stars!==a.row.stars)return b.row.stars-a.row.stars;
-        const avgA=globalThis.Career.util.mean(Object.values(a.player.attrs));
-        const avgB=globalThis.Career.util.mean(Object.values(b.player.attrs));
-        return avgB-avgA;
-      });
-    if(!cands.length)return null;
-    const{row,player}=cands[0];
-    return{...player,stars:row.stars,xp:row.xp||0,level:row.level||1,_rosterRow:row};
+  const lu=careerLineup||{};
+  return['top','jungle','mid','adc','support'].map(role=>{
+    const pid=lu[role];
+    if(!pid)return null;
+    const row=rosterRows.find(r=>r.player_id===pid);
+    if(!row)return null;
+    const player=C.players.getPlayerById(pid);
+    if(!player)return null;
+    const offRole=player.role!==role;
+    return{...player,stars:row.stars,xp:row.xp||0,level:row.level||1,_rosterRow:row,_slotRole:role,_offRole:offRole};
   });
 }
 
@@ -1483,6 +1516,7 @@ async function openCareerMatch(){
       '<div class="roster-empty">Módulos de carreira ainda carregando. Aguarde e tente novamente.</div>';
     return;
   }
+  await ensureCareerProfile(careerUser);  // garante careerLineup fresco
   await loadCareerRoster();
   if(!careerRoster||!careerRoster.length){
     document.getElementById('careerMatchPanel').innerHTML=
@@ -1494,9 +1528,9 @@ async function openCareerMatch(){
   const missingRoles=['top','jungle','mid','adc','support'].filter((_,i)=>!myStarters[i]);
   if(missingRoles.length){
     document.getElementById('careerMatchPanel').innerHTML=
-      `<div class="roster-empty">Faltam titulares para: <b>${missingRoles.map(r=>ROLE_LABELS[r]).join(', ')}</b>.<br>
-       Recrute mais jogadores no gacha.<br><br>
-       <button class="btn btn-gold" onclick="openGacha()">Ir para Recrutar</button></div>`;
+      `<div class="roster-empty">Escalação incompleta — faltam: <b>${missingRoles.map(r=>ROLE_LABELS[r]).join(', ')}</b>.<br>
+       Configure os 5 titulares antes de jogar.<br><br>
+       <button class="btn btn-gold" onclick="openLineup()">⚽ Ir para Escalação</button></div>`;
     return;
   }
   const C=_C();
@@ -1706,7 +1740,12 @@ function startCareerSim(){
   const C=_C();
   const roles=['top','jungle','mid','adc','support'];
 
-  const myCareerPicks=s.myStarters.map((player,i)=>({player,champion:champForCareer(s.myChampPicks[i])}));
+  const myCareerPicks=s.myStarters.map((player,i)=>{
+    const p=player._offRole
+      ?{...player,attrs:Object.fromEntries(Object.entries(player.attrs).map(([k,v])=>[k,v*OFF_ROLE_PENALTY]))}
+      :player;
+    return{player:p,champion:champForCareer(s.myChampPicks[i])};
+  });
   const aiCareerPicks=s.aiPlayers.map((player,i)=>({player,champion:champForCareer(s.aiChampPicks[i])}));
   const myPower=C.power.poderTime(myCareerPicks);
   const aiPower=C.power.poderTime(aiCareerPicks);
@@ -1861,6 +1900,199 @@ function showPlayerDetail(pid){
      <div class="foot">
        <button class="btn btn-ghost" onclick="openRoster()">Voltar ao elenco</button>
      </div>`;
+}
+
+/* =======================================================================
+   MODO CARREIRA — ESCALAÇÃO (Fase 5a)
+   Persiste 5 titulares + até 2 reservas em career_profiles.lineup (JSONB).
+   Jogadores fora da rota natural recebem OFF_ROLE_PENALTY em todos os attrs.
+   ======================================================================= */
+
+async function openLineup(){
+  if(!sb||!careerUser){goCareer();return;}
+  show('v-lineup');
+  if(!_careerReady()){document.getElementById('lineupPanel').innerHTML=`<div class="roster-empty">Módulos de carreira ainda carregando. Recarregue a página.</div>`;return;}
+  document.getElementById('lineupPanel').innerHTML=`<div class="loading" style="padding:30px"><div class="spin"></div></div>`;
+  await ensureCareerProfile(careerUser);
+  await loadCareerRoster();
+  renderLineup(null);
+}
+
+function getPlayerLineupSlot(pid){
+  const lu=careerLineup||{};
+  for(const r of['top','jungle','mid','adc','support']){if(lu[r]===pid)return r;}
+  if((lu.bench||[]).includes(pid))return'bench';
+  return null;
+}
+
+function lineupTeamPower(){
+  const C=_C();
+  const lu=careerLineup||{};
+  const rows=careerRoster||[];
+  const picks=['top','jungle','mid','adc','support'].map(role=>{
+    const pid=lu[role];
+    if(!pid)return null;
+    const row=rows.find(r=>r.player_id===pid);
+    const player=C.players.getPlayerById(pid);
+    if(!player||!row)return null;
+    const p=player.role!==role
+      ?{...player,attrs:Object.fromEntries(Object.entries(player.attrs).map(([k,v])=>[k,v*OFF_ROLE_PENALTY]))}
+      :player;
+    return{player:p,champion:null};
+  });
+  if(picks.some(p=>!p))return null;
+  return C.power.poderTime(picks);
+}
+
+function renderLineup(selectedPid){
+  const C=_C();
+  const rows=careerRoster||[];
+  const lu=careerLineup||{};
+  const bench=lu.bench||[];
+  const ROLES=['top','jungle','mid','adc','support'];
+  const ROLE_ICON={top:'🛡',jungle:'🌿',mid:'⚡',adc:'🏹',support:'💚'};
+
+  // ── Slots titulares
+  const starterSlotsHtml=ROLES.map(role=>{
+    const pid=lu[role];
+    const row=pid?rows.find(r=>r.player_id===pid):null;
+    const player=pid?C.players.getPlayerById(pid):null;
+    const offRole=player&&player.role!==role;
+    const max=player?C.rarity.maxStars(player.rarity):0;
+    if(player&&row)return`<div class="lu-slot filled rar-${player.rarity}">
+      <div class="lu-role">${ROLE_ICON[role]} ${ROLE_LABELS[role]||role}</div>
+      <div class="lu-pini">${_pInit(player)}</div>
+      <div class="lu-pname">${escHtml(player.name)}</div>
+      <div style="font-size:8px">${_starsHtml(row.stars,max)}</div>
+      ${offRole?'<div class="lu-offrole">⚠ Fora de rota</div>':''}
+    </div>`;
+    return`<div class="lu-slot empty">
+      <div class="lu-role">${ROLE_ICON[role]} ${ROLE_LABELS[role]||role}</div>
+      <div class="lu-empty-label">Vazio</div>
+    </div>`;
+  }).join('');
+
+  // ── Slots reserva
+  const benchSlotsHtml=[0,1].map(i=>{
+    const pid=bench[i];
+    const row=pid?rows.find(r=>r.player_id===pid):null;
+    const player=pid?C.players.getPlayerById(pid):null;
+    if(player&&row){
+      const max=C.rarity.maxStars(player.rarity);
+      return`<div class="lu-bench-slot filled rar-${player.rarity}">
+        <div class="lu-pini">${_pInit(player)}</div>
+        <div style="font-size:10px;font-weight:600">${escHtml(player.name)}</div>
+        <div style="font-size:8px">${_starsHtml(row.stars,max)}</div>
+      </div>`;
+    }
+    return`<div class="lu-bench-slot empty"><div class="lu-empty-label">Reserva ${i+1}</div></div>`;
+  }).join('');
+
+  // ── Indicador de força
+  const allFilled=ROLES.every(r=>!!lu[r]);
+  let powerHtml;
+  if(allFilled){
+    const pw=lineupTeamPower();
+    powerHtml=pw
+      ?`<div class="lu-power-bar">
+          <span style="color:var(--txt3)">Poder estimado:</span>
+          <span class="lu-power-val">${Math.round(pw.avg)}</span>
+          <span style="font-size:11px;color:var(--txt3)">Early ${Math.round(pw.early)} · Mid ${Math.round(pw.mid)} · Late ${Math.round(pw.late)}</span>
+        </div>`
+      :'';
+  }else{
+    const missing=ROLES.filter(r=>!lu[r]).map(r=>ROLE_LABELS[r]||r);
+    powerHtml=`<div class="lu-power-bar incomplete"><span style="color:var(--txt3)">Faltam:</span> <b>${missing.join(', ')}</b> — escale os 5 titulares para jogar</div>`;
+  }
+
+  // ── Lista do elenco (ordenada por raridade > estrelas)
+  const order={lendario:0,epico:1,raro:2,comum:3};
+  const sorted=[...rows].sort((a,b)=>{
+    const pa=C.players.getPlayerById(a.player_id),pb=C.players.getPlayerById(b.player_id);
+    return (order[pa&&pa.rarity]??9)-(order[pb&&pb.rarity]??9)||b.stars-a.stars;
+  });
+
+  const rosterHtml=sorted.map(rRow=>{
+    const p=C.players.getPlayerById(rRow.player_id);
+    if(!p)return'';
+    const max=C.rarity.maxStars(p.rarity);
+    const isSelected=selectedPid===p.id;
+    const slot=getPlayerLineupSlot(p.id);
+    const offRole=slot&&slot!=='bench'&&p.role!==slot;
+
+    const assignBtns=isSelected?`<div class="lu-assign-row">
+      ${ROLES.map(r=>{
+        const nat=p.role===r;
+        const active=lu[r]===p.id;
+        return`<button class="btn btn-sm ${active?'btn-gold':'btn-ghost'}" onclick="assignLineupSlot('${p.id}','${r}')">
+          ${ROLE_LABELS[r]||r}${nat?'':' <span class="lu-off-warn">(−20%)</span>'}
+        </button>`;
+      }).join('')}
+      <button class="btn btn-sm ${bench.includes(p.id)?'btn-gold':'btn-ghost'}" onclick="assignLineupSlot('${p.id}','bench')">Reserva</button>
+      ${slot?`<button class="btn btn-sm btn-ghost" onclick="removeFromLineup('${p.id}')">Remover</button>`:''}
+      <button class="btn btn-sm btn-ghost" onclick="renderLineup(null)">✕</button>
+    </div>`:'';
+
+    return`<div class="lu-pcard${isSelected?' selected':''} rar-${p.rarity}" onclick="lineupSelectPlayer('${p.id}')">
+      <div class="lu-pc-wrap">
+        <div class="lu-pcinit">${_pInit(p)}</div>
+        <div class="lu-pc-info">
+          <div class="lu-pc-name">${escHtml(p.name)}</div>
+          <div class="lu-pc-sub">${ROLE_LABELS[p.role]||p.role} · ${_rarLabel(p.rarity)} · Nv${rRow.level}</div>
+          <div style="font-size:10px">${_starsHtml(rRow.stars,max)}</div>
+        </div>
+        <div>${slot?`<span class="lu-badge${offRole?' offrole':''}">${slot==='bench'?'Reserva':`Tit. ${ROLE_LABELS[slot]||slot}`}${offRole?' ⚠':''}</span>`:''}</div>
+      </div>
+      ${assignBtns}
+    </div>`;
+  }).join('');
+
+  document.getElementById('lineupPanel').innerHTML=`
+    <div class="draft-head">
+      <div class="title disp">Escalação</div>
+      <div class="chip">${rows.length} jogadores</div>
+    </div>
+    <div class="lu-starter-row">${starterSlotsHtml}</div>
+    <div class="lu-bench-row">${benchSlotsHtml}</div>
+    ${powerHtml}
+    <div style="font-size:12px;color:var(--txt3);margin-bottom:8px">Toque num jogador para escalar:</div>
+    <div class="lu-roster">${rosterHtml||'<div class="roster-empty">Elenco vazio — recrute jogadores.</div>'}</div>
+    <div class="foot">
+      <button class="btn btn-ghost" onclick="goCareer()">Voltar</button>
+      <button class="btn btn-ghost" onclick="openRoster()">Ver Elenco</button>
+      <button class="btn ${allFilled?'btn-gold ready':'btn-ghost'}"${allFilled?'':' disabled'} onclick="openCareerMatch()">⚔ Jogar</button>
+    </div>`;
+}
+
+function lineupSelectPlayer(pid){renderLineup(pid);}
+
+async function assignLineupSlot(pid,slotKey){
+  const ROLES=['top','jungle','mid','adc','support'];
+  const lu=careerLineup;
+  ROLES.forEach(r=>{if(lu[r]===pid)delete lu[r];});
+  lu.bench=(lu.bench||[]).filter(b=>b!==pid);
+  if(slotKey==='bench'){
+    if((lu.bench||[]).length<2)lu.bench=[...(lu.bench||[]),pid];
+  }else if(ROLES.includes(slotKey)){
+    lu[slotKey]=pid;
+  }
+  await _saveLineup();
+  renderLineup(null);
+}
+
+async function removeFromLineup(pid){
+  const ROLES=['top','jungle','mid','adc','support'];
+  const lu=careerLineup;
+  ROLES.forEach(r=>{if(lu[r]===pid)delete lu[r];});
+  lu.bench=(lu.bench||[]).filter(b=>b!==pid);
+  await _saveLineup();
+  renderLineup(null);
+}
+
+async function _saveLineup(){
+  if(!sb||!careerUser)return;
+  await sb.from('career_profiles').update({lineup:careerLineup}).eq('user_id',careerUser.id);
+  if(careerProfile)careerProfile.lineup=careerLineup;
 }
 
 /* =======================================================================
@@ -2607,6 +2839,8 @@ let careerUser=null;        // usuário da sessão (anônimo ou Google)
 let careerProfile=null;     // linha de career_profiles do usuário logado
 let careerRoster=null;      // linhas de career_roster (elenco) do usuário
 let careerMatchState=null;  // estado da partida de carreira em andamento
+let careerLineup={bench:[]};  // escalação {top,jungle,mid,adc,support,bench:[]}
+const OFF_ROLE_PENALTY=0.80;  // 🎚️ multiplicador de atributos ao escalar fora da rota natural
 
 const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
