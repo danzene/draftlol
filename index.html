@@ -310,6 +310,56 @@
   .map-flash{position:absolute;width:60px;height:60px;border-radius:50%;border:2px solid;transform:translate(-50%,-50%) scale(.1);pointer-events:none;z-index:5;animation:map-ring .75s ease-out forwards}
   @keyframes map-ring{0%{transform:translate(-50%,-50%) scale(.1);opacity:.9}100%{transform:translate(-50%,-50%) scale(2.4);opacity:0}}
   @media(max-width:560px){.rift-map-wrap{width:min(100%,270px)}.rift-icon{width:22px;height:22px}.map-flash{width:46px;height:46px}}
+
+  /* ── MODO CARREIRA: gacha + elenco ─────────────────────────────────── */
+  .car-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .car-stat-row{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 2px}
+  /* cores por raridade */
+  .rar-comum{--rc:#8b97ad} .rar-raro{--rc:#4f8fe2} .rar-epico{--rc:#9a60d8} .rar-lendario{--rc:var(--gold)}
+  .rar-pill{display:inline-block;font-family:'Oswald';font-size:10px;letter-spacing:.6px;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--rc) 18%,transparent);color:var(--rc)}
+  .stars{color:var(--gold2);font-size:12px;letter-spacing:1px;font-family:'Oswald'}
+  .stars .off{color:var(--txt3)}
+  /* grade do elenco */
+  .roster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px}
+  .pcard{background:var(--bg2);border:1px solid var(--line);border-top:3px solid var(--rc,var(--line));border-radius:var(--r);padding:12px 10px;text-align:center;cursor:pointer;transition:transform .12s,border-color .12s}
+  .pcard:hover{transform:translateY(-2px)}
+  .pcard .pcimg{width:58px;height:58px;border-radius:50%;margin:0 auto 8px;overflow:hidden;background:var(--bg3);border:2px solid var(--rc,var(--line));display:flex;align-items:center;justify-content:center}
+  .pcard .pcimg .inittile{font-size:20px}
+  .pcard .pcn{font-family:'Oswald';font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pcard .pcr{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin:2px 0 5px}
+  .roster-empty{text-align:center;color:var(--txt2);padding:40px 16px}
+  /* detalhe do jogador */
+  .pdetail .pd-head{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+  .pd-ava{width:64px;height:64px;border-radius:14px;overflow:hidden;background:var(--bg3);border:2px solid var(--rc,var(--line));flex-shrink:0}
+  .pd-ava img,.pd-ava .inittile{width:100%;height:100%;object-fit:cover}
+  .attr-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+  .attr-row .an{width:96px;font-family:'Oswald';font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:var(--txt2);flex-shrink:0}
+  .attr-row .at{flex:1;height:8px;border-radius:5px;background:var(--bg3);overflow:hidden}
+  .attr-row .at>div{height:100%;background:linear-gradient(90deg,var(--rc,var(--blue)),var(--gold))}
+  .attr-row .av{width:30px;text-align:right;font-family:'Oswald';font-variant-numeric:tabular-nums;font-size:13px;color:var(--txt)}
+  .aff-grid{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+  .aff-chip{font-family:'Oswald';font-size:11px;letter-spacing:.3px;padding:3px 9px;border-radius:999px;background:var(--bg3);border:1px solid var(--line);color:var(--txt2)}
+  .aff-chip b{color:var(--gold2);font-weight:500}
+  .frag-bar{height:7px;border-radius:5px;background:var(--bg3);overflow:hidden;margin-top:5px}
+  .frag-bar>div{height:100%;background:linear-gradient(90deg,var(--blue),var(--gold))}
+  /* gacha */
+  .gacha-stage{text-align:center;padding:10px 0 6px}
+  .gacha-cost{font-family:'Oswald';color:var(--txt2);font-size:14px;letter-spacing:.5px;margin-bottom:14px}
+  .gacha-cost b{color:var(--gold2)}
+  .pull-reveal{display:flex;justify-content:center;margin:18px 0}
+  .reveal-card{width:200px;background:var(--bg2);border:1px solid var(--rc,var(--line));border-top:4px solid var(--rc,var(--line));border-radius:var(--r2);padding:20px 16px;animation:revpop .45s cubic-bezier(.2,1.2,.3,1)}
+  @keyframes revpop{from{opacity:0;transform:scale(.8) translateY(10px)}to{opacity:1;transform:none}}
+  .reveal-card .rc-img{width:84px;height:84px;border-radius:50%;margin:0 auto 10px;overflow:hidden;background:var(--bg3);border:3px solid var(--rc,var(--line));box-shadow:0 0 18px color-mix(in srgb,var(--rc) 45%,transparent)}
+  .reveal-card .rc-img img,.reveal-card .rc-img .inittile{width:100%;height:100%;object-fit:cover}
+  .reveal-card .rc-name{font-family:'Oswald';font-size:20px;margin-bottom:3px}
+  .reveal-card .rc-role{font-size:12px;color:var(--txt3);text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+  .reveal-badge{display:inline-block;font-family:'Oswald';font-size:11px;letter-spacing:1px;text-transform:uppercase;padding:3px 12px;border-radius:999px;margin-top:6px}
+  .reveal-badge.new{background:var(--gold);color:#1a1306}
+  .reveal-badge.dup{background:var(--bg4);color:var(--txt2);border:1px solid var(--line2)}
+  .reveal-badge.tok{background:rgba(95,214,168,.16);color:var(--win)}
+  .reveal-card .rc-img .inittile{font-size:30px}
+  .pd-ava .inittile{font-size:24px}
+  .roster-grid .pcimg .inittile{font-size:20px}
 </style>
 </head>
 <body>
@@ -643,9 +693,19 @@
     </div>
   </div>
 
-  <!-- MODO CARREIRA (login + perfil; sem telas de jogo ainda) -->
+  <!-- MODO CARREIRA: hub (login + perfil) -->
   <div id="v-career" class="hidden">
     <div class="panel" id="careerPanel"></div>
+  </div>
+
+  <!-- MODO CARREIRA: gacha (recrutar) -->
+  <div id="v-gacha" class="hidden">
+    <div class="panel" id="gachaPanel"></div>
+  </div>
+
+  <!-- MODO CARREIRA: elenco -->
+  <div id="v-roster" class="hidden">
+    <div class="panel" id="rosterPanel"></div>
   </div>
 
   <div class="disc">
@@ -654,6 +714,18 @@
     Dados de pro play por <a href="https://oracleselixir.com" target="_blank" rel="noopener">Oracle's Elixir</a>, disponibilizados publicamente para uso por analistas e fãs — não afiliado à Riot Games.
   </div>
 </div>
+
+<!-- Fundação do Modo Carreira (Fase 1) — registra globalThis.Career.*; ordem = dependências.
+     type=module: cada arquivo tem escopo próprio (evita colisão de const no escopo global)
+     e executa em ordem do DOM, antes do DOMContentLoaded. -->
+<script type="module" src="career/util.js"></script>
+<script type="module" src="career/config.js"></script>
+<script type="module" src="career/archetypes.js"></script>
+<script type="module" src="career/rarity.js"></script>
+<script type="module" src="career/players.js"></script>
+<script type="module" src="career/power.js"></script>
+<script type="module" src="career/probability.js"></script>
+<script type="module" src="career/economy.js"></script>
 
 <script>
 /* =======================================================================
@@ -978,7 +1050,7 @@ function renderNav(){
 }
 
 /* ---------- roteador ---------- */
-const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career'];
+const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career','v-gacha','v-roster'];
 function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(id==='v-create')_updateCreateFooter();}
 function goHome(){
   clearTimeout(liveTimer);tour=null;draft=null;sd=null;
@@ -1059,7 +1131,11 @@ function renderCareerHome(u){
        <div class="rchip">PE: <span class="tier">${p.pe||0}</span></div>
        <div class="rchip">Fichas: <span class="tier">${p.fichas||0}</span></div>
      </div>
-     <p style="color:var(--txt3);font-size:13px;margin-top:16px">Em breve: gacha, elenco, árvore de talentos e ligas.</p>
+     <div class="car-actions">
+       <button class="btn btn-gold" onclick="openGacha()">🎴 Recrutar</button>
+       <button class="btn btn-ghost" onclick="openRoster()">📋 Elenco</button>
+     </div>
+     <p style="color:var(--txt3);font-size:13px;margin-top:14px">Em breve: árvore de talentos e ligas.</p>
      <div class="foot">
        <button class="btn btn-ghost" onclick="goHome()">Início</button>
        <button class="btn btn-ghost" onclick="signOutCareer()">Sair da conta</button>
@@ -1086,7 +1162,16 @@ async function ensureCareerProfile(u){
   // cria a linha se ainda não existir (idempotente)
   await sb.from('career_profiles')
     .upsert({user_id:u.id,display_name:name},{onConflict:'user_id',ignoreDuplicates:true});
-  const {data}=await sb.from('career_profiles').select('*').eq('user_id',u.id).single();
+  let {data}=await sb.from('career_profiles').select('*').eq('user_id',u.id).single();
+  // pacote inicial de Fichas — concedido uma única vez (exige migration 005)
+  const starter=window.Career&&window.Career.config?window.Career.config.economy.starterFichas:0;
+  if(data&&data.starter_claimed===false&&starter>0){
+    const {data:upd,error}=await sb.from('career_profiles')
+      .update({fichas:(data.fichas||0)+starter,starter_claimed:true})
+      .eq('user_id',u.id).select('*').single();
+    if(!error&&upd)data=upd;
+    else if(error)console.warn('[DraftLoL] pacote inicial (migration 005?):',error.message);
+  }
   careerProfile=data||null;
   return careerProfile;
 }
@@ -1108,6 +1193,184 @@ function _onAuthChange(event,session){
   careerUser=u;
   if(u)myPlayerId=u.id;
   renderNav();
+}
+
+/* =======================================================================
+   MODO CARREIRA — GACHA + ELENCO (Fase 3)
+   Liga as funções puras de career/ (Fase 1) à tabela career_roster (Fase 2).
+   ======================================================================= */
+const _C=()=>window.Career;                  // atalho p/ a fundação de carreira
+const _pInit=p=>String(p&&p.name||'JG').replace(/[^A-Za-z]/g,'').slice(0,2).toUpperCase();
+function _rarLabel(r){const C=_C();return (C&&C.config.rarities[r]?C.config.rarities[r].label:r);}
+function _starsHtml(stars,max){let s='';for(let i=1;i<=max;i++)s+=i<=stars?'★':'<span class="off">★</span>';return `<span class="stars">${s}</span>`;}
+function _careerReady(){return !!(window.Career&&window.Career.players&&window.Career.economy);}
+
+async function loadCareerRoster(){
+  if(!sb||!careerUser)return [];
+  const {data}=await sb.from('career_roster').select('*').eq('user_id',careerUser.id);
+  careerRoster=data||[];
+  return careerRoster;
+}
+function _ownedRow(playerId){return (careerRoster||[]).find(r=>r.player_id===playerId)||null;}
+
+/* ---------- GACHA ---------- */
+async function openGacha(){
+  if(!sb||!careerUser){goCareer();return;}
+  show('v-gacha');
+  if(!_careerReady()){document.getElementById('gachaPanel').innerHTML=`<div class="roster-empty">Falha ao carregar os módulos da carreira. Recarregue a página.</div>`;return;}
+  document.getElementById('gachaPanel').innerHTML=`<div class="loading" style="padding:30px"><div class="spin"></div></div>`;
+  await ensureCareerProfile(careerUser);
+  await loadCareerRoster();
+  renderGacha('');
+}
+function renderGacha(reveal){
+  const C=_C();
+  const cost=C.config.economy.gachaPullCost;
+  const fichas=(careerProfile&&careerProfile.fichas)||0;
+  const can=fichas>=cost;
+  document.getElementById('gachaPanel').innerHTML=
+    `<div class="draft-head"><div class="title disp">Recrutar</div>
+       <div class="chip">Fichas: <b style="color:var(--gold2)">${fichas}</b></div></div>
+     <div class="gacha-stage">
+       <div class="gacha-cost">Custo <b>${cost}</b> Fichas · 70% Comum · 22% Raro · 7% Épico · 1% Lendário</div>
+       <div class="pull-reveal" id="pullReveal">${reveal||''}</div>
+       <div id="gachaMsg" class="lobby-msg">${can?'':'Fichas insuficientes — vença campeonatos para ganhar mais (em breve).'}</div>
+     </div>
+     <div class="foot">
+       <button class="btn btn-ghost" onclick="goCareer()">Voltar</button>
+       <button class="btn btn-gold grow ${can?'ready':''}" id="pullBtn" onclick="doGachaPull()">🎴 Recrutar (${cost})</button>
+     </div>`;
+}
+async function doGachaPull(){
+  const C=_C();
+  const cost=C.config.economy.gachaPullCost;
+  if(!careerProfile||(careerProfile.fichas||0)<cost)return;
+  const btn=document.getElementById('pullBtn');
+  if(btn){btn.classList.remove('ready');btn.textContent='Recrutando…';}
+  const catalog=C.players.getCatalog();
+  const pulled=C.economy.pullPlayer(Math.random,catalog);
+  const owned=_ownedRow(pulled.id);
+  let newFichas=(careerProfile.fichas||0)-cost;
+  let badge='NOVO',badgeCls='new',subtitle='',curStars=1;
+  try{
+    if(!owned){
+      await sb.from('career_roster').insert({user_id:careerUser.id,player_id:pulled.id,stars:1,fragments:0,level:1,xp:0});
+      badge='NOVO';badgeCls='new';curStars=1;
+    }else{
+      const res=C.economy.applyDuplicate({rarity:pulled.rarity,stars:owned.stars,fragments:owned.fragments});
+      if(res.outcome.type==='tokens'){
+        newFichas+=res.outcome.tokens;curStars=owned.stars;
+        badge=`+${res.outcome.tokens} Fichas`;badgeCls='tok';subtitle='Duplicata no máximo de ★ → convertida em Fichas';
+      }else{
+        await sb.from('career_roster').update({stars:res.stars,fragments:res.fragments})
+          .eq('user_id',careerUser.id).eq('player_id',pulled.id);
+        curStars=res.stars;
+        if(res.outcome.starsGained){badge=`SUBIU PARA ${res.stars}★`;badgeCls='new';subtitle='Duplicata completou uma estrela!';}
+        else{badge='DUPLICATA';badgeCls='dup';subtitle=`+1 fragmento (${res.fragments} acumulados)`;}
+      }
+    }
+    await sb.from('career_profiles').update({fichas:newFichas}).eq('user_id',careerUser.id);
+    careerProfile.fichas=newFichas;
+    await loadCareerRoster();
+  }catch(e){
+    console.error('[DraftLoL] gacha:',e);
+    if(btn){btn.classList.add('ready');btn.textContent=`🎴 Recrutar (${cost})`;}
+    return;
+  }
+  const max=C.rarity.maxStars(pulled.rarity);
+  renderGacha(_revealCard(pulled,badge,badgeCls,subtitle,curStars,max));
+}
+function _revealCard(p,badge,badgeCls,subtitle,stars,max){
+  return `<div class="reveal-card rar-${p.rarity}">
+    <div class="rc-img"><div class="inittile">${_pInit(p)}</div></div>
+    <div class="rc-name">${escHtml(p.name)}</div>
+    <div class="rc-role">${(ROLE_LABELS[p.role]||p.role)} · ${_rarLabel(p.rarity)}</div>
+    <div>${_starsHtml(stars,max)}</div>
+    <div style="margin-top:8px"><span class="reveal-badge ${badgeCls}">${escHtml(badge)}</span></div>
+    ${subtitle?`<div style="color:var(--txt3);font-size:12px;margin-top:8px">${escHtml(subtitle)}</div>`:''}
+  </div>`;
+}
+
+/* ---------- ELENCO ---------- */
+async function openRoster(){
+  if(!sb||!careerUser){goCareer();return;}
+  show('v-roster');
+  if(!_careerReady()){document.getElementById('rosterPanel').innerHTML=`<div class="roster-empty">Falha ao carregar os módulos da carreira. Recarregue a página.</div>`;return;}
+  document.getElementById('rosterPanel').innerHTML=`<div class="loading" style="padding:30px"><div class="spin"></div></div>`;
+  await loadCareerRoster();
+  renderRoster();
+}
+function renderRoster(){
+  const C=_C();
+  const rows=careerRoster||[];
+  const total=C.players.getCatalog().length;
+  let body;
+  if(!rows.length){
+    body=`<div class="roster-empty">Seu elenco está vazio. Vá em <b>Recrutar</b> para contratar seu primeiro jogador.</div>`;
+  }else{
+    const order={lendario:0,epico:1,raro:2,comum:3};
+    const sorted=[...rows].sort((a,b)=>{
+      const pa=C.players.getPlayerById(a.player_id),pb=C.players.getPlayerById(b.player_id);
+      return (order[pa&&pa.rarity]??9)-(order[pb&&pb.rarity]??9)||b.stars-a.stars;
+    });
+    body=`<div class="roster-grid">`+sorted.map(r=>{
+      const p=C.players.getPlayerById(r.player_id);if(!p)return'';
+      const max=C.rarity.maxStars(p.rarity);
+      return `<div class="pcard rar-${p.rarity}" onclick="showPlayerDetail('${p.id}')">
+        <div class="pcimg"><div class="inittile">${_pInit(p)}</div></div>
+        <div class="pcn">${escHtml(p.name)}</div>
+        <div class="pcr">${(ROLE_LABELS[p.role]||p.role)}</div>
+        <span class="rar-pill">${_rarLabel(p.rarity)}</span>
+        <div style="margin-top:6px">${_starsHtml(r.stars,max)}</div>
+      </div>`;
+    }).join('')+`</div>`;
+  }
+  document.getElementById('rosterPanel').innerHTML=
+    `<div class="draft-head"><div class="title disp">Elenco</div><div class="chip">${rows.length}/${total} jogadores</div></div>
+     ${body}
+     <div class="foot">
+       <button class="btn btn-ghost" onclick="goCareer()">Voltar</button>
+       <button class="btn btn-gold ready" onclick="openGacha()">🎴 Recrutar</button>
+     </div>`;
+}
+function showPlayerDetail(pid){
+  const C=_C();
+  const p=C.players.getPlayerById(pid);
+  const row=_ownedRow(pid);
+  if(!p||!row){renderRoster();return;}
+  const max=C.rarity.maxStars(p.rarity);
+  const ceil=C.rarity.attributeCeiling(p.rarity,row.stars);
+  const fragCost=C.rarity.starFragmentCost(p.rarity,row.stars);
+  const ALAB=C.archetypes.ATTR_LABELS;
+  const attrRows=C.archetypes.ATTR_KEYS.map(k=>{
+    const v=p.attrs[k]||0;
+    return `<div class="attr-row"><div class="an">${ALAB[k]}</div><div class="at"><div style="width:${v}%"></div></div><div class="av">${v}</div></div>`;
+  }).join('');
+  const affs=C.archetypes.ARCHETYPES.map(a=>[a,p.affinities[a]]).sort((x,y)=>y[1]-x[1]);
+  const affHtml=affs.map(([a,m])=>`<span class="aff-chip">${a} <b>${m>=1?'+':''}${Math.round((m-1)*100)}%</b></span>`).join('');
+  const fragHtml=fragCost!=null
+    ? `<div style="font-size:12px;color:var(--txt2);margin-top:12px">Fragmentos p/ ${row.stars+1}★: ${row.fragments}/${fragCost}<div class="frag-bar"><div style="width:${Math.round(Math.min(1,row.fragments/fragCost)*100)}%"></div></div></div>`
+    : `<div style="font-size:12px;color:var(--gold2);margin-top:12px">Estrelas no máximo — duplicatas viram Fichas.</div>`;
+  document.getElementById('rosterPanel').innerHTML=
+    `<div class="draft-head"><div class="title disp">Jogador</div><span class="rar-pill rar-${p.rarity}">${_rarLabel(p.rarity)}</span></div>
+     <div class="pdetail rar-${p.rarity}">
+       <div class="pd-head">
+         <div class="pd-ava"><div class="inittile">${_pInit(p)}</div></div>
+         <div>
+           <div style="font-family:'Oswald';font-size:22px">${escHtml(p.name)}</div>
+           <div style="color:var(--txt3);font-size:13px;text-transform:uppercase;letter-spacing:.5px">${(ROLE_LABELS[p.role]||p.role)} · Nível ${row.level}</div>
+           <div style="margin-top:4px">${_starsHtml(row.stars,max)}</div>
+         </div>
+       </div>
+       <div class="section-label">Atributos <span style="color:var(--txt3);text-transform:none;letter-spacing:0">(teto atual ${ceil})</span></div>
+       ${attrRows}
+       <div class="section-label" style="margin-top:14px">Afinidades por arquétipo</div>
+       <div class="aff-grid">${affHtml}</div>
+       ${fragHtml}
+     </div>
+     <div class="foot">
+       <button class="btn btn-ghost" onclick="openRoster()">Voltar ao elenco</button>
+     </div>`;
 }
 
 /* =======================================================================
@@ -1849,6 +2112,7 @@ let draftChannel=null; // canal realtime do draft
 let heartbeatTimer=null;
 let careerUser=null;   // usuário da sessão (anônimo ou Google)
 let careerProfile=null;// linha de career_profiles do usuário logado
+let careerRoster=null; // linhas de career_roster (elenco) do usuário
 
 const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 

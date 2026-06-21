@@ -59,6 +59,8 @@ const CAREER_CONFIG = {
     pePerMatch: 50,            // 🎚️ PE por partida disputada
     peWinBonus: 80,            // 🎚️ PE extra por vitória
     fichaPerTournamentWin: 100,// 🎚️ Fichas por vencer um campeonato
+    gachaPullCost: 10,         // 🎚️ Fichas por recrutamento (1 pull)
+    starterFichas: 500,        // 🎚️ Fichas do pacote inicial (resgate único)
   },
 };
 
