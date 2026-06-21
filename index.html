@@ -380,6 +380,12 @@
         <h3>Com amigos</h3>
         <p>Sala por código para jogar online com a galera.</p>
       </div>
+      <div class="mode-card" onclick="goCareer()">
+        <span class="badge">conta google</span>
+        <span class="mi">🎴</span>
+        <h3>Modo Carreira</h3>
+        <p>Recrute e evolua um elenco, suba de liga. Progresso salvo na sua conta.</p>
+      </div>
     </div>
   </div>
 
@@ -635,6 +641,11 @@
         <button class="btn btn-gold grow ready" onclick="show('v-create')">Jogar contra bots</button>
       </div>
     </div>
+  </div>
+
+  <!-- MODO CARREIRA (login + perfil; sem telas de jogo ainda) -->
+  <div id="v-career" class="hidden">
+    <div class="panel" id="careerPanel"></div>
   </div>
 
   <div class="disc">
@@ -935,7 +946,17 @@ async function load(){
   POWER_NORM={mean,std:Math.sqrt(variance)||1};
   document.getElementById('v-loading').classList.add('hidden');
   renderNav();
-  if(location.hash.length>4){try{openShared();return;}catch(e){}}
+  // hash de retorno do OAuth (#access_token=...) não é link de partilha
+  if(location.hash.length>4&&!location.hash.includes('access_token')){try{openShared();return;}catch(e){}}
+  // retorno do login Google (OAuth): aguarda a sessão permanente e abre a carreira
+  if(sessionStorage.getItem('career_login_pending')||location.hash.includes('access_token')){
+    let w=0;
+    while(!sb&&w++<25)await new Promise(r=>setTimeout(r,200));
+    let u=null;
+    for(let i=0;sb&&i<20;i++){u=await _sessionUser();if(_careerLoggedIn(u))break;await new Promise(r=>setTimeout(r,200));}
+    sessionStorage.removeItem('career_login_pending');
+    if(sb){await goCareer();return;}
+  }
   const savedRoom=sessionStorage.getItem('draftlol_room');
   if(savedRoom){
     let sbWait=0;
@@ -947,12 +968,17 @@ async function load(){
 
 function renderNav(){
   const el=document.getElementById('navRight');
-  el.innerHTML=`<span class="chip">patch <b>${OFFLINE?'offline':PATCH}</b></span>`+
-    (OFFLINE?`<span class="chip" style="border-color:var(--goldDim);color:var(--gold2)">lista reduzida · hospede p/ todos</span>`:'');
+  let acct='';
+  if(careerUser&&!careerUser.is_anonymous){
+    const nm=careerUser.user_metadata&&(careerUser.user_metadata.full_name||careerUser.user_metadata.name)||careerUser.email||'conta';
+    acct=`<span class="chip" style="border-color:var(--goldDim);color:var(--gold2)">👤 ${escHtml(String(nm).split(' ')[0])}</span>`;
+  }
+  el.innerHTML=`<span class="chip">patch <b>${OFFLINE?'offline':(PATCH||'…')}</b></span>`+
+    (OFFLINE?`<span class="chip" style="border-color:var(--goldDim);color:var(--gold2)">lista reduzida · hospede p/ todos</span>`:'')+acct;
 }
 
 /* ---------- roteador ---------- */
-const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info'];
+const VIEWS=['v-loading','v-home','v-create','v-join','v-lobby','v-snake','v-bracket','v-draft','v-match','v-result','v-tour-result','v-online-info','v-career'];
 function show(id){VIEWS.forEach(v=>document.getElementById(v).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');window.scrollTo({top:0,behavior:'smooth'});if(id==='v-create')_updateCreateFooter();}
 function goHome(){
   clearTimeout(liveTimer);tour=null;draft=null;sd=null;
@@ -969,6 +995,120 @@ function goOnline(){
   show('v-create');
 }
 function openBlindInfo(){createCfg.mode='blind';quickStart(true);}
+
+/* =======================================================================
+   MODO CARREIRA — login Google + perfil (Fase 2; sem telas de jogo ainda)
+   Coexiste com o modo casual anônimo: career exige conta permanente;
+   o casual online segue funcionando com sessão anônima.
+   ======================================================================= */
+function _careerLoggedIn(u){return !!u&&!u.is_anonymous;}
+async function _sessionUser(){
+  if(!sb)return null;
+  const {data}=await sb.auth.getSession();
+  return data&&data.session?data.session.user:null;
+}
+
+async function goCareer(){
+  if(!sb)await initSupabase();
+  show('v-career');
+  if(!sb){
+    document.getElementById('careerPanel').innerHTML=
+      `<div class="draft-head"><div class="title disp">Modo Carreira</div></div>
+       <p style="color:var(--txt2);font-size:15px;line-height:1.7">Backend online não configurado. O Modo Carreira precisa do Supabase (login + progresso na nuvem).</p>
+       <div class="foot"><button class="btn btn-ghost" onclick="goHome()">Voltar</button></div>`;
+    return;
+  }
+  const u=await _sessionUser();
+  if(!_careerLoggedIn(u)){renderCareerLogin();return;}
+  renderCareerLoading();
+  try{await ensureCareerProfile(u);}catch(e){console.error('[DraftLoL] perfil de carreira:',e);}
+  renderCareerHome(u);
+}
+
+function renderCareerLoading(){
+  document.getElementById('careerPanel').innerHTML=
+    `<div class="loading" style="padding:40px 20px"><div class="spin"></div><div>Carregando carreira…</div></div>`;
+}
+
+function renderCareerLogin(){
+  document.getElementById('careerPanel').innerHTML=
+    `<div class="draft-head"><div class="title disp">Modo Carreira</div></div>
+     <p style="color:var(--txt2);font-size:15px;line-height:1.7;margin-bottom:18px">
+       Recrute jogadores no gacha, evolua seu elenco e suba de liga. O progresso é
+       pessoal e fica salvo na sua conta — entre com o Google para começar.</p>
+     <div class="inp-err" id="careerErr"></div>
+     <div class="foot">
+       <button class="btn btn-ghost" onclick="goHome()">Voltar</button>
+       <button class="btn btn-gold grow ready" onclick="signInGoogle()">Entrar com Google</button>
+     </div>`;
+}
+
+function renderCareerHome(u){
+  const p=careerProfile||{};
+  const nm=p.display_name||(u&&u.user_metadata&&(u.user_metadata.full_name||u.user_metadata.name))||'Treinador';
+  const av=(u&&u.user_metadata&&u.user_metadata.avatar_url)
+    ? `<img src="${u.user_metadata.avatar_url}" alt="" onerror="this.style.display='none'">`
+    : `<div class="inittile">${escHtml(String(nm).slice(0,2).toUpperCase())}</div>`;
+  document.getElementById('careerPanel').innerHTML=
+    `<div class="draft-head"><div class="title disp">Modo Carreira</div><div class="chip">conta google</div></div>
+     <div class="profile-head" style="margin-bottom:16px">
+       <div class="profile-icon">${av}</div>
+       <div class="profile-meta"><div class="pname">${escHtml(nm)}</div><div class="plevel">Liga: ${escHtml(p.league||'ferro')}</div></div>
+     </div>
+     <div class="rank-chips">
+       <div class="rchip">PE: <span class="tier">${p.pe||0}</span></div>
+       <div class="rchip">Fichas: <span class="tier">${p.fichas||0}</span></div>
+     </div>
+     <p style="color:var(--txt3);font-size:13px;margin-top:16px">Em breve: gacha, elenco, árvore de talentos e ligas.</p>
+     <div class="foot">
+       <button class="btn btn-ghost" onclick="goHome()">Início</button>
+       <button class="btn btn-ghost" onclick="signOutCareer()">Sair da conta</button>
+     </div>`;
+}
+
+async function signInGoogle(){
+  if(!sb){alert('Backend não configurado.');return;}
+  sessionStorage.setItem('career_login_pending','1');
+  const {error}=await sb.auth.signInWithOAuth({
+    provider:'google',
+    options:{redirectTo:location.origin+location.pathname}
+  });
+  if(error){
+    sessionStorage.removeItem('career_login_pending');
+    const el=document.getElementById('careerErr');
+    if(el)el.textContent='Erro ao entrar com Google: '+error.message+' (o provedor Google está habilitado no Supabase?)';
+  }
+}
+
+async function ensureCareerProfile(u){
+  const name=(u.user_metadata&&(u.user_metadata.full_name||u.user_metadata.name))
+    ||(u.email?u.email.split('@')[0]:'Treinador');
+  // cria a linha se ainda não existir (idempotente)
+  await sb.from('career_profiles')
+    .upsert({user_id:u.id,display_name:name},{onConflict:'user_id',ignoreDuplicates:true});
+  const {data}=await sb.from('career_profiles').select('*').eq('user_id',u.id).single();
+  careerProfile=data||null;
+  return careerProfile;
+}
+
+async function signOutCareer(){
+  careerProfile=null;
+  try{await sb.auth.signOut();}catch(e){}
+  // volta para sessão anônima para o casual online seguir funcionando
+  try{const {data}=await sb.auth.signInAnonymously();myPlayerId=data&&data.user?data.user.id:myPlayerId;careerUser=data?data.user:null;}catch(e){}
+  renderNav();
+  show('v-home');
+}
+
+/* Reage a mudanças de auth — só atualiza estado/nav.
+   O roteamento de retorno do OAuth fica centralizado em load() (autoritativo,
+   roda por último) para não competir com a navegação inicial. */
+function _onAuthChange(event,session){
+  const u=session&&session.user?session.user:null;
+  careerUser=u;
+  if(u)myPlayerId=u.id;
+  renderNav();
+}
 
 /* =======================================================================
    POOLS + ESTATÍSTICAS
@@ -1707,6 +1847,8 @@ let isRoomHost=false;  // é o host desta sala?
 let lobbyChannel=null; // canal realtime do lobby
 let draftChannel=null; // canal realtime do draft
 let heartbeatTimer=null;
+let careerUser=null;   // usuário da sessão (anônimo ou Google)
+let careerProfile=null;// linha de career_profiles do usuário logado
 
 const escHtml=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 
@@ -1727,12 +1869,22 @@ async function initSupabase(){
     // Busca URL e anon key do nosso api/config.js (nunca hardcode)
     const cfg=await fetch('/api/config').then(r=>{if(!r.ok)throw 0;return r.json();});
     sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseAnonKey,{
-      auth:{persistSession:true,autoRefreshToken:true}
+      auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
     });
-    const {data,error}=await sb.auth.signInAnonymously();
-    if(error)throw error;
-    myPlayerId=data.user.id;
-    console.log('[DraftLoL] Supabase OK, uid=',myPlayerId);
+    sb.auth.onAuthStateChange(_onAuthChange);
+    // Preserva sessão existente (o Google persiste entre reloads);
+    // só cria sessão anônima quando não há nenhuma — assim o casual online
+    // segue instantâneo e o login de carreira não é sobrescrito.
+    const {data:{session}}=await sb.auth.getSession();
+    if(session&&session.user){
+      careerUser=session.user;myPlayerId=session.user.id;
+    }else{
+      const {data,error}=await sb.auth.signInAnonymously();
+      if(error)throw error;
+      myPlayerId=data.user.id;careerUser=data.user;
+    }
+    renderNav();
+    console.log('[DraftLoL] Supabase OK, uid=',myPlayerId,'anon=',careerUser&&careerUser.is_anonymous);
   }catch(e){
     console.warn('[DraftLoL] Supabase não configurado — modo online desabilitado.',e?.message||e);
     sb=null;
