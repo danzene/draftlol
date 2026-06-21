@@ -360,6 +360,15 @@
   .reveal-card .rc-img .inittile{font-size:30px}
   .pd-ava .inittile{font-size:24px}
   .roster-grid .pcimg .inittile{font-size:20px}
+  /* resumo do 10× */
+  .reveal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;width:100%}
+  .mini-rev{background:var(--bg2);border:1px solid var(--rc,var(--line));border-top:3px solid var(--rc,var(--line));border-radius:10px;padding:8px 6px 9px;text-align:center;animation:revpop .4s}
+  .mini-rev .mr-img{width:40px;height:40px;border-radius:50%;margin:0 auto 5px;overflow:hidden;background:var(--bg3);border:2px solid var(--rc,var(--line));display:flex;align-items:center;justify-content:center}
+  .mini-rev .mr-img .inittile{font-size:14px}
+  .mini-rev .mr-n{font-family:'Oswald';font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mini-rev .mr-b{font-size:9px;font-family:'Oswald';letter-spacing:.3px;text-transform:uppercase;margin-top:4px;padding:1px 6px;border-radius:999px;display:inline-block;background:var(--bg4);color:var(--txt3)}
+  .mini-rev .mr-b.new,.mini-rev .mr-b.star{background:var(--gold);color:#1a1306}
+  .mini-rev .mr-b.tok{background:rgba(95,214,168,.16);color:var(--win)}
 </style>
 </head>
 <body>
@@ -1236,9 +1245,10 @@ function renderGacha(reveal){
        <div class="pull-reveal" id="pullReveal">${reveal||''}</div>
        <div id="gachaMsg" class="lobby-msg">${can?'':'Fichas insuficientes — vença campeonatos para ganhar mais (em breve).'}</div>
      </div>
-     <div class="foot">
+     <div class="foot" style="flex-wrap:wrap;gap:8px">
        <button class="btn btn-ghost" onclick="goCareer()">Voltar</button>
        <button class="btn btn-gold grow ${can?'ready':''}" id="pullBtn" onclick="doGachaPull()">🎴 Recrutar (${cost})</button>
+       <button class="btn btn-gold grow ${fichas>=cost*10?'ready':''}" id="pull10Btn" onclick="doGachaPull10()">🎴 Recrutar 10× (${cost*10})</button>
      </div>`;
 }
 async function doGachaPull(){
@@ -1289,6 +1299,83 @@ function _revealCard(p,badge,badgeCls,subtitle,stars,max){
     <div style="margin-top:8px"><span class="reveal-badge ${badgeCls}">${escHtml(badge)}</span></div>
     ${subtitle?`<div style="color:var(--txt3);font-size:12px;margin-top:8px">${escHtml(subtitle)}</div>`:''}
   </div>`;
+}
+function _miniRevCard(p,badge,badgeCls,stars,max){
+  return `<div class="mini-rev rar-${p.rarity}">
+    <div class="mr-img"><div class="inittile">${_pInit(p)}</div></div>
+    <div class="mr-n">${escHtml(p.name)}</div>
+    <div style="font-size:9px;margin:2px 0">${_starsHtml(stars,max)}</div>
+    <div class="mr-b ${badgeCls}">${escHtml(badge)}</div>
+  </div>`;
+}
+async function doGachaPull10(){
+  const C=_C();
+  const cost=C.config.economy.gachaPullCost*10;
+  if(!careerProfile||(careerProfile.fichas||0)<cost)return;
+  const btn10=document.getElementById('pull10Btn');
+  const btn1=document.getElementById('pullBtn');
+  if(btn10){btn10.disabled=true;btn10.textContent='Recrutando…';}
+  if(btn1)btn1.disabled=true;
+  const catalog=C.players.getCatalog();
+  // local mutable snapshot to resolve 10 pulls in sequence
+  const localState={};
+  for(const r of(careerRoster||[])){
+    localState[r.player_id]={stars:r.stars,fragments:r.fragments,isNew:false};
+  }
+  let fichasDelta=-cost;
+  const results=[];
+  for(let i=0;i<10;i++){
+    const pulled=C.economy.pullPlayer(Math.random,catalog);
+    const max=C.rarity.maxStars(pulled.rarity);
+    const existing=localState[pulled.id];
+    let badge,badgeCls,stars;
+    if(!existing){
+      localState[pulled.id]={stars:1,fragments:0,isNew:true};
+      badge='NOVO';badgeCls='new';stars=1;
+    }else{
+      const res=C.economy.applyDuplicate({rarity:pulled.rarity,stars:existing.stars,fragments:existing.fragments});
+      if(res.outcome.type==='tokens'){
+        fichasDelta+=res.outcome.tokens;
+        badge=`+${res.outcome.tokens}⚙`;badgeCls='tok';stars=existing.stars;
+      }else{
+        existing.stars=res.stars;existing.fragments=res.fragments;stars=res.stars;
+        if(res.outcome.starsGained){badge=`${res.stars}★`;badgeCls='star';}
+        else{badge='DUPL.';badgeCls='dup';}
+      }
+    }
+    results.push({p:pulled,badge,badgeCls,stars,max});
+  }
+  // batch DB writes
+  try{
+    const originalIds=new Set((careerRoster||[]).map(r=>r.player_id));
+    const toInsert=[];
+    const toUpdate=[];
+    for(const[pid,st]of Object.entries(localState)){
+      if(!originalIds.has(pid)){
+        toInsert.push({user_id:careerUser.id,player_id:pid,stars:st.stars,fragments:st.fragments,level:1,xp:0});
+      }else{
+        const orig=(careerRoster||[]).find(r=>r.player_id===pid);
+        if(orig&&(orig.stars!==st.stars||orig.fragments!==st.fragments)){
+          toUpdate.push({player_id:pid,stars:st.stars,fragments:st.fragments});
+        }
+      }
+    }
+    if(toInsert.length)await sb.from('career_roster').insert(toInsert);
+    for(const u of toUpdate){
+      await sb.from('career_roster').update({stars:u.stars,fragments:u.fragments})
+        .eq('user_id',careerUser.id).eq('player_id',u.player_id);
+    }
+    const newFichas=(careerProfile.fichas||0)+fichasDelta;
+    await sb.from('career_profiles').update({fichas:newFichas}).eq('user_id',careerUser.id);
+    careerProfile.fichas=newFichas;
+    await loadCareerRoster();
+  }catch(e){
+    console.error('[DraftLoL] gacha10:',e);
+    if(btn10){btn10.disabled=false;btn10.textContent=`🎴 Recrutar 10× (${cost})`;}
+    if(btn1)btn1.disabled=false;
+    return;
+  }
+  renderGacha(`<div class="reveal-grid">${results.map(r=>_miniRevCard(r.p,r.badge,r.badgeCls,r.stars,r.max)).join('')}</div>`);
 }
 
 /* ---------- ELENCO ---------- */
