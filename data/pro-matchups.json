@@ -1,7 +1,6084 @@
 {
   "source": "oracleselixir",
-  "attribution": "Dados de Oracle's Elixir, disponibilizados publicamente para uso por analistas e fãs — não afiliado à Riot Games.",
-  "generatedAt": null,
-  "gamesProcessed": 0,
-  "byMatchup": {}
+  "attribution": "Dados de Oracle's Elixir, disponibilizados publicamente para uso por analistas e fãs — não afiliado à Riot Games. oracleselixir.com",
+  "generatedAt": "2026-06-21T23:08:32.422Z",
+  "gamesProcessed": 5935,
+  "byMatchup": {
+    "top": {
+      "Renekton-Zaahen": {
+        "games": 19,
+        "winsA": 8
+      },
+      "Ambessa-KSante": {
+        "games": 42,
+        "winsA": 29
+      },
+      "Ambessa-Rumble": {
+        "games": 81,
+        "winsA": 43
+      },
+      "Sion-KSante": {
+        "games": 36,
+        "winsA": 23
+      },
+      "Aatrox-Gwen": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Ambessa-Sion": {
+        "games": 53,
+        "winsA": 31
+      },
+      "Gnar-Renekton": {
+        "games": 82,
+        "winsA": 48
+      },
+      "Renekton-Volibear": {
+        "games": 6,
+        "winsA": 2
+      },
+      "KSante-Rumble": {
+        "games": 186,
+        "winsA": 95
+      },
+      "Gnar-Yasuo": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Renekton-Ambessa": {
+        "games": 16,
+        "winsA": 8
+      },
+      "Zaahen-Sion": {
+        "games": 36,
+        "winsA": 23
+      },
+      "KSante-Yorick": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Sion-Gwen": {
+        "games": 86,
+        "winsA": 41
+      },
+      "Ornn-Gwen": {
+        "games": 8,
+        "winsA": 1
+      },
+      "Zaahen-KSante": {
+        "games": 19,
+        "winsA": 9
+      },
+      "Rumble-Aatrox": {
+        "games": 16,
+        "winsA": 12
+      },
+      "Sion-Kled": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Rumble-KSante": {
+        "games": 226,
+        "winsA": 130
+      },
+      "Rumble-Sion": {
+        "games": 86,
+        "winsA": 37
+      },
+      "Renekton-Ornn": {
+        "games": 47,
+        "winsA": 27
+      },
+      "Rumble-Ornn": {
+        "games": 103,
+        "winsA": 55
+      },
+      "Jax-KSante": {
+        "games": 12,
+        "winsA": 8
+      },
+      "KSante-Gnar": {
+        "games": 92,
+        "winsA": 37
+      },
+      "Sion-Zaahen": {
+        "games": 49,
+        "winsA": 23
+      },
+      "Sion-Renekton": {
+        "games": 54,
+        "winsA": 30
+      },
+      "RekSai-Ambessa": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Renekton-Gnar": {
+        "games": 115,
+        "winsA": 59
+      },
+      "Jax-Gragas": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Ambessa-RekSai": {
+        "games": 13,
+        "winsA": 8
+      },
+      "Renekton-KSante": {
+        "games": 66,
+        "winsA": 39
+      },
+      "Rumble-Yorick": {
+        "games": 20,
+        "winsA": 16
+      },
+      "Kled-Sion": {
+        "games": 7,
+        "winsA": 2
+      },
+      "KSante-Zaahen": {
+        "games": 23,
+        "winsA": 8
+      },
+      "Renekton-Sion": {
+        "games": 34,
+        "winsA": 17
+      },
+      "Rumble-Ambessa": {
+        "games": 95,
+        "winsA": 48
+      },
+      "Aatrox-Renekton": {
+        "games": 18,
+        "winsA": 8
+      },
+      "Ambessa-Aatrox": {
+        "games": 11,
+        "winsA": 6
+      },
+      "KSante-Ambessa": {
+        "games": 41,
+        "winsA": 19
+      },
+      "Renekton-Gwen": {
+        "games": 10,
+        "winsA": 3
+      },
+      "Kennen-Renekton": {
+        "games": 13,
+        "winsA": 4
+      },
+      "Renekton-Jax": {
+        "games": 30,
+        "winsA": 19
+      },
+      "RekSai-Renekton": {
+        "games": 11,
+        "winsA": 5
+      },
+      "Sion-RekSai": {
+        "games": 18,
+        "winsA": 7
+      },
+      "Zaahen-Ambessa": {
+        "games": 31,
+        "winsA": 18
+      },
+      "Sion-Gnar": {
+        "games": 74,
+        "winsA": 37
+      },
+      "Ornn-Gragas": {
+        "games": 5,
+        "winsA": 2
+      },
+      "KSante-Vayne": {
+        "games": 24,
+        "winsA": 9
+      },
+      "Gnar-Aurora": {
+        "games": 13,
+        "winsA": 10
+      },
+      "Sion-Fiora": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Ambessa-Renekton": {
+        "games": 36,
+        "winsA": 18
+      },
+      "Yorick-Ambessa": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Gnar-Yorick": {
+        "games": 32,
+        "winsA": 22
+      },
+      "Gnar-Jax": {
+        "games": 23,
+        "winsA": 17
+      },
+      "Gwen-Sion": {
+        "games": 57,
+        "winsA": 37
+      },
+      "KSante-Renekton": {
+        "games": 56,
+        "winsA": 30
+      },
+      "KSante-Gwen": {
+        "games": 45,
+        "winsA": 10
+      },
+      "RekSai-Sion": {
+        "games": 15,
+        "winsA": 10
+      },
+      "Gnar-KSante": {
+        "games": 42,
+        "winsA": 22
+      },
+      "Yorick-Gnar": {
+        "games": 27,
+        "winsA": 16
+      },
+      "Sion-Ornn": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Sion-Camille": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Rumble-Galio": {
+        "games": 42,
+        "winsA": 26
+      },
+      "Aatrox-Ambessa": {
+        "games": 21,
+        "winsA": 14
+      },
+      "Jax-Renekton": {
+        "games": 12,
+        "winsA": 6
+      },
+      "Aurora-Rumble": {
+        "games": 19,
+        "winsA": 13
+      },
+      "Sion-Rumble": {
+        "games": 73,
+        "winsA": 30
+      },
+      "Sion-Aatrox": {
+        "games": 53,
+        "winsA": 24
+      },
+      "Gwen-Ambessa": {
+        "games": 19,
+        "winsA": 9
+      },
+      "KSante-Olaf": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Sion-Mordekaiser": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Zaahen-Jax": {
+        "games": 16,
+        "winsA": 7
+      },
+      "Ornn-Rumble": {
+        "games": 80,
+        "winsA": 46
+      },
+      "Renekton-Kennen": {
+        "games": 23,
+        "winsA": 13
+      },
+      "KSante-Aatrox": {
+        "games": 12,
+        "winsA": 8
+      },
+      "Ornn-Renekton": {
+        "games": 19,
+        "winsA": 12
+      },
+      "KSante-Poppy": {
+        "games": 8,
+        "winsA": 3
+      },
+      "KSante-Sion": {
+        "games": 31,
+        "winsA": 14
+      },
+      "Sion-Ambessa": {
+        "games": 50,
+        "winsA": 28
+      },
+      "Yasuo-Gnar": {
+        "games": 5,
+        "winsA": 2
+      },
+      "RekSai-KSante": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Ambessa-Kennen": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Sion-Shen": {
+        "games": 16,
+        "winsA": 9
+      },
+      "KSante-Jax": {
+        "games": 8,
+        "winsA": 6
+      },
+      "KSante-RekSai": {
+        "games": 7,
+        "winsA": 1
+      },
+      "Renekton-Aatrox": {
+        "games": 12,
+        "winsA": 10
+      },
+      "Gwen-Aatrox": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Zaahen-Gnar": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Gnar-Kennen": {
+        "games": 17,
+        "winsA": 8
+      },
+      "Sion-Yorick": {
+        "games": 8,
+        "winsA": 6
+      },
+      "Sion-ChoGath": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Rumble-Aurora": {
+        "games": 34,
+        "winsA": 22
+      },
+      "Renekton-Malphite": {
+        "games": 5,
+        "winsA": 5
+      },
+      "Olaf-Gnar": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Yorick-Rumble": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Ornn-Gnar": {
+        "games": 13,
+        "winsA": 3
+      },
+      "Ornn-Zaahen": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Renekton-Olaf": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Zaahen-Gwen": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Jax-Kennen": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Aatrox-KSante": {
+        "games": 12,
+        "winsA": 6
+      },
+      "Jax-Poppy": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Renekton-Mordekaiser": {
+        "games": 5,
+        "winsA": 5
+      },
+      "Ambessa-Volibear": {
+        "games": 14,
+        "winsA": 4
+      },
+      "Gwen-KSante": {
+        "games": 20,
+        "winsA": 11
+      },
+      "Ryze-Rumble": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Ambessa-Zaahen": {
+        "games": 28,
+        "winsA": 12
+      },
+      "Gnar-Vayne": {
+        "games": 29,
+        "winsA": 12
+      },
+      "Ornn-Fiora": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Rumble-Gwen": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Renekton-Yorick": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Sion-Sett": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Renekton-Rumble": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Volibear-Ambessa": {
+        "games": 8,
+        "winsA": 3
+      },
+      "KSante-Aurora": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Galio-Rumble": {
+        "games": 27,
+        "winsA": 13
+      },
+      "Renekton-Aurora": {
+        "games": 22,
+        "winsA": 10
+      },
+      "Aatrox-Sion": {
+        "games": 28,
+        "winsA": 14
+      },
+      "Ambessa-Gwen": {
+        "games": 21,
+        "winsA": 3
+      },
+      "Jax-Zaahen": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Olaf-Renekton": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Rumble-Jayce": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Aurora-Sion": {
+        "games": 7,
+        "winsA": 2
+      },
+      "ChoGath-Sion": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Gnar-Ambessa": {
+        "games": 54,
+        "winsA": 31
+      },
+      "Jayce-Renekton": {
+        "games": 14,
+        "winsA": 6
+      },
+      "Ambessa-Gnar": {
+        "games": 47,
+        "winsA": 22
+      },
+      "Poppy-Ambessa": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Jax-Gnar": {
+        "games": 14,
+        "winsA": 8
+      },
+      "Sion-Varus": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Aurora-Renekton": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Varus-Rumble": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Sion-Jax": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Aatrox-Ornn": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Jax-Ambessa": {
+        "games": 11,
+        "winsA": 4
+      },
+      "Zaahen-Renekton": {
+        "games": 32,
+        "winsA": 17
+      },
+      "Camille-KSante": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Gragas-Gnar": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Sion-DrMundo": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Jax-Aatrox": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Renekton-DrMundo": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Rumble-Gragas": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Rumble-Renekton": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Gnar-Gwen": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Gnar-Camille": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Sion-Olaf": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Gwen-Gnar": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Malphite-Gnar": {
+        "games": 12,
+        "winsA": 7
+      },
+      "KSante-Kayle": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Sion-Yone": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Ambessa-Jax": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Vayne-Renekton": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Poppy-KSante": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Gwen-Renekton": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Aatrox-Rumble": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Yorick-Renekton": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Varus-Jax": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Naafiri-Varus": {
+        "games": 5,
+        "winsA": 5
+      },
+      "Gnar-Sion": {
+        "games": 50,
+        "winsA": 29
+      },
+      "Jayce-Rumble": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Ornn-Sion": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Renekton-Vayne": {
+        "games": 14,
+        "winsA": 5
+      },
+      "Ornn-Aatrox": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Gragas-Renekton": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Gnar-Malphite": {
+        "games": 23,
+        "winsA": 10
+      },
+      "Aatrox-Gnar": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Renekton-Shen": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Gnar-Sylas": {
+        "games": 18,
+        "winsA": 10
+      },
+      "Gnar-Ornn": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Gnar-Irelia": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Fiora-KSante": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Ornn-Jax": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Ambessa-Yorick": {
+        "games": 12,
+        "winsA": 7
+      },
+      "KSante-Jayce": {
+        "games": 51,
+        "winsA": 23
+      },
+      "Aurora-Gnar": {
+        "games": 7,
+        "winsA": 1
+      },
+      "Jayce-KSante": {
+        "games": 48,
+        "winsA": 23
+      },
+      "DrMundo-Sion": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Irelia-Gnar": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Ambessa-Camille": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Gwen-Jax": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Ornn-Ambessa": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Jax-Sion": {
+        "games": 11,
+        "winsA": 8
+      },
+      "Zaahen-Vayne": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Shen-Sion": {
+        "games": 20,
+        "winsA": 8
+      },
+      "Gwen-Kennen": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Gnar-Rumble": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Ornn-Jayce": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Ornn-KSante": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Sion-Jayce": {
+        "games": 58,
+        "winsA": 31
+      },
+      "Yorick-Jayce": {
+        "games": 39,
+        "winsA": 27
+      },
+      "Ambessa-Jayce": {
+        "games": 11,
+        "winsA": 4
+      },
+      "Gnar-Jayce": {
+        "games": 21,
+        "winsA": 14
+      },
+      "Ambessa-Poppy": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Renekton-Jayce": {
+        "games": 23,
+        "winsA": 10
+      },
+      "KSante-Varus": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Zaahen-Olaf": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Jayce-Malphite": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Jayce-Irelia": {
+        "games": 7,
+        "winsA": 3
+      },
+      "KSante-Ornn": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Renekton-Varus": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Ambessa-Varus": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Poppy-Gnar": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Jax-Gwen": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Shen-Ambessa": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Sion-Irelia": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Jayce-Ambessa": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Ornn-Aurora": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Camille-Ambessa": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Jayce-Yorick": {
+        "games": 62,
+        "winsA": 39
+      },
+      "Rumble-Gnar": {
+        "games": 13,
+        "winsA": 9
+      },
+      "Ambessa-Ornn": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Kennen-Gnar": {
+        "games": 10,
+        "winsA": 5
+      },
+      "KSante-Garen": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Vayne-Gnar": {
+        "games": 21,
+        "winsA": 15
+      },
+      "Malphite-Jayce": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Rumble-Anivia": {
+        "games": 16,
+        "winsA": 6
+      },
+      "Vayne-Sion": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Jayce-Gnar": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Skarner-Renekton": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Jayce-Sion": {
+        "games": 62,
+        "winsA": 38
+      },
+      "Gragas-Jayce": {
+        "games": 12,
+        "winsA": 5
+      },
+      "Aurora-Yorick": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Vayne-KSante": {
+        "games": 12,
+        "winsA": 8
+      },
+      "Shen-KSante": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Varus-Yasuo": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Rumble-Varus": {
+        "games": 16,
+        "winsA": 10
+      },
+      "Sylas-Gnar": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Jayce-Ornn": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Gnar-Olaf": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Anivia-Rumble": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Ambessa-Vayne": {
+        "games": 9,
+        "winsA": 1
+      },
+      "TwistedFate-KSante": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Vayne-Ambessa": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Shen-Renekton": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Sion-Vayne": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Jayce-Vayne": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Gnar-Varus": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Gnar-TwistedFate": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Yorick-Varus": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Vayne-Jayce": {
+        "games": 7,
+        "winsA": 4
+      },
+      "KSante-TwistedFate": {
+        "games": 8,
+        "winsA": 1
+      },
+      "Tristana-Gnar": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Jayce-Anivia": {
+        "games": 5,
+        "winsA": 2
+      }
+    },
+    "jungle": {
+      "Nocturne-MonkeyKing": {
+        "games": 43,
+        "winsA": 25
+      },
+      "Jayce-XinZhao": {
+        "games": 14,
+        "winsA": 4
+      },
+      "JarvanIV-MonkeyKing": {
+        "games": 77,
+        "winsA": 46
+      },
+      "MonkeyKing-DrMundo": {
+        "games": 21,
+        "winsA": 14
+      },
+      "DrMundo-Naafiri": {
+        "games": 6,
+        "winsA": 3
+      },
+      "JarvanIV-Jayce": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Vi-XinZhao": {
+        "games": 113,
+        "winsA": 59
+      },
+      "Trundle-XinZhao": {
+        "games": 36,
+        "winsA": 19
+      },
+      "Qiyana-JarvanIV": {
+        "games": 20,
+        "winsA": 12
+      },
+      "Vi-JarvanIV": {
+        "games": 103,
+        "winsA": 49
+      },
+      "DrMundo-MonkeyKing": {
+        "games": 26,
+        "winsA": 16
+      },
+      "MonkeyKing-XinZhao": {
+        "games": 98,
+        "winsA": 42
+      },
+      "JarvanIV-Nocturne": {
+        "games": 49,
+        "winsA": 27
+      },
+      "XinZhao-JarvanIV": {
+        "games": 158,
+        "winsA": 88
+      },
+      "Vi-MonkeyKing": {
+        "games": 67,
+        "winsA": 40
+      },
+      "XinZhao-MonkeyKing": {
+        "games": 95,
+        "winsA": 53
+      },
+      "MonkeyKing-Ambessa": {
+        "games": 12,
+        "winsA": 6
+      },
+      "XinZhao-Sejuani": {
+        "games": 10,
+        "winsA": 7
+      },
+      "DrMundo-Sejuani": {
+        "games": 6,
+        "winsA": 3
+      },
+      "JarvanIV-Sejuani": {
+        "games": 13,
+        "winsA": 5
+      },
+      "MonkeyKing-JarvanIV": {
+        "games": 87,
+        "winsA": 39
+      },
+      "Ambessa-XinZhao": {
+        "games": 18,
+        "winsA": 13
+      },
+      "Ambessa-JarvanIV": {
+        "games": 11,
+        "winsA": 2
+      },
+      "MonkeyKing-Jayce": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Trundle-MonkeyKing": {
+        "games": 13,
+        "winsA": 9
+      },
+      "Naafiri-JarvanIV": {
+        "games": 35,
+        "winsA": 22
+      },
+      "MonkeyKing-Malphite": {
+        "games": 8,
+        "winsA": 3
+      },
+      "MonkeyKing-Pantheon": {
+        "games": 46,
+        "winsA": 24
+      },
+      "DrMundo-Malphite": {
+        "games": 13,
+        "winsA": 6
+      },
+      "XinZhao-Ambessa": {
+        "games": 11,
+        "winsA": 4
+      },
+      "JarvanIV-XinZhao": {
+        "games": 151,
+        "winsA": 82
+      },
+      "Pantheon-Nocturne": {
+        "games": 60,
+        "winsA": 34
+      },
+      "JarvanIV-Vi": {
+        "games": 80,
+        "winsA": 40
+      },
+      "JarvanIV-Naafiri": {
+        "games": 42,
+        "winsA": 25
+      },
+      "Malphite-Jayce": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Poppy-MonkeyKing": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Vi-Viego": {
+        "games": 6,
+        "winsA": 5
+      },
+      "XinZhao-Vi": {
+        "games": 103,
+        "winsA": 54
+      },
+      "Ambessa-MonkeyKing": {
+        "games": 20,
+        "winsA": 12
+      },
+      "Jayce-Malphite": {
+        "games": 9,
+        "winsA": 2
+      },
+      "Nocturne-Ambessa": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Pantheon-MonkeyKing": {
+        "games": 60,
+        "winsA": 31
+      },
+      "MonkeyKing-Vi": {
+        "games": 62,
+        "winsA": 27
+      },
+      "Malphite-MonkeyKing": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Ambessa-Qiyana": {
+        "games": 6,
+        "winsA": 4
+      },
+      "XinZhao-Pantheon": {
+        "games": 107,
+        "winsA": 49
+      },
+      "Malphite-DrMundo": {
+        "games": 9,
+        "winsA": 3
+      },
+      "JarvanIV-Ambessa": {
+        "games": 16,
+        "winsA": 14
+      },
+      "Naafiri-MonkeyKing": {
+        "games": 13,
+        "winsA": 5
+      },
+      "LeeSin-DrMundo": {
+        "games": 5,
+        "winsA": 5
+      },
+      "Jayce-Nocturne": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Sejuani-Vi": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Vi-Nocturne": {
+        "games": 33,
+        "winsA": 18
+      },
+      "MonkeyKing-Trundle": {
+        "games": 9,
+        "winsA": 5
+      },
+      "DrMundo-Vi": {
+        "games": 21,
+        "winsA": 11
+      },
+      "Vi-DrMundo": {
+        "games": 13,
+        "winsA": 6
+      },
+      "XinZhao-Trundle": {
+        "games": 45,
+        "winsA": 28
+      },
+      "Pantheon-Vi": {
+        "games": 61,
+        "winsA": 33
+      },
+      "Vi-Qiyana": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Jayce-DrMundo": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Pantheon-LeeSin": {
+        "games": 25,
+        "winsA": 10
+      },
+      "MonkeyKing-Aatrox": {
+        "games": 15,
+        "winsA": 7
+      },
+      "Nocturne-JarvanIV": {
+        "games": 56,
+        "winsA": 25
+      },
+      "Nocturne-Qiyana": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Jayce-MonkeyKing": {
+        "games": 13,
+        "winsA": 11
+      },
+      "Pantheon-Naafiri": {
+        "games": 24,
+        "winsA": 11
+      },
+      "Jayce-JarvanIV": {
+        "games": 12,
+        "winsA": 4
+      },
+      "Jayce-Vi": {
+        "games": 10,
+        "winsA": 6
+      },
+      "XinZhao-Nocturne": {
+        "games": 56,
+        "winsA": 26
+      },
+      "Qiyana-Pantheon": {
+        "games": 7,
+        "winsA": 5
+      },
+      "MonkeyKing-Qiyana": {
+        "games": 12,
+        "winsA": 6
+      },
+      "LeeSin-Jayce": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Jayce-Pantheon": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Aatrox-Pantheon": {
+        "games": 14,
+        "winsA": 6
+      },
+      "Pantheon-Ambessa": {
+        "games": 10,
+        "winsA": 6
+      },
+      "LeeSin-MonkeyKing": {
+        "games": 28,
+        "winsA": 16
+      },
+      "Qiyana-Trundle": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Nocturne-XinZhao": {
+        "games": 50,
+        "winsA": 28
+      },
+      "XinZhao-Qiyana": {
+        "games": 14,
+        "winsA": 4
+      },
+      "Trundle-Malphite": {
+        "games": 5,
+        "winsA": 2
+      },
+      "DrMundo-Nocturne": {
+        "games": 19,
+        "winsA": 9
+      },
+      "Pantheon-JarvanIV": {
+        "games": 99,
+        "winsA": 44
+      },
+      "Qiyana-Vi": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Vi-Ambessa": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Ambessa-Pantheon": {
+        "games": 15,
+        "winsA": 8
+      },
+      "Aatrox-JarvanIV": {
+        "games": 22,
+        "winsA": 13
+      },
+      "JarvanIV-Pantheon": {
+        "games": 89,
+        "winsA": 56
+      },
+      "Vi-Jayce": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Nocturne-DrMundo": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Poppy-JarvanIV": {
+        "games": 12,
+        "winsA": 5
+      },
+      "Nocturne-Vi": {
+        "games": 45,
+        "winsA": 30
+      },
+      "Aatrox-Nocturne": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Trundle-Nocturne": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Aatrox-XinZhao": {
+        "games": 23,
+        "winsA": 14
+      },
+      "DrMundo-JarvanIV": {
+        "games": 20,
+        "winsA": 11
+      },
+      "Aatrox-MonkeyKing": {
+        "games": 21,
+        "winsA": 13
+      },
+      "MonkeyKing-LeeSin": {
+        "games": 29,
+        "winsA": 3
+      },
+      "Jax-JarvanIV": {
+        "games": 5,
+        "winsA": 2
+      },
+      "LeeSin-Vi": {
+        "games": 19,
+        "winsA": 8
+      },
+      "LeeSin-XinZhao": {
+        "games": 27,
+        "winsA": 18
+      },
+      "XinZhao-DrMundo": {
+        "games": 33,
+        "winsA": 18
+      },
+      "XinZhao-Naafiri": {
+        "games": 18,
+        "winsA": 4
+      },
+      "MonkeyKing-Nocturne": {
+        "games": 44,
+        "winsA": 20
+      },
+      "Skarner-Sejuani": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Jax-XinZhao": {
+        "games": 17,
+        "winsA": 9
+      },
+      "XinZhao-Jax": {
+        "games": 13,
+        "winsA": 6
+      },
+      "DrMundo-Pantheon": {
+        "games": 12,
+        "winsA": 5
+      },
+      "Vi-Pantheon": {
+        "games": 48,
+        "winsA": 26
+      },
+      "Pantheon-Trundle": {
+        "games": 16,
+        "winsA": 10
+      },
+      "Pantheon-DrMundo": {
+        "games": 22,
+        "winsA": 10
+      },
+      "Sejuani-MonkeyKing": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Pantheon-Qiyana": {
+        "games": 6,
+        "winsA": 3
+      },
+      "JarvanIV-LeeSin": {
+        "games": 61,
+        "winsA": 33
+      },
+      "Pantheon-XinZhao": {
+        "games": 108,
+        "winsA": 55
+      },
+      "Qiyana-MonkeyKing": {
+        "games": 9,
+        "winsA": 5
+      },
+      "XinZhao-Aatrox": {
+        "games": 25,
+        "winsA": 15
+      },
+      "MonkeyKing-Viego": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Aatrox-DrMundo": {
+        "games": 15,
+        "winsA": 8
+      },
+      "Trundle-Vi": {
+        "games": 11,
+        "winsA": 5
+      },
+      "Pantheon-Jayce": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Vi-Sejuani": {
+        "games": 10,
+        "winsA": 4
+      },
+      "JarvanIV-Viego": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Trundle-Pantheon": {
+        "games": 15,
+        "winsA": 10
+      },
+      "Ambessa-Aatrox": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Sejuani-Trundle": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Maokai-MonkeyKing": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Naafiri-Nocturne": {
+        "games": 20,
+        "winsA": 9
+      },
+      "Pantheon-Malphite": {
+        "games": 6,
+        "winsA": 2
+      },
+      "JarvanIV-DrMundo": {
+        "games": 14,
+        "winsA": 10
+      },
+      "Vi-Poppy": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Trundle-Qiyana": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Aatrox-Vi": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Malphite-Pantheon": {
+        "games": 5,
+        "winsA": 1
+      },
+      "DrMundo-Trundle": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Vi-Trundle": {
+        "games": 12,
+        "winsA": 8
+      },
+      "RekSai-JarvanIV": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Nocturne-Trundle": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Naafiri-Vi": {
+        "games": 44,
+        "winsA": 17
+      },
+      "Malphite-Vi": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Skarner-XinZhao": {
+        "games": 26,
+        "winsA": 18
+      },
+      "XinZhao-Skarner": {
+        "games": 16,
+        "winsA": 7
+      },
+      "Nocturne-Pantheon": {
+        "games": 68,
+        "winsA": 41
+      },
+      "Pantheon-Skarner": {
+        "games": 40,
+        "winsA": 19
+      },
+      "Qiyana-XinZhao": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Nocturne-Naafiri": {
+        "games": 14,
+        "winsA": 6
+      },
+      "Ambessa-Vi": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Skarner-MonkeyKing": {
+        "games": 16,
+        "winsA": 7
+      },
+      "LeeSin-JarvanIV": {
+        "games": 44,
+        "winsA": 25
+      },
+      "Pantheon-Aatrox": {
+        "games": 28,
+        "winsA": 14
+      },
+      "Viego-Vi": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Qiyana-Aatrox": {
+        "games": 7,
+        "winsA": 5
+      },
+      "DrMundo-Aatrox": {
+        "games": 9,
+        "winsA": 1
+      },
+      "Trundle-LeeSin": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Poppy-Pantheon": {
+        "games": 6,
+        "winsA": 4
+      },
+      "MonkeyKing-Zaahen": {
+        "games": 14,
+        "winsA": 7
+      },
+      "DrMundo-XinZhao": {
+        "games": 14,
+        "winsA": 9
+      },
+      "JarvanIV-Qiyana": {
+        "games": 8,
+        "winsA": 2
+      },
+      "Zaahen-JarvanIV": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Vi-LeeSin": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Naafiri-XinZhao": {
+        "games": 23,
+        "winsA": 11
+      },
+      "LeeSin-Nocturne": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Skarner-JarvanIV": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Skarner-Vi": {
+        "games": 16,
+        "winsA": 10
+      },
+      "Vi-Skarner": {
+        "games": 13,
+        "winsA": 6
+      },
+      "XinZhao-LeeSin": {
+        "games": 29,
+        "winsA": 13
+      },
+      "LeeSin-Skarner": {
+        "games": 18,
+        "winsA": 11
+      },
+      "Vi-Zaahen": {
+        "games": 18,
+        "winsA": 12
+      },
+      "Vi-Aatrox": {
+        "games": 9,
+        "winsA": 3
+      },
+      "JarvanIV-Aatrox": {
+        "games": 24,
+        "winsA": 11
+      },
+      "Pantheon-Sejuani": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Skarner-Pantheon": {
+        "games": 41,
+        "winsA": 24
+      },
+      "Trundle-Naafiri": {
+        "games": 8,
+        "winsA": 3
+      },
+      "MonkeyKing-Naafiri": {
+        "games": 18,
+        "winsA": 11
+      },
+      "Zaahen-MonkeyKing": {
+        "games": 16,
+        "winsA": 12
+      },
+      "Naafiri-DrMundo": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Zaahen-Pantheon": {
+        "games": 12,
+        "winsA": 8
+      },
+      "XinZhao-Jayce": {
+        "games": 11,
+        "winsA": 7
+      },
+      "JarvanIV-Zaahen": {
+        "games": 12,
+        "winsA": 9
+      },
+      "DrMundo-Zaahen": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Vi-Naafiri": {
+        "games": 26,
+        "winsA": 13
+      },
+      "Nocturne-Aatrox": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Trundle-DrMundo": {
+        "games": 10,
+        "winsA": 6
+      },
+      "MonkeyKing-Maokai": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Aatrox-Naafiri": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Zaahen-XinZhao": {
+        "games": 25,
+        "winsA": 16
+      },
+      "Poppy-Vi": {
+        "games": 8,
+        "winsA": 3
+      },
+      "JarvanIV-Nidalee": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Zaahen-Vi": {
+        "games": 22,
+        "winsA": 16
+      },
+      "Nocturne-Zaahen": {
+        "games": 8,
+        "winsA": 1
+      },
+      "Zyra-MonkeyKing": {
+        "games": 8,
+        "winsA": 3
+      },
+      "KhaZix-XinZhao": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Naafiri-Aatrox": {
+        "games": 5,
+        "winsA": 3
+      },
+      "LeeSin-Pantheon": {
+        "games": 16,
+        "winsA": 8
+      },
+      "Ambessa-Nocturne": {
+        "games": 9,
+        "winsA": 5
+      },
+      "LeeSin-Naafiri": {
+        "games": 12,
+        "winsA": 10
+      },
+      "XinZhao-KhaZix": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Sejuani-Maokai": {
+        "games": 5,
+        "winsA": 2
+      },
+      "XinZhao-Zaahen": {
+        "games": 14,
+        "winsA": 11
+      },
+      "Skarner-Trundle": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Naafiri-LeeSin": {
+        "games": 14,
+        "winsA": 8
+      },
+      "Pantheon-Zaahen": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Skarner-Maokai": {
+        "games": 5,
+        "winsA": 5
+      },
+      "DrMundo-Skarner": {
+        "games": 5,
+        "winsA": 2
+      },
+      "XinZhao-Maokai": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Naafiri-Trundle": {
+        "games": 14,
+        "winsA": 4
+      },
+      "Maokai-Nocturne": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Ambessa-LeeSin": {
+        "games": 5,
+        "winsA": 1
+      },
+      "JarvanIV-Poppy": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Nocturne-LeeSin": {
+        "games": 13,
+        "winsA": 7
+      },
+      "Zaahen-DrMundo": {
+        "games": 6,
+        "winsA": 1
+      },
+      "DrMundo-Maokai": {
+        "games": 5,
+        "winsA": 4
+      },
+      "XinZhao-Olaf": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Malphite-XinZhao": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Aatrox-Skarner": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Skarner-Nocturne": {
+        "games": 12,
+        "winsA": 6
+      },
+      "Nocturne-Skarner": {
+        "games": 17,
+        "winsA": 13
+      },
+      "LeeSin-Ambessa": {
+        "games": 5,
+        "winsA": 3
+      },
+      "MonkeyKing-Skarner": {
+        "games": 14,
+        "winsA": 5
+      },
+      "Naafiri-Maokai": {
+        "games": 5,
+        "winsA": 4
+      },
+      "LeeSin-Trundle": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Olaf-XinZhao": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Naafiri-Pantheon": {
+        "games": 14,
+        "winsA": 8
+      },
+      "Vi-Olaf": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Naafiri-Skarner": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Skarner-LeeSin": {
+        "games": 11,
+        "winsA": 9
+      },
+      "Aatrox-Zaahen": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Skarner-Naafiri": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Zaahen-Nocturne": {
+        "games": 5,
+        "winsA": 3
+      },
+      "JarvanIV-Skarner": {
+        "games": 12,
+        "winsA": 9
+      },
+      "Trundle-Skarner": {
+        "games": 8,
+        "winsA": 7
+      },
+      "Maokai-Naafiri": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Sejuani-JarvanIV": {
+        "games": 5,
+        "winsA": 4
+      },
+      "RekSai-LeeSin": {
+        "games": 5,
+        "winsA": 4
+      }
+    },
+    "mid": {
+      "Ahri-Mel": {
+        "games": 30,
+        "winsA": 18
+      },
+      "Orianna-Galio": {
+        "games": 60,
+        "winsA": 35
+      },
+      "Akali-Orianna": {
+        "games": 68,
+        "winsA": 33
+      },
+      "Viktor-Syndra": {
+        "games": 25,
+        "winsA": 6
+      },
+      "Azir-Ekko": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Syndra-Ryze": {
+        "games": 36,
+        "winsA": 19
+      },
+      "Ryze-Cassiopeia": {
+        "games": 69,
+        "winsA": 32
+      },
+      "Akali-Taliyah": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Azir-Orianna": {
+        "games": 95,
+        "winsA": 46
+      },
+      "Taliyah-Ryze": {
+        "games": 98,
+        "winsA": 54
+      },
+      "Akali-Azir": {
+        "games": 33,
+        "winsA": 19
+      },
+      "Ryze-Taliyah": {
+        "games": 114,
+        "winsA": 65
+      },
+      "Taliyah-Syndra": {
+        "games": 13,
+        "winsA": 7
+      },
+      "Anivia-Ryze": {
+        "games": 105,
+        "winsA": 58
+      },
+      "Azir-Taliyah": {
+        "games": 57,
+        "winsA": 30
+      },
+      "Aurora-Ahri": {
+        "games": 95,
+        "winsA": 41
+      },
+      "Viktor-Orianna": {
+        "games": 28,
+        "winsA": 13
+      },
+      "Ryze-Veigar": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Orianna-Azir": {
+        "games": 99,
+        "winsA": 55
+      },
+      "Aurora-Akali": {
+        "games": 20,
+        "winsA": 8
+      },
+      "Orianna-Ryze": {
+        "games": 88,
+        "winsA": 50
+      },
+      "Ziggs-Azir": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Orianna-Syndra": {
+        "games": 39,
+        "winsA": 24
+      },
+      "Orianna-Akali": {
+        "games": 83,
+        "winsA": 30
+      },
+      "Syndra-Azir": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Viktor-Mel": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Ryze-Galio": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Syndra-Taliyah": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Orianna-AurelionSol": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Orianna-Viktor": {
+        "games": 41,
+        "winsA": 19
+      },
+      "Ahri-Taliyah": {
+        "games": 44,
+        "winsA": 30
+      },
+      "Viktor-Ryze": {
+        "games": 28,
+        "winsA": 15
+      },
+      "Zoe-Aurora": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Ryze-Syndra": {
+        "games": 63,
+        "winsA": 32
+      },
+      "Cassiopeia-Aurora": {
+        "games": 18,
+        "winsA": 12
+      },
+      "Leblanc-Orianna": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Aurora-Sylas": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Ryze-Anivia": {
+        "games": 135,
+        "winsA": 68
+      },
+      "Ryze-Viktor": {
+        "games": 38,
+        "winsA": 24
+      },
+      "Syndra-Orianna": {
+        "games": 25,
+        "winsA": 8
+      },
+      "Galio-Syndra": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Ahri-Aurora": {
+        "games": 82,
+        "winsA": 43
+      },
+      "Azir-Akali": {
+        "games": 28,
+        "winsA": 15
+      },
+      "Syndra-Viktor": {
+        "games": 19,
+        "winsA": 9
+      },
+      "Ahri-Ryze": {
+        "games": 43,
+        "winsA": 21
+      },
+      "Taliyah-Ahri": {
+        "games": 45,
+        "winsA": 19
+      },
+      "Sylas-Orianna": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Azir-Leblanc": {
+        "games": 19,
+        "winsA": 7
+      },
+      "Aurora-Syndra": {
+        "games": 17,
+        "winsA": 9
+      },
+      "Taliyah-Cassiopeia": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Cassiopeia-Ryze": {
+        "games": 62,
+        "winsA": 28
+      },
+      "Ryze-Orianna": {
+        "games": 64,
+        "winsA": 33
+      },
+      "Ryze-AurelionSol": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Mel-Ryze": {
+        "games": 10,
+        "winsA": 3
+      },
+      "Leblanc-Azir": {
+        "games": 23,
+        "winsA": 14
+      },
+      "Ahri-Orianna": {
+        "games": 24,
+        "winsA": 11
+      },
+      "Syndra-Akali": {
+        "games": 11,
+        "winsA": 4
+      },
+      "Hwei-Orianna": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Azir-Viktor": {
+        "games": 14,
+        "winsA": 6
+      },
+      "Taliyah-Viktor": {
+        "games": 20,
+        "winsA": 9
+      },
+      "Syndra-Mel": {
+        "games": 10,
+        "winsA": 8
+      },
+      "Ahri-Galio": {
+        "games": 22,
+        "winsA": 15
+      },
+      "Taliyah-Aurora": {
+        "games": 28,
+        "winsA": 11
+      },
+      "Mel-Akali": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Taliyah-Galio": {
+        "games": 11,
+        "winsA": 9
+      },
+      "Ryze-Mel": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Azir-Ahri": {
+        "games": 21,
+        "winsA": 11
+      },
+      "Galio-Ryze": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Syndra-Aurora": {
+        "games": 26,
+        "winsA": 12
+      },
+      "Akali-Syndra": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Taliyah-Yone": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Viktor-Taliyah": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Aurora-Taliyah": {
+        "games": 25,
+        "winsA": 10
+      },
+      "Leblanc-Akali": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Viktor-Ahri": {
+        "games": 24,
+        "winsA": 15
+      },
+      "Ryze-Akali": {
+        "games": 18,
+        "winsA": 9
+      },
+      "Ahri-Yone": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Taliyah-Azir": {
+        "games": 47,
+        "winsA": 25
+      },
+      "Ahri-Viktor": {
+        "games": 14,
+        "winsA": 4
+      },
+      "Azir-Ryze": {
+        "games": 60,
+        "winsA": 32
+      },
+      "Akali-Galio": {
+        "games": 12,
+        "winsA": 9
+      },
+      "Sylas-Azir": {
+        "games": 6,
+        "winsA": 6
+      },
+      "Yone-Ryze": {
+        "games": 13,
+        "winsA": 8
+      },
+      "Ryze-Azir": {
+        "games": 78,
+        "winsA": 48
+      },
+      "Cassiopeia-Azir": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Taliyah-Sylas": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Orianna-Yone": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Leblanc-Galio": {
+        "games": 11,
+        "winsA": 4
+      },
+      "Galio-Ahri": {
+        "games": 23,
+        "winsA": 14
+      },
+      "Mel-Ahri": {
+        "games": 30,
+        "winsA": 13
+      },
+      "TwistedFate-Akali": {
+        "games": 9,
+        "winsA": 8
+      },
+      "Orianna-Taliyah": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Yone-Ahri": {
+        "games": 12,
+        "winsA": 4
+      },
+      "Ahri-Zoe": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Viktor-AurelionSol": {
+        "games": 5,
+        "winsA": 0
+      },
+      "Sylas-Ryze": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Taliyah-Orianna": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Akali-Ryze": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Azir-Syndra": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Galio-Akali": {
+        "games": 11,
+        "winsA": 8
+      },
+      "Taliyah-Zoe": {
+        "games": 5,
+        "winsA": 0
+      },
+      "Malzahar-Ryze": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Mel-Aurora": {
+        "games": 15,
+        "winsA": 6
+      },
+      "Galio-Orianna": {
+        "games": 43,
+        "winsA": 24
+      },
+      "Viktor-Sylas": {
+        "games": 17,
+        "winsA": 10
+      },
+      "Orianna-Leblanc": {
+        "games": 17,
+        "winsA": 8
+      },
+      "Hwei-Ryze": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Leblanc-Syndra": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Ryze-Ahri": {
+        "games": 44,
+        "winsA": 26
+      },
+      "Yone-Taliyah": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Ahri-Sylas": {
+        "games": 38,
+        "winsA": 23
+      },
+      "Taliyah-Akali": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Akali-Aurora": {
+        "games": 16,
+        "winsA": 14
+      },
+      "Aurora-Orianna": {
+        "games": 12,
+        "winsA": 4
+      },
+      "Sylas-Aurora": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Ahri-Leblanc": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Syndra-Cassiopeia": {
+        "games": 7,
+        "winsA": 0
+      },
+      "Yone-Azir": {
+        "games": 32,
+        "winsA": 21
+      },
+      "Akali-Viktor": {
+        "games": 22,
+        "winsA": 14
+      },
+      "Yone-Syndra": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Galio-Taliyah": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Galio-Aurora": {
+        "games": 22,
+        "winsA": 9
+      },
+      "Swain-Galio": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Azir-Yone": {
+        "games": 33,
+        "winsA": 20
+      },
+      "Ahri-Azir": {
+        "games": 17,
+        "winsA": 9
+      },
+      "Azir-Aurora": {
+        "games": 22,
+        "winsA": 13
+      },
+      "Ryze-Zoe": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Taliyah-Anivia": {
+        "games": 7,
+        "winsA": 1
+      },
+      "Akali-Ahri": {
+        "games": 15,
+        "winsA": 4
+      },
+      "Akali-Leblanc": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Sylas-Ahri": {
+        "games": 37,
+        "winsA": 19
+      },
+      "Lissandra-Ahri": {
+        "games": 25,
+        "winsA": 12
+      },
+      "Yone-Akali": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Ahri-Syndra": {
+        "games": 19,
+        "winsA": 10
+      },
+      "Azir-Sylas": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Ryze-Yone": {
+        "games": 26,
+        "winsA": 15
+      },
+      "Aurora-Ryze": {
+        "games": 43,
+        "winsA": 24
+      },
+      "Azir-Ziggs": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Anivia-Cassiopeia": {
+        "games": 19,
+        "winsA": 10
+      },
+      "Akali-Cassiopeia": {
+        "games": 10,
+        "winsA": 3
+      },
+      "Taliyah-Leblanc": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Ahri-Hwei": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Aurora-Azir": {
+        "games": 30,
+        "winsA": 14
+      },
+      "Syndra-Ahri": {
+        "games": 7,
+        "winsA": 1
+      },
+      "Viktor-Akali": {
+        "games": 18,
+        "winsA": 5
+      },
+      "Galio-Viktor": {
+        "games": 15,
+        "winsA": 8
+      },
+      "Galio-Leblanc": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Ahri-Akali": {
+        "games": 16,
+        "winsA": 12
+      },
+      "Hwei-Syndra": {
+        "games": 8,
+        "winsA": 1
+      },
+      "Orianna-Kassadin": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Orianna-Ahri": {
+        "games": 26,
+        "winsA": 15
+      },
+      "Orianna-Aurora": {
+        "games": 11,
+        "winsA": 3
+      },
+      "Galio-Yone": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Hwei-Viktor": {
+        "games": 10,
+        "winsA": 3
+      },
+      "Orianna-Sylas": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Aurora-Galio": {
+        "games": 16,
+        "winsA": 7
+      },
+      "Annie-Viktor": {
+        "games": 23,
+        "winsA": 12
+      },
+      "Sylas-Syndra": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Ryze-Aurora": {
+        "games": 48,
+        "winsA": 23
+      },
+      "Hwei-Aurora": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Hwei-Akali": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Aurora-Viktor": {
+        "games": 47,
+        "winsA": 27
+      },
+      "Cassiopeia-Galio": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Viktor-Galio": {
+        "games": 8,
+        "winsA": 6
+      },
+      "Leblanc-Ahri": {
+        "games": 20,
+        "winsA": 9
+      },
+      "Viktor-Aurora": {
+        "games": 32,
+        "winsA": 17
+      },
+      "TwistedFate-Aurora": {
+        "games": 21,
+        "winsA": 15
+      },
+      "Aurora-Hwei": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Aurora-Leblanc": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Viktor-Yone": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Taliyah-Hwei": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Viktor-Anivia": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Aurora-Cassiopeia": {
+        "games": 9,
+        "winsA": 2
+      },
+      "Ryze-TwistedFate": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Cassiopeia-Syndra": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Zoe-Ryze": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Anivia-Hwei": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Cassiopeia-Ahri": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Aurora-Anivia": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Zoe-Viktor": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Syndra-Hwei": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Yone-Cassiopeia": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Ahri-TwistedFate": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Anivia-Taliyah": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Leblanc-Viktor": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Viktor-Cassiopeia": {
+        "games": 18,
+        "winsA": 11
+      },
+      "Mel-TwistedFate": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Zoe-Syndra": {
+        "games": 5,
+        "winsA": 3
+      },
+      "TwistedFate-Ahri": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Viktor-Hwei": {
+        "games": 15,
+        "winsA": 6
+      },
+      "Aurora-TwistedFate": {
+        "games": 17,
+        "winsA": 5
+      },
+      "Ahri-Cassiopeia": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Viktor-Azir": {
+        "games": 13,
+        "winsA": 5
+      },
+      "Ahri-Annie": {
+        "games": 16,
+        "winsA": 8
+      },
+      "Ahri-Veigar": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Syndra-Leblanc": {
+        "games": 6,
+        "winsA": 2
+      },
+      "TwistedFate-Taliyah": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Leblanc-Aurora": {
+        "games": 19,
+        "winsA": 11
+      },
+      "Annie-Azir": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Yone-Viktor": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Anivia-Aurora": {
+        "games": 11,
+        "winsA": 9
+      },
+      "Annie-Ahri": {
+        "games": 29,
+        "winsA": 12
+      },
+      "Galio-Smolder": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Annie-Ryze": {
+        "games": 42,
+        "winsA": 21
+      },
+      "Annie-Galio": {
+        "games": 18,
+        "winsA": 9
+      },
+      "Galio-Cassiopeia": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Sylas-Viktor": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Aurora-Mel": {
+        "games": 14,
+        "winsA": 8
+      },
+      "Azir-Annie": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Annie-Anivia": {
+        "games": 11,
+        "winsA": 4
+      },
+      "Annie-Hwei": {
+        "games": 16,
+        "winsA": 8
+      },
+      "Azir-KogMaw": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Ahri-Anivia": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Orianna-Annie": {
+        "games": 8,
+        "winsA": 2
+      },
+      "Mel-Hwei": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Annie-Taliyah": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Aurora-Annie": {
+        "games": 43,
+        "winsA": 15
+      },
+      "Ryze-Annie": {
+        "games": 38,
+        "winsA": 14
+      },
+      "Akali-Anivia": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Hwei-Annie": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Galio-Annie": {
+        "games": 20,
+        "winsA": 10
+      },
+      "Azir-Mel": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Syndra-Annie": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Mel-Viktor": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Cassiopeia-Viktor": {
+        "games": 18,
+        "winsA": 15
+      },
+      "Aurora-Zoe": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Annie-Mel": {
+        "games": 16,
+        "winsA": 10
+      },
+      "Viktor-Annie": {
+        "games": 22,
+        "winsA": 10
+      },
+      "Ryze-Hwei": {
+        "games": 14,
+        "winsA": 11
+      },
+      "Annie-Aurora": {
+        "games": 43,
+        "winsA": 26
+      },
+      "Lissandra-Leblanc": {
+        "games": 7,
+        "winsA": 4
+      },
+      "TwistedFate-Galio": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Annie-Akali": {
+        "games": 22,
+        "winsA": 12
+      },
+      "Anivia-Annie": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Leblanc-Cassiopeia": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Annie-Syndra": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Mel-Annie": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Hwei-Leblanc": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Ahri-Lissandra": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Cassiopeia-Akali": {
+        "games": 16,
+        "winsA": 6
+      },
+      "Anivia-Viktor": {
+        "games": 6,
+        "winsA": 4
+      },
+      "TwistedFate-Ryze": {
+        "games": 17,
+        "winsA": 9
+      },
+      "Akali-Annie": {
+        "games": 18,
+        "winsA": 11
+      },
+      "Annie-Orianna": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Taliyah-Annie": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Anivia-Ahri": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Annie-Cassiopeia": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Anivia-Akali": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Cassiopeia-Annie": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Hwei-Cassiopeia": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Cassiopeia-Anivia": {
+        "games": 17,
+        "winsA": 11
+      },
+      "Cassiopeia-Hwei": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Cassiopeia-Leblanc": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Cassiopeia-Taliyah": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Cassiopeia-Orianna": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Orianna-Cassiopeia": {
+        "games": 6,
+        "winsA": 3
+      }
+    },
+    "adc": {
+      "Corki-Sivir": {
+        "games": 28,
+        "winsA": 12
+      },
+      "Corki-MissFortune": {
+        "games": 12,
+        "winsA": 4
+      },
+      "Corki-Yunara": {
+        "games": 169,
+        "winsA": 92
+      },
+      "Lucian-Corki": {
+        "games": 53,
+        "winsA": 33
+      },
+      "Caitlyn-Yunara": {
+        "games": 49,
+        "winsA": 34
+      },
+      "MissFortune-Corki": {
+        "games": 15,
+        "winsA": 6
+      },
+      "Varus-Jhin": {
+        "games": 80,
+        "winsA": 47
+      },
+      "Aphelios-Yunara": {
+        "games": 60,
+        "winsA": 28
+      },
+      "KaiSa-Lucian": {
+        "games": 13,
+        "winsA": 8
+      },
+      "Yunara-Jhin": {
+        "games": 25,
+        "winsA": 12
+      },
+      "Lucian-Aphelios": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Varus-Ezreal": {
+        "games": 85,
+        "winsA": 41
+      },
+      "Aphelios-Ashe": {
+        "games": 13,
+        "winsA": 6
+      },
+      "KaiSa-Yunara": {
+        "games": 63,
+        "winsA": 31
+      },
+      "Corki-Aphelios": {
+        "games": 14,
+        "winsA": 7
+      },
+      "Sivir-Yunara": {
+        "games": 18,
+        "winsA": 7
+      },
+      "Ezreal-Corki": {
+        "games": 66,
+        "winsA": 41
+      },
+      "Sivir-Corki": {
+        "games": 50,
+        "winsA": 24
+      },
+      "Yunara-Xayah": {
+        "games": 31,
+        "winsA": 15
+      },
+      "Aphelios-MissFortune": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Yunara-KaiSa": {
+        "games": 56,
+        "winsA": 33
+      },
+      "Yunara-Corki": {
+        "games": 139,
+        "winsA": 79
+      },
+      "KaiSa-Sivir": {
+        "games": 21,
+        "winsA": 10
+      },
+      "Smolder-Corki": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Lucian-Ezreal": {
+        "games": 48,
+        "winsA": 34
+      },
+      "Corki-Jhin": {
+        "games": 29,
+        "winsA": 20
+      },
+      "Ashe-Lucian": {
+        "games": 54,
+        "winsA": 33
+      },
+      "Varus-Yunara": {
+        "games": 56,
+        "winsA": 27
+      },
+      "Aphelios-Ziggs": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Zeri-Sivir": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Ezreal-Yunara": {
+        "games": 95,
+        "winsA": 57
+      },
+      "Sivir-Jhin": {
+        "games": 17,
+        "winsA": 12
+      },
+      "MissFortune-Varus": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Caitlyn-Corki": {
+        "games": 28,
+        "winsA": 17
+      },
+      "Lucian-Tristana": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Aphelios-Corki": {
+        "games": 16,
+        "winsA": 8
+      },
+      "Lucian-KaiSa": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Ezreal-KaiSa": {
+        "games": 76,
+        "winsA": 40
+      },
+      "KaiSa-Corki": {
+        "games": 42,
+        "winsA": 26
+      },
+      "Lucian-Yunara": {
+        "games": 54,
+        "winsA": 30
+      },
+      "Yunara-Aphelios": {
+        "games": 83,
+        "winsA": 47
+      },
+      "Jhin-Varus": {
+        "games": 42,
+        "winsA": 22
+      },
+      "Sivir-Varus": {
+        "games": 96,
+        "winsA": 46
+      },
+      "KaiSa-Aphelios": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Ashe-Jhin": {
+        "games": 47,
+        "winsA": 34
+      },
+      "MissFortune-Sivir": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Ezreal-Jhin": {
+        "games": 70,
+        "winsA": 39
+      },
+      "Varus-Sivir": {
+        "games": 102,
+        "winsA": 50
+      },
+      "Ezreal-Varus": {
+        "games": 62,
+        "winsA": 27
+      },
+      "MissFortune-Ezreal": {
+        "games": 15,
+        "winsA": 6
+      },
+      "Caitlyn-Ziggs": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Smolder-Yunara": {
+        "games": 14,
+        "winsA": 5
+      },
+      "Aphelios-Lucian": {
+        "games": 18,
+        "winsA": 6
+      },
+      "Ezreal-Ashe": {
+        "games": 105,
+        "winsA": 53
+      },
+      "Jhin-Corki": {
+        "games": 44,
+        "winsA": 18
+      },
+      "Ezreal-Caitlyn": {
+        "games": 84,
+        "winsA": 39
+      },
+      "Corki-KaiSa": {
+        "games": 23,
+        "winsA": 14
+      },
+      "Corki-Ezreal": {
+        "games": 71,
+        "winsA": 38
+      },
+      "Aphelios-Ezreal": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Sivir-Aphelios": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Yunara-Smolder": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Yunara-Ezreal": {
+        "games": 80,
+        "winsA": 39
+      },
+      "Caitlyn-MissFortune": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Varus-Ashe": {
+        "games": 26,
+        "winsA": 10
+      },
+      "Varus-MissFortune": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Yunara-Varus": {
+        "games": 39,
+        "winsA": 19
+      },
+      "Sivir-Jinx": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Corki-Lucian": {
+        "games": 48,
+        "winsA": 23
+      },
+      "Corki-Varus": {
+        "games": 29,
+        "winsA": 13
+      },
+      "Yunara-MissFortune": {
+        "games": 13,
+        "winsA": 4
+      },
+      "Xayah-Ezreal": {
+        "games": 15,
+        "winsA": 7
+      },
+      "Sivir-KaiSa": {
+        "games": 14,
+        "winsA": 6
+      },
+      "Yunara-Ziggs": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Aphelios-Sivir": {
+        "games": 14,
+        "winsA": 5
+      },
+      "KaiSa-Ezreal": {
+        "games": 79,
+        "winsA": 49
+      },
+      "Ezreal-MissFortune": {
+        "games": 15,
+        "winsA": 7
+      },
+      "Varus-Corki": {
+        "games": 35,
+        "winsA": 19
+      },
+      "Lucian-Zeri": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Sivir-MissFortune": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Lucian-Kalista": {
+        "games": 10,
+        "winsA": 5
+      },
+      "MissFortune-Aphelios": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Sivir-Ezreal": {
+        "games": 93,
+        "winsA": 52
+      },
+      "Ashe-MissFortune": {
+        "games": 24,
+        "winsA": 14
+      },
+      "Aphelios-Xayah": {
+        "games": 5,
+        "winsA": 2
+      },
+      "MissFortune-Lucian": {
+        "games": 9,
+        "winsA": 4
+      },
+      "MissFortune-Jhin": {
+        "games": 23,
+        "winsA": 14
+      },
+      "Xayah-KaiSa": {
+        "games": 23,
+        "winsA": 12
+      },
+      "MissFortune-Yunara": {
+        "games": 10,
+        "winsA": 7
+      },
+      "Yunara-Caitlyn": {
+        "games": 49,
+        "winsA": 23
+      },
+      "Corki-Caitlyn": {
+        "games": 34,
+        "winsA": 18
+      },
+      "Kalista-Lucian": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Jhin-Caitlyn": {
+        "games": 61,
+        "winsA": 34
+      },
+      "Aphelios-Jinx": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Ashe-Corki": {
+        "games": 44,
+        "winsA": 27
+      },
+      "Xayah-Aphelios": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Caitlyn-Jhin": {
+        "games": 61,
+        "winsA": 31
+      },
+      "KaiSa-Varus": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Varus-Tristana": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Sivir-Caitlyn": {
+        "games": 9,
+        "winsA": 2
+      },
+      "Aphelios-Jhin": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Jinx-Aphelios": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Lucian-Sivir": {
+        "games": 6,
+        "winsA": 5
+      },
+      "KaiSa-Jhin": {
+        "games": 24,
+        "winsA": 17
+      },
+      "Jhin-Ezreal": {
+        "games": 58,
+        "winsA": 27
+      },
+      "Yunara-Sivir": {
+        "games": 26,
+        "winsA": 15
+      },
+      "Tristana-Ezreal": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Yunara-Tristana": {
+        "games": 16,
+        "winsA": 10
+      },
+      "Jhin-Tristana": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Tristana-Yunara": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Varus-Lucian": {
+        "games": 19,
+        "winsA": 10
+      },
+      "KaiSa-MissFortune": {
+        "games": 8,
+        "winsA": 8
+      },
+      "MissFortune-Ashe": {
+        "games": 25,
+        "winsA": 12
+      },
+      "Corki-Kalista": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Varus-Zeri": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Ezreal-Xayah": {
+        "games": 12,
+        "winsA": 4
+      },
+      "Caitlyn-Aphelios": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Xayah-Corki": {
+        "games": 21,
+        "winsA": 10
+      },
+      "KaiSa-Xayah": {
+        "games": 21,
+        "winsA": 8
+      },
+      "Varus-KaiSa": {
+        "games": 14,
+        "winsA": 7
+      },
+      "Ashe-Yunara": {
+        "games": 51,
+        "winsA": 30
+      },
+      "Aphelios-Kalista": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Jinx-Yunara": {
+        "games": 17,
+        "winsA": 8
+      },
+      "Sivir-Kalista": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Aphelios-Caitlyn": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Yunara-Ashe": {
+        "games": 42,
+        "winsA": 16
+      },
+      "Lucian-Caitlyn": {
+        "games": 39,
+        "winsA": 16
+      },
+      "Jhin-Ashe": {
+        "games": 50,
+        "winsA": 23
+      },
+      "Caitlyn-Ezreal": {
+        "games": 78,
+        "winsA": 41
+      },
+      "Varus-Xayah": {
+        "games": 8,
+        "winsA": 2
+      },
+      "Yunara-Jinx": {
+        "games": 8,
+        "winsA": 6
+      },
+      "Kalista-Xayah": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Jhin-Yunara": {
+        "games": 20,
+        "winsA": 11
+      },
+      "KaiSa-Tristana": {
+        "games": 7,
+        "winsA": 6
+      },
+      "Xayah-Yunara": {
+        "games": 26,
+        "winsA": 14
+      },
+      "Varus-Mel": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Sivir-Ashe": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Lucian-Draven": {
+        "games": 8,
+        "winsA": 6
+      },
+      "Lucian-MissFortune": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Jhin-Lucian": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Caitlyn-Lucian": {
+        "games": 39,
+        "winsA": 24
+      },
+      "Kalista-Ezreal": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Lucian-Ashe": {
+        "games": 34,
+        "winsA": 18
+      },
+      "MissFortune-KaiSa": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Jhin-MissFortune": {
+        "games": 17,
+        "winsA": 6
+      },
+      "Corki-Xayah": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Ezreal-Aphelios": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Corki-Zeri": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Xayah-Varus": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Varus-Ziggs": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Caitlyn-Varus": {
+        "games": 14,
+        "winsA": 8
+      },
+      "Corki-Ashe": {
+        "games": 31,
+        "winsA": 10
+      },
+      "Caitlyn-Ashe": {
+        "games": 34,
+        "winsA": 23
+      },
+      "Jhin-Xayah": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Ezreal-Sivir": {
+        "games": 78,
+        "winsA": 30
+      },
+      "Jhin-Sivir": {
+        "games": 16,
+        "winsA": 5
+      },
+      "Ashe-Ezreal": {
+        "games": 111,
+        "winsA": 59
+      },
+      "Varus-Caitlyn": {
+        "games": 24,
+        "winsA": 10
+      },
+      "KaiSa-Ashe": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Yunara-Zeri": {
+        "games": 8,
+        "winsA": 7
+      },
+      "Kalista-Varus": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Yunara-Lucian": {
+        "games": 50,
+        "winsA": 31
+      },
+      "Ezreal-Lucian": {
+        "games": 45,
+        "winsA": 19
+      },
+      "Ezreal-Jinx": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Caitlyn-Sivir": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Sivir-Zeri": {
+        "games": 8,
+        "winsA": 2
+      },
+      "Ashe-Varus": {
+        "games": 29,
+        "winsA": 16
+      },
+      "Jinx-KaiSa": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Ashe-Caitlyn": {
+        "games": 42,
+        "winsA": 22
+      },
+      "Caitlyn-Jinx": {
+        "games": 11,
+        "winsA": 7
+      },
+      "Ezreal-Kalista": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Lucian-Xayah": {
+        "games": 15,
+        "winsA": 6
+      },
+      "Varus-Kalista": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Smolder-Ezreal": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Jinx-Xayah": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Tristana-KaiSa": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Zeri-Ashe": {
+        "games": 18,
+        "winsA": 6
+      },
+      "Xayah-Sivir": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Xayah-Lucian": {
+        "games": 19,
+        "winsA": 15
+      },
+      "Lucian-Varus": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Aphelios-KaiSa": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Xayah-Jhin": {
+        "games": 8,
+        "winsA": 6
+      },
+      "Smolder-Xayah": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Ezreal-Smolder": {
+        "games": 9,
+        "winsA": 7
+      },
+      "Sivir-Xayah": {
+        "games": 13,
+        "winsA": 8
+      },
+      "Ashe-Kalista": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Ashe-KaiSa": {
+        "games": 5,
+        "winsA": 5
+      },
+      "Yunara-Senna": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Ashe-Zeri": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Jinx-Ezreal": {
+        "games": 7,
+        "winsA": 4
+      },
+      "MissFortune-Caitlyn": {
+        "games": 12,
+        "winsA": 4
+      },
+      "Ashe-Seraphine": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Ashe-Ziggs": {
+        "games": 13,
+        "winsA": 7
+      },
+      "MissFortune-Xayah": {
+        "games": 8,
+        "winsA": 2
+      },
+      "Ashe-Mel": {
+        "games": 30,
+        "winsA": 18
+      },
+      "Ashe-Senna": {
+        "games": 20,
+        "winsA": 12
+      },
+      "Yunara-Kalista": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Ziggs-Ashe": {
+        "games": 10,
+        "winsA": 3
+      },
+      "Jhin-KaiSa": {
+        "games": 11,
+        "winsA": 4
+      },
+      "Zeri-Yunara": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Caitlyn-Mel": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Jinx-Ashe": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Ashe-Sivir": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Sivir-Senna": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Mel-Ashe": {
+        "games": 21,
+        "winsA": 9
+      },
+      "Ziggs-Yunara": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Ziggs-Caitlyn": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Senna-Ashe": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Senna-Ezreal": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Senna-Yunara": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Corki-Senna": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Kalista-Jhin": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Ziggs-Ezreal": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Lucian-Jhin": {
+        "games": 14,
+        "winsA": 9
+      },
+      "Lucian-KogMaw": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Lucian-Senna": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Ezreal-Senna": {
+        "games": 6,
+        "winsA": 5
+      },
+      "Senna-Lucian": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Jhin-Senna": {
+        "games": 6,
+        "winsA": 1
+      }
+    },
+    "support": {
+      "Leona-Braum": {
+        "games": 17,
+        "winsA": 7
+      },
+      "Alistar-Neeko": {
+        "games": 36,
+        "winsA": 17
+      },
+      "Leona-Poppy": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Bard-Rakan": {
+        "games": 38,
+        "winsA": 25
+      },
+      "Leona-Bard": {
+        "games": 26,
+        "winsA": 11
+      },
+      "Rell-Poppy": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Poppy-Rell": {
+        "games": 11,
+        "winsA": 11
+      },
+      "Alistar-Nautilus": {
+        "games": 61,
+        "winsA": 35
+      },
+      "Rell-Renata": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Lulu-Nautilus": {
+        "games": 41,
+        "winsA": 15
+      },
+      "Alistar-Braum": {
+        "games": 28,
+        "winsA": 17
+      },
+      "Nautilus-Alistar": {
+        "games": 45,
+        "winsA": 18
+      },
+      "Nami-Lulu": {
+        "games": 109,
+        "winsA": 60
+      },
+      "Lulu-Neeko": {
+        "games": 68,
+        "winsA": 35
+      },
+      "Alistar-Leona": {
+        "games": 29,
+        "winsA": 17
+      },
+      "Thresh-Alistar": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Leona-Rakan": {
+        "games": 21,
+        "winsA": 7
+      },
+      "Leona-Rell": {
+        "games": 17,
+        "winsA": 6
+      },
+      "Karma-Nautilus": {
+        "games": 83,
+        "winsA": 28
+      },
+      "Rakan-Rell": {
+        "games": 22,
+        "winsA": 11
+      },
+      "Rakan-Neeko": {
+        "games": 29,
+        "winsA": 14
+      },
+      "Alistar-Nami": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Rell-Rakan": {
+        "games": 37,
+        "winsA": 15
+      },
+      "Nautilus-Braum": {
+        "games": 68,
+        "winsA": 36
+      },
+      "Alistar-Rell": {
+        "games": 34,
+        "winsA": 21
+      },
+      "Lulu-Nami": {
+        "games": 100,
+        "winsA": 53
+      },
+      "Neeko-Nautilus": {
+        "games": 48,
+        "winsA": 28
+      },
+      "Lulu-Leona": {
+        "games": 15,
+        "winsA": 9
+      },
+      "Nami-Karma": {
+        "games": 55,
+        "winsA": 28
+      },
+      "Braum-Alistar": {
+        "games": 28,
+        "winsA": 9
+      },
+      "Rell-Alistar": {
+        "games": 38,
+        "winsA": 19
+      },
+      "Neeko-Rakan": {
+        "games": 29,
+        "winsA": 17
+      },
+      "Neeko-Leona": {
+        "games": 15,
+        "winsA": 11
+      },
+      "Karma-Neeko": {
+        "games": 48,
+        "winsA": 31
+      },
+      "Bard-Elise": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Neeko-Rell": {
+        "games": 20,
+        "winsA": 15
+      },
+      "Thresh-Rakan": {
+        "games": 6,
+        "winsA": 1
+      },
+      "Karma-Leona": {
+        "games": 17,
+        "winsA": 11
+      },
+      "Rakan-Braum": {
+        "games": 14,
+        "winsA": 10
+      },
+      "Braum-Lulu": {
+        "games": 8,
+        "winsA": 2
+      },
+      "Nautilus-Leona": {
+        "games": 67,
+        "winsA": 28
+      },
+      "Nautilus-Rell": {
+        "games": 74,
+        "winsA": 31
+      },
+      "Alistar-Lulu": {
+        "games": 18,
+        "winsA": 5
+      },
+      "Nautilus-Poppy": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Rakan-Lulu": {
+        "games": 33,
+        "winsA": 22
+      },
+      "Alistar-Bard": {
+        "games": 23,
+        "winsA": 7
+      },
+      "Rell-Braum": {
+        "games": 19,
+        "winsA": 8
+      },
+      "Bard-Alistar": {
+        "games": 36,
+        "winsA": 19
+      },
+      "Karma-Lulu": {
+        "games": 33,
+        "winsA": 22
+      },
+      "Thresh-Lulu": {
+        "games": 22,
+        "winsA": 15
+      },
+      "Neeko-Alistar": {
+        "games": 52,
+        "winsA": 28
+      },
+      "Nautilus-Neeko": {
+        "games": 32,
+        "winsA": 19
+      },
+      "Blitzcrank-Thresh": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Bard-Nautilus": {
+        "games": 64,
+        "winsA": 36
+      },
+      "Braum-Rakan": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Leona-Neeko": {
+        "games": 13,
+        "winsA": 6
+      },
+      "Nami-Neeko": {
+        "games": 51,
+        "winsA": 21
+      },
+      "Lulu-Rakan": {
+        "games": 27,
+        "winsA": 10
+      },
+      "Leona-Nautilus": {
+        "games": 26,
+        "winsA": 19
+      },
+      "Rakan-Leona": {
+        "games": 30,
+        "winsA": 19
+      },
+      "Braum-Nautilus": {
+        "games": 49,
+        "winsA": 22
+      },
+      "Leona-Alistar": {
+        "games": 27,
+        "winsA": 6
+      },
+      "Leona-Karma": {
+        "games": 9,
+        "winsA": 6
+      },
+      "Bard-Neeko": {
+        "games": 76,
+        "winsA": 45
+      },
+      "Nami-Alistar": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Rakan-Bard": {
+        "games": 40,
+        "winsA": 21
+      },
+      "Rell-Leona": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Alistar-Poppy": {
+        "games": 20,
+        "winsA": 13
+      },
+      "Renata-Leona": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Milio-Alistar": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Poppy-Rakan": {
+        "games": 11,
+        "winsA": 5
+      },
+      "Lulu-Rell": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Rell-Nautilus": {
+        "games": 83,
+        "winsA": 48
+      },
+      "Bard-Leona": {
+        "games": 27,
+        "winsA": 21
+      },
+      "Alistar-Karma": {
+        "games": 21,
+        "winsA": 12
+      },
+      "Neeko-Nami": {
+        "games": 59,
+        "winsA": 26
+      },
+      "Alistar-Rakan": {
+        "games": 51,
+        "winsA": 27
+      },
+      "Neeko-Lulu": {
+        "games": 51,
+        "winsA": 28
+      },
+      "Thresh-Nautilus": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Poppy-Alistar": {
+        "games": 18,
+        "winsA": 11
+      },
+      "Bard-Rell": {
+        "games": 31,
+        "winsA": 21
+      },
+      "Rakan-Alistar": {
+        "games": 52,
+        "winsA": 19
+      },
+      "Nautilus-Rakan": {
+        "games": 26,
+        "winsA": 11
+      },
+      "Braum-Bard": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Braum-Rell": {
+        "games": 16,
+        "winsA": 9
+      },
+      "Renata-Rakan": {
+        "games": 9,
+        "winsA": 2
+      },
+      "Thresh-Bard": {
+        "games": 10,
+        "winsA": 3
+      },
+      "Neeko-Thresh": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Bard-Karma": {
+        "games": 66,
+        "winsA": 30
+      },
+      "Rell-Neeko": {
+        "games": 20,
+        "winsA": 11
+      },
+      "Rell-Bard": {
+        "games": 20,
+        "winsA": 11
+      },
+      "Karma-Bard": {
+        "games": 84,
+        "winsA": 35
+      },
+      "Rell-Lulu": {
+        "games": 20,
+        "winsA": 5
+      },
+      "Lulu-Bard": {
+        "games": 41,
+        "winsA": 20
+      },
+      "Bard-Lulu": {
+        "games": 39,
+        "winsA": 30
+      },
+      "Nautilus-Bard": {
+        "games": 42,
+        "winsA": 17
+      },
+      "Neeko-Bard": {
+        "games": 83,
+        "winsA": 40
+      },
+      "Lulu-Blitzcrank": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Pyke-Karma": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Thresh-Leona": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Lulu-Renata": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Lulu-Karma": {
+        "games": 32,
+        "winsA": 19
+      },
+      "Neeko-Karma": {
+        "games": 49,
+        "winsA": 28
+      },
+      "Lulu-Pyke": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Lulu-Alistar": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Nautilus-Thresh": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Rakan-Seraphine": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Nautilus-Lulu": {
+        "games": 44,
+        "winsA": 26
+      },
+      "Bard-Seraphine": {
+        "games": 74,
+        "winsA": 45
+      },
+      "Braum-Thresh": {
+        "games": 6,
+        "winsA": 3
+      },
+      "Rakan-Karma": {
+        "games": 25,
+        "winsA": 14
+      },
+      "Nami-Bard": {
+        "games": 43,
+        "winsA": 30
+      },
+      "Seraphine-Lulu": {
+        "games": 50,
+        "winsA": 32
+      },
+      "Nami-Rakan": {
+        "games": 18,
+        "winsA": 10
+      },
+      "Thresh-Karma": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Leona-Seraphine": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Thresh-Neeko": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Seraphine-Nami": {
+        "games": 51,
+        "winsA": 34
+      },
+      "Neeko-Seraphine": {
+        "games": 30,
+        "winsA": 11
+      },
+      "Rakan-Nautilus": {
+        "games": 29,
+        "winsA": 16
+      },
+      "Lulu-Milio": {
+        "games": 39,
+        "winsA": 21
+      },
+      "Seraphine-Neeko": {
+        "games": 31,
+        "winsA": 18
+      },
+      "Nami-Nautilus": {
+        "games": 31,
+        "winsA": 19
+      },
+      "Pyke-Bard": {
+        "games": 14,
+        "winsA": 10
+      },
+      "Rell-Karma": {
+        "games": 15,
+        "winsA": 8
+      },
+      "Rell-Seraphine": {
+        "games": 15,
+        "winsA": 5
+      },
+      "Karma-Alistar": {
+        "games": 24,
+        "winsA": 14
+      },
+      "Rakan-Poppy": {
+        "games": 12,
+        "winsA": 7
+      },
+      "Rakan-Nami": {
+        "games": 22,
+        "winsA": 11
+      },
+      "Nami-Leona": {
+        "games": 13,
+        "winsA": 3
+      },
+      "Blitzcrank-Lulu": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Renata-Karma": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Nami-Seraphine": {
+        "games": 38,
+        "winsA": 15
+      },
+      "Pyke-Lulu": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Nautilus-Pyke": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Bard-Thresh": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Leona-Nami": {
+        "games": 14,
+        "winsA": 8
+      },
+      "Karma-Seraphine": {
+        "games": 71,
+        "winsA": 38
+      },
+      "Seraphine-Braum": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Rell-Nami": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Leona-Thresh": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Karma-Rakan": {
+        "games": 32,
+        "winsA": 19
+      },
+      "Bard-Pyke": {
+        "games": 19,
+        "winsA": 12
+      },
+      "Karma-Nami": {
+        "games": 70,
+        "winsA": 34
+      },
+      "Seraphine-Rakan": {
+        "games": 11,
+        "winsA": 6
+      },
+      "Milio-Lulu": {
+        "games": 46,
+        "winsA": 26
+      },
+      "Lulu-Thresh": {
+        "games": 12,
+        "winsA": 8
+      },
+      "Nami-Milio": {
+        "games": 38,
+        "winsA": 21
+      },
+      "Karma-Pyke": {
+        "games": 11,
+        "winsA": 5
+      },
+      "Milio-Nami": {
+        "games": 39,
+        "winsA": 25
+      },
+      "Renata-Alistar": {
+        "games": 7,
+        "winsA": 2
+      },
+      "Bard-Nami": {
+        "games": 38,
+        "winsA": 19
+      },
+      "Braum-Leona": {
+        "games": 8,
+        "winsA": 3
+      },
+      "Milio-Neeko": {
+        "games": 22,
+        "winsA": 13
+      },
+      "Rakan-Milio": {
+        "games": 13,
+        "winsA": 11
+      },
+      "Seraphine-Karma": {
+        "games": 57,
+        "winsA": 35
+      },
+      "Nautilus-Nami": {
+        "games": 21,
+        "winsA": 9
+      },
+      "Seraphine-Alistar": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Pyke-Neeko": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Nautilus-Renata": {
+        "games": 10,
+        "winsA": 2
+      },
+      "Poppy-Nautilus": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Seraphine-Bard": {
+        "games": 63,
+        "winsA": 30
+      },
+      "Nautilus-Karma": {
+        "games": 54,
+        "winsA": 39
+      },
+      "Poppy-Leona": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Renata-Neeko": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Renata-Nautilus": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Rakan-Renata": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Seraphine-Blitzcrank": {
+        "games": 9,
+        "winsA": 4
+      },
+      "Milio-Nautilus": {
+        "games": 27,
+        "winsA": 16
+      },
+      "Karma-Rell": {
+        "games": 16,
+        "winsA": 7
+      },
+      "Seraphine-Nautilus": {
+        "games": 48,
+        "winsA": 23
+      },
+      "Seraphine-Rell": {
+        "games": 21,
+        "winsA": 12
+      },
+      "Renata-Bard": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Seraphine-Milio": {
+        "games": 48,
+        "winsA": 29
+      },
+      "Nami-Rell": {
+        "games": 12,
+        "winsA": 8
+      },
+      "Seraphine-Yuumi": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Lulu-Seraphine": {
+        "games": 70,
+        "winsA": 36
+      },
+      "Neeko-Milio": {
+        "games": 12,
+        "winsA": 8
+      },
+      "Nautilus-Seraphine": {
+        "games": 50,
+        "winsA": 18
+      },
+      "Alistar-Milio": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Seraphine-Pyke": {
+        "games": 19,
+        "winsA": 9
+      },
+      "Milio-Renata": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Yuumi-Karma": {
+        "games": 8,
+        "winsA": 4
+      },
+      "Yuumi-Seraphine": {
+        "games": 16,
+        "winsA": 5
+      },
+      "Karma-Yuumi": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Pyke-Seraphine": {
+        "games": 13,
+        "winsA": 7
+      },
+      "Seraphine-Leona": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Neeko-Lux": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Anivia-Seraphine": {
+        "games": 7,
+        "winsA": 5
+      },
+      "Lulu-Soraka": {
+        "games": 9,
+        "winsA": 3
+      },
+      "Milio-Seraphine": {
+        "games": 36,
+        "winsA": 21
+      },
+      "Anivia-Karma": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Seraphine-Anivia": {
+        "games": 10,
+        "winsA": 5
+      },
+      "Anivia-Bard": {
+        "games": 7,
+        "winsA": 3
+      },
+      "Elise-Bard": {
+        "games": 7,
+        "winsA": 4
+      },
+      "Karma-Anivia": {
+        "games": 10,
+        "winsA": 6
+      },
+      "Neeko-Anivia": {
+        "games": 10,
+        "winsA": 4
+      },
+      "Lulu-Anivia": {
+        "games": 8,
+        "winsA": 5
+      },
+      "Bard-Anivia": {
+        "games": 6,
+        "winsA": 4
+      },
+      "Anivia-Neeko": {
+        "games": 9,
+        "winsA": 5
+      },
+      "Milio-Rakan": {
+        "games": 14,
+        "winsA": 6
+      },
+      "Milio-Bard": {
+        "games": 29,
+        "winsA": 16
+      },
+      "Bard-Milio": {
+        "games": 22,
+        "winsA": 13
+      },
+      "Neeko-Yuumi": {
+        "games": 5,
+        "winsA": 1
+      },
+      "Milio-Rell": {
+        "games": 6,
+        "winsA": 6
+      },
+      "Nautilus-Milio": {
+        "games": 22,
+        "winsA": 11
+      },
+      "Milio-Lux": {
+        "games": 5,
+        "winsA": 2
+      },
+      "Camille-Seraphine": {
+        "games": 6,
+        "winsA": 2
+      },
+      "Milio-Karma": {
+        "games": 17,
+        "winsA": 10
+      },
+      "Yuumi-Milio": {
+        "games": 5,
+        "winsA": 4
+      },
+      "Lux-Neeko": {
+        "games": 5,
+        "winsA": 3
+      },
+      "Karma-Milio": {
+        "games": 13,
+        "winsA": 8
+      }
+    }
+  },
+  "byChampion": {
+    "Gnar": {
+      "top": {
+        "games": 1077,
+        "wins": 586
+      }
+    },
+    "Zaahen": {
+      "top": {
+        "games": 370,
+        "wins": 200
+      },
+      "jungle": {
+        "games": 246,
+        "wins": 129
+      }
+    },
+    "XinZhao": {
+      "jungle": {
+        "games": 1642,
+        "wins": 807
+      },
+      "mid": {
+        "games": 5,
+        "wins": 3
+      },
+      "top": {
+        "games": 4,
+        "wins": 1
+      }
+    },
+    "Diana": {
+      "jungle": {
+        "games": 20,
+        "wins": 8
+      },
+      "mid": {
+        "games": 9,
+        "wins": 5
+      }
+    },
+    "Ahri": {
+      "mid": {
+        "games": 974,
+        "wins": 521
+      },
+      "top": {
+        "games": 3,
+        "wins": 2
+      }
+    },
+    "Mel": {
+      "mid": {
+        "games": 264,
+        "wins": 105
+      },
+      "support": {
+        "games": 6,
+        "wins": 2
+      },
+      "adc": {
+        "games": 96,
+        "wins": 45
+      }
+    },
+    "Corki": {
+      "adc": {
+        "games": 1117,
+        "wins": 537
+      },
+      "mid": {
+        "games": 12,
+        "wins": 5
+      }
+    },
+    "Sivir": {
+      "adc": {
+        "games": 736,
+        "wins": 375
+      }
+    },
+    "Leona": {
+      "support": {
+        "games": 477,
+        "wins": 224
+      }
+    },
+    "Braum": {
+      "support": {
+        "games": 331,
+        "wins": 147
+      }
+    },
+    "Renekton": {
+      "top": {
+        "games": 967,
+        "wins": 490
+      },
+      "mid": {
+        "games": 7,
+        "wins": 2
+      }
+    },
+    "DrMundo": {
+      "jungle": {
+        "games": 415,
+        "wins": 208
+      },
+      "top": {
+        "games": 48,
+        "wins": 15
+      }
+    },
+    "Ekko": {
+      "mid": {
+        "games": 17,
+        "wins": 7
+      }
+    },
+    "Galio": {
+      "mid": {
+        "games": 431,
+        "wins": 206
+      },
+      "top": {
+        "games": 71,
+        "wins": 29
+      },
+      "support": {
+        "games": 8,
+        "wins": 1
+      }
+    },
+    "MissFortune": {
+      "adc": {
+        "games": 324,
+        "wins": 155
+      }
+    },
+    "Rell": {
+      "support": {
+        "games": 623,
+        "wins": 293
+      }
+    },
+    "Zac": {
+      "jungle": {
+        "games": 10,
+        "wins": 3
+      },
+      "top": {
+        "games": 7,
+        "wins": 3
+      }
+    },
+    "Ambessa": {
+      "top": {
+        "games": 913,
+        "wins": 446
+      },
+      "jungle": {
+        "games": 246,
+        "wins": 115
+      },
+      "mid": {
+        "games": 3,
+        "wins": 2
+      }
+    },
+    "KSante": {
+      "top": {
+        "games": 1302,
+        "wins": 576
+      },
+      "mid": {
+        "games": 3,
+        "wins": 2
+      }
+    },
+    "Nocturne": {
+      "jungle": {
+        "games": 782,
+        "wins": 417
+      }
+    },
+    "MonkeyKing": {
+      "jungle": {
+        "games": 1138,
+        "wins": 502
+      },
+      "top": {
+        "games": 4,
+        "wins": 2
+      }
+    },
+    "Orianna": {
+      "mid": {
+        "games": 990,
+        "wins": 511
+      }
+    },
+    "Ziggs": {
+      "adc": {
+        "games": 126,
+        "wins": 60
+      },
+      "mid": {
+        "games": 46,
+        "wins": 24
+      }
+    },
+    "Alistar": {
+      "support": {
+        "games": 753,
+        "wins": 416
+      }
+    },
+    "Neeko": {
+      "support": {
+        "games": 988,
+        "wins": 490
+      },
+      "mid": {
+        "games": 7,
+        "wins": 3
+      },
+      "jungle": {
+        "games": 6,
+        "wins": 4
+      }
+    },
+    "ChoGath": {
+      "top": {
+        "games": 43,
+        "wins": 14
+      },
+      "jungle": {
+        "games": 5,
+        "wins": 2
+      }
+    },
+    "Jayce": {
+      "jungle": {
+        "games": 181,
+        "wins": 86
+      },
+      "top": {
+        "games": 553,
+        "wins": 278
+      },
+      "mid": {
+        "games": 39,
+        "wins": 18
+      }
+    },
+    "Akali": {
+      "mid": {
+        "games": 572,
+        "wins": 311
+      },
+      "top": {
+        "games": 41,
+        "wins": 22
+      }
+    },
+    "Yunara": {
+      "adc": {
+        "games": 1467,
+        "wins": 731
+      }
+    },
+    "Poppy": {
+      "support": {
+        "games": 130,
+        "wins": 69
+      },
+      "jungle": {
+        "games": 84,
+        "wins": 46
+      },
+      "top": {
+        "games": 55,
+        "wins": 30
+      }
+    },
+    "Rumble": {
+      "top": {
+        "games": 1313,
+        "wins": 692
+      },
+      "mid": {
+        "games": 5,
+        "wins": 2
+      },
+      "support": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "JarvanIV": {
+      "jungle": {
+        "games": 1456,
+        "wins": 774
+      }
+    },
+    "Ryze": {
+      "mid": {
+        "games": 1555,
+        "wins": 793
+      },
+      "top": {
+        "games": 16,
+        "wins": 7
+      }
+    },
+    "Lucian": {
+      "adc": {
+        "games": 721,
+        "wins": 375
+      }
+    },
+    "Bard": {
+      "support": {
+        "games": 1136,
+        "wins": 634
+      }
+    },
+    "Rakan": {
+      "support": {
+        "games": 715,
+        "wins": 377
+      }
+    },
+    "Sion": {
+      "top": {
+        "games": 1284,
+        "wins": 632
+      },
+      "mid": {
+        "games": 35,
+        "wins": 22
+      },
+      "jungle": {
+        "games": 4,
+        "wins": 2
+      },
+      "adc": {
+        "games": 3,
+        "wins": 2
+      }
+    },
+    "Viktor": {
+      "mid": {
+        "games": 687,
+        "wins": 334
+      }
+    },
+    "Syndra": {
+      "mid": {
+        "games": 493,
+        "wins": 231
+      }
+    },
+    "Caitlyn": {
+      "adc": {
+        "games": 772,
+        "wins": 425
+      }
+    },
+    "Aatrox": {
+      "top": {
+        "games": 294,
+        "wins": 140
+      },
+      "jungle": {
+        "games": 323,
+        "wins": 169
+      }
+    },
+    "Gwen": {
+      "top": {
+        "games": 396,
+        "wins": 232
+      },
+      "jungle": {
+        "games": 25,
+        "wins": 9
+      },
+      "mid": {
+        "games": 4,
+        "wins": 3
+      }
+    },
+    "Naafiri": {
+      "jungle": {
+        "games": 445,
+        "wins": 222
+      },
+      "top": {
+        "games": 12,
+        "wins": 8
+      },
+      "mid": {
+        "games": 5,
+        "wins": 2
+      }
+    },
+    "Azir": {
+      "mid": {
+        "games": 893,
+        "wins": 412
+      }
+    },
+    "Darius": {
+      "top": {
+        "games": 29,
+        "wins": 11
+      },
+      "jungle": {
+        "games": 12,
+        "wins": 6
+      }
+    },
+    "Lillia": {
+      "jungle": {
+        "games": 17,
+        "wins": 9
+      }
+    },
+    "Cassiopeia": {
+      "mid": {
+        "games": 441,
+        "wins": 244
+      },
+      "top": {
+        "games": 19,
+        "wins": 13
+      },
+      "adc": {
+        "games": 3,
+        "wins": 3
+      }
+    },
+    "Varus": {
+      "adc": {
+        "games": 874,
+        "wins": 434
+      },
+      "top": {
+        "games": 132,
+        "wins": 69
+      },
+      "mid": {
+        "games": 8,
+        "wins": 3
+      }
+    },
+    "Jhin": {
+      "adc": {
+        "games": 794,
+        "wins": 347
+      }
+    },
+    "Nautilus": {
+      "support": {
+        "games": 1219,
+        "wins": 585
+      },
+      "jungle": {
+        "games": 4,
+        "wins": 2
+      }
+    },
+    "Vi": {
+      "jungle": {
+        "games": 1137,
+        "wins": 583
+      }
+    },
+    "Taliyah": {
+      "mid": {
+        "games": 675,
+        "wins": 316
+      },
+      "jungle": {
+        "games": 27,
+        "wins": 19
+      }
+    },
+    "KaiSa": {
+      "adc": {
+        "games": 601,
+        "wins": 321
+      }
+    },
+    "Kalista": {
+      "adc": {
+        "games": 142,
+        "wins": 66
+      }
+    },
+    "Renata": {
+      "support": {
+        "games": 133,
+        "wins": 55
+      }
+    },
+    "Trundle": {
+      "jungle": {
+        "games": 330,
+        "wins": 168
+      },
+      "top": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "Aphelios": {
+      "adc": {
+        "games": 403,
+        "wins": 193
+      }
+    },
+    "Lulu": {
+      "support": {
+        "games": 1035,
+        "wins": 484
+      }
+    },
+    "Volibear": {
+      "top": {
+        "games": 49,
+        "wins": 26
+      },
+      "jungle": {
+        "games": 29,
+        "wins": 12
+      }
+    },
+    "Qiyana": {
+      "jungle": {
+        "games": 179,
+        "wins": 98
+      },
+      "mid": {
+        "games": 3,
+        "wins": 0
+      }
+    },
+    "Yasuo": {
+      "top": {
+        "games": 31,
+        "wins": 13
+      },
+      "mid": {
+        "games": 32,
+        "wins": 21
+      },
+      "adc": {
+        "games": 13,
+        "wins": 4
+      }
+    },
+    "Nami": {
+      "support": {
+        "games": 918,
+        "wins": 459
+      }
+    },
+    "Anivia": {
+      "mid": {
+        "games": 436,
+        "wins": 241
+      },
+      "top": {
+        "games": 79,
+        "wins": 44
+      },
+      "support": {
+        "games": 96,
+        "wins": 53
+      }
+    },
+    "Ezreal": {
+      "adc": {
+        "games": 1560,
+        "wins": 764
+      },
+      "mid": {
+        "games": 6,
+        "wins": 2
+      }
+    },
+    "Yorick": {
+      "top": {
+        "games": 325,
+        "wins": 148
+      }
+    },
+    "Ashe": {
+      "adc": {
+        "games": 977,
+        "wins": 550
+      }
+    },
+    "Thresh": {
+      "support": {
+        "games": 161,
+        "wins": 77
+      }
+    },
+    "Aurora": {
+      "mid": {
+        "games": 920,
+        "wins": 427
+      },
+      "top": {
+        "games": 177,
+        "wins": 77
+      }
+    },
+    "Ornn": {
+      "top": {
+        "games": 455,
+        "wins": 225
+      },
+      "jungle": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "Veigar": {
+      "mid": {
+        "games": 28,
+        "wins": 11
+      }
+    },
+    "Karma": {
+      "support": {
+        "games": 989,
+        "wins": 467
+      },
+      "mid": {
+        "games": 3,
+        "wins": 0
+      }
+    },
+    "Mordekaiser": {
+      "top": {
+        "games": 40,
+        "wins": 16
+      }
+    },
+    "Kled": {
+      "top": {
+        "games": 31,
+        "wins": 17
+      }
+    },
+    "Rengar": {
+      "jungle": {
+        "games": 16,
+        "wins": 10
+      }
+    },
+    "Vayne": {
+      "adc": {
+        "games": 24,
+        "wins": 11
+      },
+      "top": {
+        "games": 189,
+        "wins": 122
+      },
+      "mid": {
+        "games": 6,
+        "wins": 4
+      }
+    },
+    "Tristana": {
+      "adc": {
+        "games": 112,
+        "wins": 40
+      },
+      "mid": {
+        "games": 24,
+        "wins": 13
+      },
+      "top": {
+        "games": 9,
+        "wins": 4
+      }
+    },
+    "Vladimir": {
+      "top": {
+        "games": 19,
+        "wins": 6
+      },
+      "mid": {
+        "games": 22,
+        "wins": 6
+      }
+    },
+    "Sejuani": {
+      "jungle": {
+        "games": 155,
+        "wins": 73
+      },
+      "top": {
+        "games": 5,
+        "wins": 2
+      }
+    },
+    "Xayah": {
+      "adc": {
+        "games": 320,
+        "wins": 182
+      }
+    },
+    "AurelionSol": {
+      "mid": {
+        "games": 48,
+        "wins": 31
+      }
+    },
+    "Udyr": {
+      "top": {
+        "games": 13,
+        "wins": 5
+      },
+      "jungle": {
+        "games": 7,
+        "wins": 3
+      }
+    },
+    "Jax": {
+      "top": {
+        "games": 291,
+        "wins": 135
+      },
+      "jungle": {
+        "games": 54,
+        "wins": 28
+      }
+    },
+    "Viego": {
+      "jungle": {
+        "games": 100,
+        "wins": 35
+      }
+    },
+    "Seraphine": {
+      "adc": {
+        "games": 26,
+        "wins": 15
+      },
+      "support": {
+        "games": 939,
+        "wins": 505
+      },
+      "mid": {
+        "games": 4,
+        "wins": 1
+      }
+    },
+    "Malphite": {
+      "jungle": {
+        "games": 119,
+        "wins": 63
+      },
+      "top": {
+        "games": 92,
+        "wins": 47
+      }
+    },
+    "Draven": {
+      "adc": {
+        "games": 40,
+        "wins": 21
+      }
+    },
+    "Smolder": {
+      "adc": {
+        "games": 115,
+        "wins": 45
+      },
+      "mid": {
+        "games": 14,
+        "wins": 7
+      },
+      "top": {
+        "games": 7,
+        "wins": 2
+      }
+    },
+    "Pantheon": {
+      "support": {
+        "games": 14,
+        "wins": 6
+      },
+      "jungle": {
+        "games": 1163,
+        "wins": 554
+      },
+      "top": {
+        "games": 9,
+        "wins": 5
+      }
+    },
+    "Sylas": {
+      "jungle": {
+        "games": 39,
+        "wins": 17
+      },
+      "mid": {
+        "games": 238,
+        "wins": 110
+      },
+      "top": {
+        "games": 28,
+        "wins": 10
+      },
+      "support": {
+        "games": 6,
+        "wins": 2
+      }
+    },
+    "Soraka": {
+      "support": {
+        "games": 31,
+        "wins": 17
+      }
+    },
+    "RekSai": {
+      "top": {
+        "games": 101,
+        "wins": 54
+      },
+      "jungle": {
+        "games": 56,
+        "wins": 33
+      }
+    },
+    "Zoe": {
+      "mid": {
+        "games": 110,
+        "wins": 59
+      }
+    },
+    "Senna": {
+      "adc": {
+        "games": 149,
+        "wins": 74
+      },
+      "support": {
+        "games": 16,
+        "wins": 7
+      }
+    },
+    "Gragas": {
+      "top": {
+        "games": 109,
+        "wins": 54
+      },
+      "mid": {
+        "games": 3,
+        "wins": 2
+      }
+    },
+    "Zeri": {
+      "adc": {
+        "games": 121,
+        "wins": 52
+      }
+    },
+    "Leblanc": {
+      "mid": {
+        "games": 275,
+        "wins": 140
+      },
+      "support": {
+        "games": 3,
+        "wins": 2
+      }
+    },
+    "Elise": {
+      "support": {
+        "games": 53,
+        "wins": 28
+      }
+    },
+    "Kennen": {
+      "top": {
+        "games": 145,
+        "wins": 62
+      }
+    },
+    "Nasus": {
+      "top": {
+        "games": 8,
+        "wins": 5
+      },
+      "jungle": {
+        "games": 21,
+        "wins": 16
+      }
+    },
+    "Swain": {
+      "mid": {
+        "games": 25,
+        "wins": 17
+      },
+      "top": {
+        "games": 8,
+        "wins": 3
+      }
+    },
+    "Camille": {
+      "top": {
+        "games": 68,
+        "wins": 28
+      },
+      "jungle": {
+        "games": 3,
+        "wins": 1
+      },
+      "support": {
+        "games": 42,
+        "wins": 22
+      }
+    },
+    "TwistedFate": {
+      "mid": {
+        "games": 194,
+        "wins": 107
+      },
+      "top": {
+        "games": 39,
+        "wins": 27
+      }
+    },
+    "Blitzcrank": {
+      "support": {
+        "games": 69,
+        "wins": 37
+      }
+    },
+    "Kassadin": {
+      "mid": {
+        "games": 20,
+        "wins": 10
+      }
+    },
+    "Milio": {
+      "support": {
+        "games": 510,
+        "wins": 255
+      }
+    },
+    "LeeSin": {
+      "jungle": {
+        "games": 482,
+        "wins": 270
+      },
+      "top": {
+        "games": 4,
+        "wins": 2
+      }
+    },
+    "Ivern": {
+      "jungle": {
+        "games": 24,
+        "wins": 11
+      }
+    },
+    "Olaf": {
+      "top": {
+        "games": 95,
+        "wins": 53
+      },
+      "jungle": {
+        "games": 59,
+        "wins": 31
+      }
+    },
+    "Skarner": {
+      "jungle": {
+        "games": 357,
+        "wins": 179
+      },
+      "top": {
+        "games": 17,
+        "wins": 10
+      },
+      "support": {
+        "games": 16,
+        "wins": 8
+      }
+    },
+    "TahmKench": {
+      "support": {
+        "games": 20,
+        "wins": 7
+      }
+    },
+    "Urgot": {
+      "top": {
+        "games": 14,
+        "wins": 10
+      }
+    },
+    "Fizz": {
+      "mid": {
+        "games": 5,
+        "wins": 2
+      }
+    },
+    "Sett": {
+      "top": {
+        "games": 14,
+        "wins": 6
+      }
+    },
+    "Zyra": {
+      "jungle": {
+        "games": 47,
+        "wins": 23
+      },
+      "support": {
+        "games": 7,
+        "wins": 1
+      }
+    },
+    "Hwei": {
+      "mid": {
+        "games": 213,
+        "wins": 99
+      },
+      "adc": {
+        "games": 4,
+        "wins": 2
+      }
+    },
+    "Fiora": {
+      "top": {
+        "games": 55,
+        "wins": 26
+      }
+    },
+    "Yone": {
+      "top": {
+        "games": 31,
+        "wins": 17
+      },
+      "mid": {
+        "games": 251,
+        "wins": 123
+      }
+    },
+    "Jinx": {
+      "adc": {
+        "games": 147,
+        "wins": 69
+      }
+    },
+    "Shen": {
+      "support": {
+        "games": 42,
+        "wins": 21
+      },
+      "top": {
+        "games": 107,
+        "wins": 50
+      },
+      "jungle": {
+        "games": 25,
+        "wins": 12
+      }
+    },
+    "Yuumi": {
+      "support": {
+        "games": 83,
+        "wins": 32
+      }
+    },
+    "Pyke": {
+      "support": {
+        "games": 149,
+        "wins": 78
+      }
+    },
+    "Amumu": {
+      "support": {
+        "games": 12,
+        "wins": 7
+      },
+      "jungle": {
+        "games": 7,
+        "wins": 2
+      }
+    },
+    "Vex": {
+      "mid": {
+        "games": 14,
+        "wins": 9
+      }
+    },
+    "Lux": {
+      "mid": {
+        "games": 14,
+        "wins": 7
+      },
+      "support": {
+        "games": 47,
+        "wins": 29
+      }
+    },
+    "Gangplank": {
+      "top": {
+        "games": 25,
+        "wins": 14
+      }
+    },
+    "Malzahar": {
+      "mid": {
+        "games": 20,
+        "wins": 9
+      }
+    },
+    "KogMaw": {
+      "mid": {
+        "games": 27,
+        "wins": 10
+      },
+      "adc": {
+        "games": 34,
+        "wins": 15
+      }
+    },
+    "Zilean": {
+      "support": {
+        "games": 7,
+        "wins": 0
+      }
+    },
+    "Lissandra": {
+      "mid": {
+        "games": 70,
+        "wins": 33
+      }
+    },
+    "Nidalee": {
+      "support": {
+        "games": 4,
+        "wins": 3
+      },
+      "jungle": {
+        "games": 43,
+        "wins": 25
+      },
+      "top": {
+        "games": 6,
+        "wins": 2
+      }
+    },
+    "Taric": {
+      "support": {
+        "games": 12,
+        "wins": 2
+      }
+    },
+    "Irelia": {
+      "top": {
+        "games": 62,
+        "wins": 37
+      },
+      "mid": {
+        "games": 20,
+        "wins": 10
+      }
+    },
+    "Hecarim": {
+      "jungle": {
+        "games": 20,
+        "wins": 7
+      }
+    },
+    "Garen": {
+      "top": {
+        "games": 23,
+        "wins": 11
+      }
+    },
+    "Zed": {
+      "jungle": {
+        "games": 8,
+        "wins": 2
+      },
+      "mid": {
+        "games": 22,
+        "wins": 10
+      }
+    },
+    "Maokai": {
+      "jungle": {
+        "games": 110,
+        "wins": 54
+      },
+      "top": {
+        "games": 8,
+        "wins": 4
+      },
+      "support": {
+        "games": 10,
+        "wins": 5
+      }
+    },
+    "Morgana": {
+      "support": {
+        "games": 7,
+        "wins": 5
+      },
+      "jungle": {
+        "games": 5,
+        "wins": 3
+      },
+      "mid": {
+        "games": 7,
+        "wins": 4
+      }
+    },
+    "Nunu": {
+      "jungle": {
+        "games": 11,
+        "wins": 7
+      }
+    },
+    "Janna": {
+      "support": {
+        "games": 10,
+        "wins": 5
+      }
+    },
+    "Twitch": {
+      "adc": {
+        "games": 6,
+        "wins": 4
+      }
+    },
+    "Kayle": {
+      "top": {
+        "games": 17,
+        "wins": 6
+      }
+    },
+    "Graves": {
+      "jungle": {
+        "games": 15,
+        "wins": 7
+      }
+    },
+    "KhaZix": {
+      "jungle": {
+        "games": 58,
+        "wins": 34
+      }
+    },
+    "Singed": {
+      "top": {
+        "games": 11,
+        "wins": 4
+      }
+    },
+    "Riven": {
+      "top": {
+        "games": 14,
+        "wins": 10
+      }
+    },
+    "Xerath": {
+      "mid": {
+        "games": 28,
+        "wins": 10
+      }
+    },
+    "Annie": {
+      "mid": {
+        "games": 556,
+        "wins": 300
+      },
+      "top": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "Kindred": {
+      "jungle": {
+        "games": 28,
+        "wins": 7
+      }
+    },
+    "VelKoz": {
+      "mid": {
+        "games": 5,
+        "wins": 2
+      }
+    },
+    "Sona": {
+      "support": {
+        "games": 12,
+        "wins": 5
+      }
+    },
+    "BelVeth": {
+      "jungle": {
+        "games": 6,
+        "wins": 1
+      }
+    },
+    "Samira": {
+      "adc": {
+        "games": 15,
+        "wins": 8
+      }
+    },
+    "Quinn": {
+      "top": {
+        "games": 5,
+        "wins": 3
+      }
+    },
+    "Karthus": {
+      "jungle": {
+        "games": 7,
+        "wins": 3
+      }
+    },
+    "Talon": {
+      "jungle": {
+        "games": 7,
+        "wins": 4
+      }
+    },
+    "Fiddlesticks": {
+      "support": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "Tryndamere": {
+      "top": {
+        "games": 12,
+        "wins": 5
+      },
+      "jungle": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "Illaoi": {
+      "top": {
+        "games": 14,
+        "wins": 8
+      }
+    },
+    "MasterYi": {
+      "jungle": {
+        "games": 4,
+        "wins": 1
+      }
+    },
+    "Warwick": {
+      "top": {
+        "games": 4,
+        "wins": 3
+      }
+    },
+    "Brand": {
+      "jungle": {
+        "games": 5,
+        "wins": 3
+      },
+      "adc": {
+        "games": 8,
+        "wins": 1
+      },
+      "mid": {
+        "games": 4,
+        "wins": 2
+      },
+      "top": {
+        "games": 3,
+        "wins": 0
+      }
+    },
+    "Nilah": {
+      "adc": {
+        "games": 3,
+        "wins": 1
+      }
+    },
+    "Shyvana": {
+      "top": {
+        "games": 17,
+        "wins": 8
+      },
+      "jungle": {
+        "games": 19,
+        "wins": 8
+      }
+    },
+    "Kayn": {
+      "jungle": {
+        "games": 3,
+        "wins": 0
+      }
+    }
+  }
 }
