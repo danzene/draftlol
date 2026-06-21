@@ -964,6 +964,14 @@ const ARCH_CTR={
   scaling:  {engage:-1,dive:-1, burst:-1, poke:-1, sustain:1,  peel:0,  scaling:0, teamfight:1},
   teamfight:{engage:1, dive:1,  burst:1,  poke:1,  sustain:0,  peel:-1, scaling:-1,teamfight:0},
 };
+// Sinergia entre arquétipos aliados — chave = "arquétipoA-arquétipoB" (ordem não importa)
+// Positivo = se complementam; 0 = neutro; negativo = redundância ou conflito
+const ARCH_ALLY_SYN={
+  'engage-dive':2,'engage-teamfight':1,'engage-burst':1,
+  'poke-scaling':1,'poke-peel':1,
+  'peel-sustain':1,'peel-scaling':1,
+  'dive-burst':1,
+};
 // Bônus de matchup total: lane a lane (peso maior) + composição geral (peso menor)
 // Cadeia de fallback por rota: (a) dados reais ≥15 games → (b) pro play Oracle's Elixir → (c) ARCH_CTR
 const MIN_MU_GAMES=15;
@@ -1025,7 +1033,7 @@ const FALLBACK_CHAMPS=FB.map(([id,name,tags,info],idx)=>({id,name,tags,key:Strin
 const FALLBACK_PATCH='14.24.1';
 
 /* ---------- estado ---------- */
-const EVENT_PACE_MS=1000; // base de tempo entre eventos da simulação; ajuste aqui para calibrar ritmo
+const EVENT_PACE_MS=1750; // base de tempo entre eventos da simulação; ajuste aqui para calibrar ritmo
 let CHAMPS=null,PATCH=null,OFFLINE=false;
 let CHAMP_BY_KEY={};
 let POWER_NORM={mean:5,std:1};
@@ -2400,6 +2408,50 @@ function poolForRole(role,ctx,salt,exclude=new Set()){
   const weighted=cands.map(c=>({c,w:rnd()+(ctx.mods[c.arch]||0)*0.04})).sort((a,b)=>b.w-a.w);
   return weighted.slice(0,4).map(x=>{const s=estStats(x.c,ctx.label);return {...x.c,wr:s.wr,pr:s.pr,source:s.source,games:s.games,cat:archCat(x.c.arch)};});
 }
+
+// Mínimo de games para pro-play (menor que ranked por amostra escassa)
+const MIN_PRO_MU_GAMES=5;
+
+// Ajusta o WR de um campeão com base em counters (lane opponent) e sinergia (aliados já escolhidos).
+// Cadeia de fallback por counter: (a) dados reais ≥15 games → (b) pro play ≥5 games → (c) ARCH_CTR
+// Sinergia: ARCH_ALLY_SYN (heurística de arquétipo) — dados reais não disponíveis nos arquivos ainda.
+// Retorna {wr, source, games, pr} — mutaciona apenas a cópia, não o objeto original.
+function contextualWinrate(champ,role,ctx,enemyPicksByRole,allyPicks){
+  const base=estStats(champ,ctx.label);
+  let delta=0,source=base.source,games=base.games;
+  // Counter vs campeão inimigo na mesma rota
+  const enemy=(enemyPicksByRole||{})[role];
+  if(enemy){
+    const mu=STATS_SNAPSHOT?.byMatchup?.[role];
+    const pm=PRO_MATCHUPS?.byMatchup?.[role];
+    const k1=`${champ.id}-${enemy.id}`;
+    const k2=`${enemy.id}-${champ.id}`;
+    let adj=null;
+    if(mu?.[k1]?.games>=MIN_MU_GAMES){adj=(mu[k1].winsA/mu[k1].games-0.5)*20;source='real';games=mu[k1].games;}
+    else if(mu?.[k2]?.games>=MIN_MU_GAMES){adj=(0.5-mu[k2].winsA/mu[k2].games)*20;source='real';games=mu[k2].games;}
+    else if(pm?.[k1]?.games>=MIN_PRO_MU_GAMES){adj=(pm[k1].winsA/pm[k1].games-0.5)*18;source='pro';games=pm[k1].games;}
+    else if(pm?.[k2]?.games>=MIN_PRO_MU_GAMES){adj=(0.5-pm[k2].winsA/pm[k2].games)*18;source='pro';games=pm[k2].games;}
+    else{adj=(ARCH_CTR[champ.arch]?.[enemy.arch]||0)*1.5;}
+    delta+=adj;
+  }
+  // Sinergia com picks aliados já confirmados
+  (allyPicks||[]).forEach(ally=>{
+    if(!ally||ally.id===champ.id)return;
+    const k1=`${champ.arch}-${ally.arch}`;
+    const k2=`${ally.arch}-${champ.arch}`;
+    delta+=(ARCH_ALLY_SYN[k1]||ARCH_ALLY_SYN[k2]||0)*0.4;
+  });
+  return{wr:+clamp(base.wr+delta,35,65).toFixed(1),source,games,pr:base.pr};
+}
+
+// Atualiza wr/source/games nos objetos de um pool existente (não re-sorteia campeões).
+function refreshContextualStats(pool,role,ctx,enemyPicksByRole,allyPicks){
+  pool.forEach(c=>{
+    const cwr=contextualWinrate(c,role,ctx,enemyPicksByRole,allyPicks);
+    c.wr=cwr.wr;c.source=cwr.source;c.games=cwr.games;
+  });
+}
+
 function autoDraft(ctx){
   return ALL_ROLES.map(role=>{
     const cands=CHAMPS.filter(c=>c.roles.includes(role));
@@ -2416,7 +2468,8 @@ function startDraft(opts){
   // opts: {ctx,mode,title,onComplete,backLabel,backFn}
   const ctx=opts.ctx||pick(Math.random,CONTEXTS);
   draft={ctx,mode:opts.mode||'normal',onComplete:opts.onComplete,
-    pools:{},picks:{},rerolledFlag:{},rerollsLeft:2,salt:Math.random().toString(36).slice(2,7)};
+    pools:{},picks:{},rerolledFlag:{},rerollsLeft:2,salt:Math.random().toString(36).slice(2,7),
+    enemyPicksByRole:{}};
   const globalUsed=new Set();
   ALL_ROLES.forEach(r=>{
     draft.picks[r]=null;draft.rerolledFlag[r]=false;
@@ -2456,8 +2509,12 @@ function renderGrid(role){
   document.getElementById('grid-'+role).innerHTML=draft.pools[role].map((c,i)=>{
     const sel=draft.picks[role]===i;
     const dim=locked&&!sel;
-    const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
-    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
+    const statLbl=c.source==='real'
+      ?`${c.wr}% <span class="pr">· ${c.games} partidas</span>`
+      :c.source==='pro'
+        ?`≈${c.wr}% <span class="pr">· pro play</span>`
+        :`≈${c.wr}% <span class="pr">· estimado</span>`;
+    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source!=='estimado'?' real':''}">${statLbl}</div>`;
     return `<div class="card ${sel?'sel':''} ${dim?'locked-out':''}" ${dim?'':(`onclick="selectPick('${role}',${i})"`)}>
       <div class="ck">✓</div>
       <div class="pic"><img src="${IMG(c.id)}" alt="" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div>
@@ -2467,9 +2524,14 @@ function renderGrid(role){
 function selectPick(role,i){
   if(draft.picks[role]!==null)return; // locked — cannot change
   draft.picks[role]=i;
-  // disable reroll for this role immediately
   const rrBtn=document.getElementById('rr-'+role);
   if(rrBtn){rrBtn.disabled=true;rrBtn.style.opacity=.35;}
+  // recalcular WR contextual para rotas ainda não escolhidas (novo aliado confirmado)
+  const allies=ALL_ROLES.filter(r=>draft.picks[r]!==null).map(r=>draft.pools[r][draft.picks[r]]);
+  const enemy=draft.enemyPicksByRole||{};
+  ALL_ROLES.forEach(r=>{
+    if(draft.picks[r]===null){refreshContextualStats(draft.pools[r],r,draft.ctx,enemy,allies);renderGrid(r);}
+  });
   renderGrid(role);renderSlots();updateSyn();updateConfirm();
 }
 function reroll(role){
@@ -2478,6 +2540,9 @@ function reroll(role){
   const exclude=new Set();
   ALL_ROLES.forEach(r=>{if(r!==role)draft.pools[r].forEach(c=>exclude.add(c.id));});
   draft.pools[role]=poolForRole(role,draft.ctx,'rr'+Math.random(),exclude);
+  // aplicar WR contextual ao novo pool (aliados já confirmados nas outras rotas)
+  const allies=ALL_ROLES.filter(r=>r!==role&&draft.picks[r]!==null).map(r=>draft.pools[r][draft.picks[r]]);
+  refreshContextualStats(draft.pools[role],role,draft.ctx,draft.enemyPicksByRole||{},allies);
   renderGrid(role);renderSlots();updateSyn();updateConfirm();updateRerollPill();
   const b=document.getElementById('rr-'+role);b.disabled=true;b.style.opacity=.35;
   if(draft.rerollsLeft<=0)ALL_ROLES.forEach(r=>{const x=document.getElementById('rr-'+r);if(x){x.disabled=true;x.style.opacity=.35;}});
@@ -2559,12 +2624,15 @@ function genTimeline(teamA,teamB,synA,seed,powerBias){
   const tl=[];
   beats.forEach(b=>{
     const m=Math.max(1,b.m+rint(rnd,-1,1));
+    const lane=eventLane(b.t,rnd); // lane do evento — determinístico com o seed
     let winA;
     if(b.t==='nexus'){winA=(lead+(pAwin(m)-0.5)*3000)>=0;}
     else winA=rnd()<pAwin(m);
     const side=winA?'a':'b';
     let txt=pick(rnd,TXT[b.t][side]);
-    const carry=pick(rnd,(winA?teamA:teamB));
+    // carry = campeão da rota relevante (não aleatório do time)
+    const winTeam=winA?teamA:teamB;
+    const carry=winTeam[LANE_RIDX[lane]??2]||winTeam[0];
     txt=txt.replace('{c}',carry.name);
     let cls=side,ic=EICON[b.t];
     switch(b.t){
@@ -2578,7 +2646,7 @@ function genTimeline(teamA,teamB,synA,seed,powerBias){
       case 'baron':{obj[side].b++;const k=rint(rnd,1,2);if(winA)aK+=k;else bK+=k;lead+=winA?950:-950;break;}
       case 'nexus': break;
     }
-    tl.push({m,type:b.t,winA,txt,cls,ic,lead,aK,bK,obj:JSON.parse(JSON.stringify(obj)),carry});
+    tl.push({m,type:b.t,winA,txt,cls,ic,lead,aK,bK,obj:JSON.parse(JSON.stringify(obj)),carry,lane});
   });
   const last=tl[tl.length-1];
   return {tl,win:last.winA,aK:last.aK,bK:last.bK,aceA,aceB};
@@ -2602,6 +2670,24 @@ const RIFT_FLASH={
   nexus:     {a:{x:13,y:87},b:{x:87,y:13}}
 };
 const RIDX={top:0,jungle:1,mid:2,adc:3,support:4};
+// Índice de role por lane de evento (river_dragon/baron = jungler como carry principal)
+const LANE_RIDX={top:0,jungle:1,mid:2,bot:3,adc:3,support:4,river_dragon:1,river_baron:1,nexus:2};
+// Posição do flash no mapa por lane (% do container; y cresce para baixo)
+const LANE_FLASH={
+  top:         {x:22,y:22},
+  mid:         {x:50,y:50},
+  bot:         {x:78,y:78},
+  river_dragon:{x:65,y:72},
+  river_baron: {x:35,y:28},
+};
+// Determina a lane de um evento (usa rnd() para lanes variáveis — determinístico com o seed)
+function eventLane(type,rnd){
+  if(type==='dragon')return'river_dragon';
+  if(type==='herald'||type==='baron')return'river_baron';
+  if(type==='nexus')return'nexus';
+  const lanes=['top','mid','bot'];
+  return lanes[rint(rnd,0,2)];
+}
 
 function initRiftMap(teamA,teamB){
   const makeIcons=(team,pos,side,cid)=>{
@@ -2617,29 +2703,35 @@ function initRiftMap(teamA,teamB){
   const fx=document.getElementById('riftFX');if(fx)fx.innerHTML='';
 }
 
-function pulseMapEvent(type,winA,carry){
-  const fp=RIFT_FLASH[type];
-  if(fp){
-    const pos='x' in fp?fp:(winA?fp.a:fp.b);
-    if(pos){
-      const fx=document.getElementById('riftFX');
-      if(fx){
-        const d=document.createElement('div');
-        d.className='map-flash';
-        d.style.cssText=`left:${pos.x}%;top:${pos.y}%;color:${winA?'#5f9be8':'#e24f4f'}`;
-        fx.appendChild(d);
-        d.addEventListener('animationend',()=>d.remove(),{once:true});
-      }
+function pulseMapEvent(type,winA,carry,lane){
+  // posição do flash: usa LANE_FLASH quando disponível, nexus com lados corretos
+  let pos;
+  if(lane==='nexus'){
+    // flash no nexus da equipe PERDEDORA (onde o destruidor chega)
+    pos=winA?RIFT_FLASH.nexus.b:RIFT_FLASH.nexus.a;
+  }else if(lane&&LANE_FLASH[lane]){
+    pos=LANE_FLASH[lane];
+  }else{
+    const fp=RIFT_FLASH[type];
+    pos=fp&&('x' in fp)?fp:(fp&&(winA?fp.a:fp.b));
+  }
+  if(pos){
+    const fx=document.getElementById('riftFX');
+    if(fx){
+      const d=document.createElement('div');
+      d.className='map-flash';
+      d.style.cssText=`left:${pos.x}%;top:${pos.y}%;color:${winA?'#5f9be8':'#e24f4f'}`;
+      fx.appendChild(d);
+      d.addEventListener('animationend',()=>d.remove(),{once:true});
     }
   }
-  if(carry?.roles){
-    const idx=RIDX[carry.roles[0]]??2;
-    const icon=document.getElementById(`ri_${winA?'a':'b'}${idx}`);
-    if(icon){
-      icon.classList.remove('active');void icon.offsetWidth;
-      icon.classList.add('active');
-      icon.addEventListener('animationend',()=>icon.classList.remove('active'),{once:true});
-    }
+  // iluminar ícone do carry na rota correta (índice por lane, não por roles[0])
+  const idx=lane?(LANE_RIDX[lane]??2):(RIDX[carry?.roles?.[0]]??2);
+  const icon=document.getElementById(`ri_${winA?'a':'b'}${idx}`);
+  if(icon){
+    icon.classList.remove('active');void icon.offsetWidth;
+    icon.classList.add('active');
+    icon.addEventListener('animationend',()=>icon.classList.remove('active'),{once:true});
   }
 }
 
@@ -2683,7 +2775,7 @@ function playStep(i){
   div.innerHTML=`<span class="ic">${e.ic}</span><span class="mn">${e.m}'</span><span class="tx">${e.txt}</span>`;
   feed.insertBefore(div,feed.firstChild);
   while(feed.children.length>6)feed.removeChild(feed.lastChild);
-  pulseMapEvent(e.type,e.winA,e.carry);
+  pulseMapEvent(e.type,e.winA,e.carry,e.lane);
   const delay=e.type==='nexus'?EVENT_PACE_MS*2:(e.type==='teamfight'||e.type==='baron'||e.cls==='ace'?Math.round(EVENT_PACE_MS*1.5):EVENT_PACE_MS);
   liveTimer=setTimeout(()=>playStep(i+1),delay);
 }
@@ -2850,8 +2942,12 @@ function renderSnake(curIdx,lane){
 function renderSnakeOptions(lane){
   const blind=sd.mode==='blind';
   document.getElementById('snakeOptions').innerHTML=sd.opts.map((c,i)=>{
-    const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
-    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
+    const statLbl=c.source==='real'
+      ?`${c.wr}% <span class="pr">· ${c.games} partidas</span>`
+      :c.source==='pro'
+        ?`≈${c.wr}% <span class="pr">· pro play</span>`
+        :`≈${c.wr}% <span class="pr">· estimado</span>`;
+    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source!=='estimado'?' real':''}">${statLbl}</div>`;
     return `<div class="card" onclick="snakeSelect(${i})"><div class="pic"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div><div class="cn">${c.name}</div><span class="tag ${c.cat}">${c.arch}</span>${stat}</div>`;
   }).join('');
   document.getElementById('snakeControls').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="snakeReroll()" ${sd.rerollsLeft<=0?'disabled':''}>↻ Reroll (${sd.rerollsLeft})</button>`;
@@ -3502,8 +3598,12 @@ function _onlineReroll(){
   const rerolls=od.myRerollsLeft;
   const blind=od.room.mode==='blind';
   document.getElementById('snakeOptions').innerHTML=od.opts.map((c,i)=>{
-    const statLbl=c.source==='real'?`${c.wr}% <span class="pr">· ${c.games} games reais</span>`:`${c.wr}% <span class="pr">· ${c.pr}% pick</span>`;
-    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source==='real'?' real':''}">${statLbl}</div>`;
+    const statLbl=c.source==='real'
+      ?`${c.wr}% <span class="pr">· ${c.games} partidas</span>`
+      :c.source==='pro'
+        ?`≈${c.wr}% <span class="pr">· pro play</span>`
+        :`≈${c.wr}% <span class="pr">· estimado</span>`;
+    const stat=blind?`<div class="st blind">? ? ?</div>`:`<div class="st${c.source!=='estimado'?' real':''}">${statLbl}</div>`;
     return`<div class="card" onclick="snakeSelect(${i})"><div class="pic"><img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))"></div><div class="cn">${escHtml(c.name)}</div><span class="tag ${c.cat}">${c.arch}</span>${stat}</div>`;
   }).join('');
   document.getElementById('snakeControls').innerHTML=`<button class="btn btn-ghost btn-sm" onclick="snakeReroll()" ${rerolls<=0?'disabled':''}>↻ Reroll (${rerolls})</button>`;
