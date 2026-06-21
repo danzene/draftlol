@@ -2428,7 +2428,8 @@ const MIN_PRO_MU_GAMES=5;
 // Retorna {wr, source, games, pr} — mutaciona apenas a cópia, não o objeto original.
 function contextualWinrate(champ,role,ctx,enemyPicksByRole,allyPicks){
   const base=estStats(champ,ctx.label);
-  let delta=0,source=base.source,games=base.games;
+  let delta=0;
+  let cSrc=null,cGames=0; // fonte do counter — rastreada separado do base
   // Counter vs campeão inimigo na mesma rota
   const enemy=(enemyPicksByRole||{})[role];
   if(enemy){
@@ -2437,10 +2438,10 @@ function contextualWinrate(champ,role,ctx,enemyPicksByRole,allyPicks){
     const k1=`${champ.id}-${enemy.id}`;
     const k2=`${enemy.id}-${champ.id}`;
     let adj=null;
-    if(mu?.[k1]?.games>=MIN_MU_GAMES){adj=(mu[k1].winsA/mu[k1].games-0.5)*20;source='real';games=mu[k1].games;}
-    else if(mu?.[k2]?.games>=MIN_MU_GAMES){adj=(0.5-mu[k2].winsA/mu[k2].games)*20;source='real';games=mu[k2].games;}
-    else if(pm?.[k1]?.games>=MIN_PRO_MU_GAMES){adj=(pm[k1].winsA/pm[k1].games-0.5)*18;source='pro';games=pm[k1].games;}
-    else if(pm?.[k2]?.games>=MIN_PRO_MU_GAMES){adj=(0.5-pm[k2].winsA/pm[k2].games)*18;source='pro';games=pm[k2].games;}
+    if(mu?.[k1]?.games>=MIN_MU_GAMES){adj=(mu[k1].winsA/mu[k1].games-0.5)*20;cSrc='real';cGames=mu[k1].games;}
+    else if(mu?.[k2]?.games>=MIN_MU_GAMES){adj=(0.5-mu[k2].winsA/mu[k2].games)*20;cSrc='real';cGames=mu[k2].games;}
+    else if(pm?.[k1]?.games>=MIN_PRO_MU_GAMES){adj=(pm[k1].winsA/pm[k1].games-0.5)*18;cSrc='pro';cGames=pm[k1].games;}
+    else if(pm?.[k2]?.games>=MIN_PRO_MU_GAMES){adj=(0.5-pm[k2].winsA/pm[k2].games)*18;cSrc='pro';cGames=pm[k2].games;}
     else{adj=(ARCH_CTR[champ.arch]?.[enemy.arch]||0)*1.5;}
     delta+=adj;
   }
@@ -2451,6 +2452,10 @@ function contextualWinrate(champ,role,ctx,enemyPicksByRole,allyPicks){
     const k2=`${ally.arch}-${champ.arch}`;
     delta+=(ARCH_ALLY_SYN[k1]||ARCH_ALLY_SYN[k2]||0)*0.4;
   });
+  // Exibir a melhor fonte entre base e counter: ranked > pro > heurística
+  const rank=s=>s==='real'?3:s==='pro'?2:1;
+  const [source,games]=rank(base.source)>=rank(cSrc)
+    ?[base.source,base.games]:[cSrc,cGames];
   return{wr:+clamp(base.wr+delta,35,65).toFixed(1),source,games,pr:base.pr};
 }
 
