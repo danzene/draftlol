@@ -377,11 +377,22 @@
   .ban-slot{width:36px;height:36px;border-radius:6px;background:var(--bg3);border:1px dashed var(--line);overflow:hidden;display:flex;align-items:center;justify-content:center}
   .ban-slot.filled{border:1px solid var(--line);filter:grayscale(1);opacity:.6}
   .ban-slot img{width:100%;height:100%;object-fit:cover}
-  .ban-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:6px;max-height:280px;overflow-y:auto;margin:10px 0;padding:2px}
+  .ban-search{width:100%;box-sizing:border-box;background:var(--bg2);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:8px 12px;font-size:13px;margin-bottom:8px;outline:none}
+  .ban-search:focus{border-color:var(--gold)}
+  .ban-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:6px;max-height:260px;overflow-y:auto;margin:6px 0;padding:2px}
   .ban-card{border-radius:8px;background:var(--bg2);border:1px solid var(--line);padding:5px;text-align:center;cursor:pointer;transition:border-color .15s}
   .ban-card:hover{border-color:var(--gold)}
   .ban-card img{width:48px;height:48px;border-radius:6px;object-fit:cover}
   .ban-card .bcn{font-size:9px;color:var(--txt2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .train-box{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px}
+  .train-title{font-family:'Oswald';font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:10px}
+  .train-row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .train-stat{font-size:12px;color:var(--txt2)}
+  .train-stat b{color:var(--txt)}
+  .train-btn{padding:7px 16px;border-radius:6px;background:var(--gold);color:#111;font-family:'Oswald';font-size:13px;cursor:pointer;border:none;white-space:nowrap}
+  .train-btn:disabled{background:var(--bg3);color:var(--txt3);cursor:default}
+  .train-lvbar{height:4px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden}
+  .train-lvbar div{height:100%;background:var(--gold);border-radius:2px;transition:width .3s}
   .cdr-player{background:var(--bg2);border:1px solid var(--rc,var(--line));border-radius:10px;padding:12px;margin-bottom:12px;display:flex;align-items:center;gap:12px}
   .cdr-icon{width:44px;height:44px;border-radius:50%;background:var(--bg3);border:2px solid var(--rc,var(--line));display:flex;align-items:center;justify-content:center;font-size:16px}
   .cdr-info .cdr-name{font-family:'Oswald';font-size:16px}
@@ -1596,7 +1607,11 @@ function pickMyStarters(rosterRows){
     const player=C.players.getPlayerById(pid);
     if(!player)return null;
     const offRole=player.role!==role;
-    return{...player,stars:row.stars,xp:row.xp||0,level:row.level||1,_rosterRow:row,_slotRole:role,_offRole:offRole};
+    const lv=row.level||1;
+    // +2 em todos os atributos por nível acima de 1, máx 100
+    const lvBonus=(lv-1)*2;
+    const boostedAttrs=Object.fromEntries(Object.entries(player.attrs).map(([k,v])=>[k,Math.min(100,v+lvBonus)]));
+    return{...player,stars:row.stars,xp:row.xp||0,level:lv,attrs:boostedAttrs,_rosterRow:row,_slotRole:role,_offRole:offRole};
   });
 }
 
@@ -1679,13 +1694,16 @@ function renderCareerBans(){
     .sort((a,b)=>b.avg-a.avg);
   s._banOpts=sorted.map(x=>x.c);
 
+  const allBanCards=sorted.map(({c},i)=>`
+    <div class="ban-card" data-cname="${c.name.toLowerCase()}" onclick="careerBanByIdx(${i})">
+      <img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))">
+      <div class="bcn">${escHtml(c.name)}</div>
+    </div>`).join('');
+
   const gridHtml=myTurn
-    ? sorted.slice(0,60).map(({c},i)=>`
-        <div class="ban-card" onclick="careerBanByIdx(${i})">
-          <img src="${IMG(c.id)}" loading="lazy" onerror="this.replaceWith(initTile('${initials(c)}'))">
-          <div class="bcn">${escHtml(c.name)}</div>
-        </div>`).join('')
-    : `<div style="color:var(--txt2);padding:24px;text-align:center;grid-column:1/-1">IA escolhendo ban…</div>`;
+    ? `<input class="ban-search" id="banSearchInput" placeholder="Buscar campeão…" oninput="_filterBanGrid(this.value)" autocomplete="off">
+       <div class="ban-grid" id="banGrid">${allBanCards}</div>`
+    : `<div style="color:var(--txt2);padding:24px;text-align:center">IA escolhendo ban…</div>`;
 
   document.getElementById('careerMatchPanel').innerHTML=`
     <div class="draft-head">
@@ -1705,7 +1723,7 @@ function renderCareerBans(){
     <div class="lobby-msg" style="margin:6px 0">
       ${myTurn?'<b>Sua vez</b> — clique num campeão para banir':'<span style="color:var(--txt2)">IA banindo…</span>'}
     </div>
-    <div class="ban-grid">${gridHtml}</div>
+    ${gridHtml}
     <div class="foot">
       <button class="btn btn-ghost" onclick="goCareer()">Abandonar</button>
       ${myTurn?'<button class="btn btn-ghost" onclick="skipCareerBan()">Pular ban</button>':''}
@@ -1724,6 +1742,15 @@ function careerBanByIdx(idx){
   s.allUsed.add(champ.id);
   s.banTurn++;
   renderCareerBans();
+}
+
+function _filterBanGrid(q){
+  const grid=document.getElementById('banGrid');
+  if(!grid)return;
+  const lq=(q||'').toLowerCase().trim();
+  grid.querySelectorAll('.ban-card').forEach(el=>{
+    el.style.display=(!lq||el.dataset.cname.includes(lq))?'':'none';
+  });
 }
 
 function skipCareerBan(){
@@ -1984,6 +2011,23 @@ function showPlayerDetail(pid){
   const fragHtml=fragCost!=null
     ? `<div style="font-size:12px;color:var(--txt2);margin-top:12px">Fragmentos p/ ${row.stars+1}★: ${row.fragments}/${fragCost}<div class="frag-bar"><div style="width:${Math.round(Math.min(1,row.fragments/fragCost)*100)}%"></div></div></div>`
     : `<div style="font-size:12px;color:var(--gold2);margin-top:12px">Estrelas no máximo — duplicatas viram Fichas.</div>`;
+  const lv=row.level||1;
+  const MAX_LEVEL=20;
+  function peForLevel(l){return Math.round(100*Math.pow(1.6,l-1));} // 100,160,256,410,655...
+  const cost=lv<MAX_LEVEL?peForLevel(lv):null;
+  const myPe=careerProfile?.pe||0;
+  const lvBonus=(lv-1)*2;
+  const trainHtml=`<div class="train-box">
+    <div class="train-title">Treinar Jogador</div>
+    <div class="train-row">
+      <div class="train-stat">Nível <b>${lv}${lv>=MAX_LEVEL?' (máx)':''}</b> &nbsp;·&nbsp; Bônus attrs <b>+${lvBonus}</b></div>
+      ${cost!=null?`<button class="train-btn" id="trainBtn" onclick="trainPlayer('${pid}')"
+        ${myPe>=cost?'':'disabled'}>Treinar (${cost} PE)</button>`:'<span style="color:var(--gold2);font-size:12px">Nível máximo atingido</span>'}
+    </div>
+    ${cost!=null?`<div class="train-stat" style="margin-top:6px;font-size:11px">Seu PE: <b>${myPe}</b>${myPe<cost?` — faltam ${cost-myPe} PE`:''}</div>
+    <div class="train-lvbar"><div style="width:${Math.round(Math.min(lv/MAX_LEVEL,1)*100)}%"></div></div>`:''}
+  </div>`;
+
   document.getElementById('rosterPanel').innerHTML=
     `<div class="draft-head"><div class="title disp">Jogador</div><span class="rar-pill rar-${p.rarity}">${_rarLabel(p.rarity)}</span></div>
      <div class="pdetail rar-${p.rarity}">
@@ -1991,19 +2035,50 @@ function showPlayerDetail(pid){
          <div class="pd-ava"><div class="inittile">${_pInit(p)}</div></div>
          <div>
            <div style="font-family:'Oswald';font-size:22px">${escHtml(p.name)}</div>
-           <div style="color:var(--txt3);font-size:13px;text-transform:uppercase;letter-spacing:.5px">${(ROLE_LABELS[p.role]||p.role)} · Nível ${row.level}</div>
+           <div style="color:var(--txt3);font-size:13px;text-transform:uppercase;letter-spacing:.5px">${(ROLE_LABELS[p.role]||p.role)} · Nível ${lv}</div>
            <div style="margin-top:4px">${_starsHtml(row.stars,max)}</div>
          </div>
        </div>
-       <div class="section-label">Atributos <span style="color:var(--txt3);text-transform:none;letter-spacing:0">(teto atual ${ceil})</span></div>
+       <div class="section-label">Atributos <span style="color:var(--txt3);text-transform:none;letter-spacing:0">(teto atual ${ceil}${lvBonus>0?`, +${lvBonus} do nível`:''})</span></div>
        ${attrRows}
        <div class="section-label" style="margin-top:14px">Afinidades por arquétipo</div>
        <div class="aff-grid">${affHtml}</div>
        ${fragHtml}
+       ${trainHtml}
      </div>
      <div class="foot">
        <button class="btn btn-ghost" onclick="openRoster()">Voltar ao elenco</button>
      </div>`;
+}
+
+async function trainPlayer(pid){
+  if(!sb||!careerUser||!careerProfile)return;
+  const row=_ownedRow(pid);
+  if(!row)return;
+  const lv=row.level||1;
+  const MAX_LEVEL=20;
+  if(lv>=MAX_LEVEL)return;
+  function peForLevel(l){return Math.round(100*Math.pow(1.6,l-1));}
+  const cost=peForLevel(lv);
+  const myPe=careerProfile.pe||0;
+  if(myPe<cost)return;
+  const btn=document.getElementById('trainBtn');
+  if(btn){btn.disabled=true;btn.textContent='Treinando…';}
+  try{
+    const newPe=myPe-cost;
+    const newLevel=lv+1;
+    await Promise.all([
+      sb.from('career_roster').update({level:newLevel}).eq('user_id',careerUser.id).eq('player_id',pid),
+      sb.from('career_profiles').update({pe:newPe}).eq('user_id',careerUser.id),
+    ]);
+    careerProfile.pe=newPe;
+    const rr=careerRoster.find(r=>r.player_id===pid);
+    if(rr)rr.level=newLevel;
+    openPlayerDetail(pid); // re-render com novo nível
+  }catch(e){
+    console.error('[DraftLoL] trainPlayer:',e);
+    if(btn){btn.disabled=false;btn.textContent=`Treinar (${cost} PE)`;}
+  }
 }
 
 /* =======================================================================
@@ -2256,27 +2331,55 @@ async function openJourney(){
   renderJourney();
 }
 
-/* ── pixelChar: pixel art 8×8 determinístico (avatar de time) ─── */
+/* ── pixelChar: pixel art 16×16 determinístico (avatar de time) ─── */
 function pixelChar(seed,regionId,sz){
   sz=sz||40;
   function hs(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
   const H=hs(String(seed));
-  const TH={LCK:['#f44336','#ffd700'],LPL:['#ff7043','#ffeb3b'],LEC:['#2196f3','#ff9800'],LCS:['#4caf50','#e040fb'],LCP:['#00bcd4','#ff5722'],CBLOL:['#7c4dff','#ffca28']};
+  const TH={LCK:['#e53935','#ffd700'],LPL:['#ff6d00','#ffeb3b'],LEC:['#1565c0','#ff9800'],LCS:['#2e7d32','#ce93d8'],LCP:['#00838f','#ff7043'],CBLOL:['#6a1b9a','#ffc400']};
   const[C1,C2]=TH[regionId]||['#4f8fe2','#ffd700'];
-  const SK=['#ffccaa','#e8a87c','#c68642','#8d5524'][H%4];
-  const HR=[C1,'#333','#ffd700','#a0522d'][(H>>4)%4];
-  const CM={0:'transparent',1:C1,2:SK,3:C2,4:'#111',5:'#eee',6:HR};
-  const SP=[
-    ['04444400','04113400','04222400','01333310','11111110','01111100','01100110','11000011'],
-    ['00333000','03333300','04222400','04222400','01133100','01111100','01111100','00100100'],
-    ['04444400','04444400','04422440','14333410','01111100','01141100','04100140','11000011'],
-    ['03033000','01111100','01222100','01222100','01313100','01111100','01000100','11000011'],
-    ['05355350','05222500','05222500','15111510','01333100','01111100','01001000','01100110'],
-    ['06601660','06222600','06322600','16333610','11111110','01111100','11000110','11000011'],
-  ][H%6];
-  const ps=sz/8,r=[];
-  SP.forEach((row,y)=>row.split('').forEach((ch,x)=>{const c=CM[+ch];if(c&&c!=='transparent')r.push(`<rect x="${x*ps}" y="${y*ps}" width="${ps}" height="${ps}" fill="${c}"/>`)}));
-  return`<svg viewBox="0 0 ${sz} ${sz}" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block"><rect width="${sz}" height="${sz}" rx="4" fill="#0d1120"/>${r.join('')}</svg>`;
+  const SKINS=['#fdd5a0','#e8b97e','#c68642','#8d5524'];
+  const SK=SKINS[H%4],SK2=SKINS[Math.min(3,(H%4)+1)];
+  const HAIRS=['#1a0a00','#5c3a1e','#e8c84a','#cc2200','#ddeeff','#7b2d8b'];
+  const HR=HAIRS[(H>>3)%6];
+  // 0=trans 1=primary 2=skin 3=secondary 4=dark 5=light 6=hair 7=weapon 8=skindark 9=shad
+  const CM={'0':'transparent','1':C1,'2':SK,'3':C2,'4':'#0d1120','5':'#d8d8d8','6':HR,'7':C2,'8':SK2,'9':'rgba(0,0,0,0.35)'};
+  const TEMPLATES=[
+    // WARRIOR — armadura pesada, espada
+    ['0000044444400000','0000414444540000','0000422222440000','0000428882440000',
+     '0000442228400000','0000041114400000','0011551115511000','0011133113311000',
+     '0011131311331100','0001113111311000','0001111111111000','0007711171177000',
+     '0001177777711000','0001111111111000','0001441114441000','0004444444444000'],
+    // MAGE — manto, chapéu, cajado
+    ['0006666666660000','0006644666446000','0000446444640000','0000422222440000',
+     '0000428882440000','0000442224400000','0001111114111000','0011111114111000',
+     '0013311114113000','0011111114111000','0011131114311000','0007111114110000',
+     '0007777114777000','0001111114110000','0001411144141000','0004444444440000'],
+    // ASSASSIN — capuz, adagas duplas
+    ['0000066666000000','0004466644440000','0046622222440000','0006628882460000',
+     '0006622228460000','0006641114600000','0116641111466000','0116641111466000',
+     '0116641111466000','0116641111466000','0116441114466000','0017447474466000',
+     '0001477747110000','0001111111110000','0001141141110000','0004444444440000'],
+    // ADC — jaqueta, arco
+    ['0006666666660000','0006666666660000','0006422222460000','0006428882460000',
+     '0006422228460000','0000641114600000','0003311331130000','0003313313130000',
+     '0003311313130000','0003111113110000','0000111111100000','0007711117710000',
+     '0007777117770000','0007711117710000','0000141141000000','0000444444000000'],
+    // SUPPORT — auréola, cajado de cura
+    ['0003535353530000','0003353533530000','0003522252530000','0000322882300000',
+     '0000322222300000','0000033330000000','0003313113330000','0033133113133000',
+     '0003113111330000','0003133113133000','0003111111330000','0000771771110000',
+     '0000373773110000','0000311111130000','0000141141000000','0000444444000000'],
+    // JUNGLER — elmo, machado duplo
+    ['0000044444440000','0000411444140000','0041144144440000','0004422222440000',
+     '0004428882440000','0004442228400000','0014441111441000','0014411111140000',
+     '0014411111140000','0014441111140000','0001141111411000','0007711171170000',
+     '0007777777770000','0001111111110000','0001411114110000','0004444444440000'],
+  ];
+  const SP=TEMPLATES[H%6];
+  const ps=sz/16,r=[];
+  SP.forEach((row,y)=>row.split('').forEach((ch,x)=>{const c=CM[ch];if(c&&c!=='transparent')r.push(`<rect x="${(x*ps).toFixed(2)}" y="${(y*ps).toFixed(2)}" width="${ps.toFixed(2)}" height="${ps.toFixed(2)}" fill="${c}"/>`)}));
+  return`<svg viewBox="0 0 ${sz} ${sz}" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block;border-radius:4px"><rect width="${sz}" height="${sz}" fill="#0d1120"/>${r.join('')}</svg>`;
 }
 
 function renderJourney(){
