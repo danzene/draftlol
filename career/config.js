@@ -62,6 +62,37 @@ const CAREER_CONFIG = {
     gachaPullCost: 10,         // 🎚️ Fichas por recrutamento (1 pull)
     starterFichas: 500,        // 🎚️ Fichas do pacote inicial (resgate único)
   },
+
+  /* ── Recompensas de Temporada ─────────────────────────────────────────
+     Cada torneio tem 3 marcos: participação, top4 (semi-final) e título.
+     Valores em PE (experiência) e Fichas (gacha). */
+  season: {
+    regular: {
+      pePerWin:   120,   // 🎚️ PE por vitória na fase regular
+      pePerLoss:  40,    // 🎚️ PE por derrota na fase regular
+      fichasPerWin: 5,   // 🎚️ Fichas por vitória na fase regular
+    },
+    playoffs: {
+      participation: { pe: 200,  fichas: 30  }, // 🎚️ chegar nos playoffs
+      top4:          { pe: 350,  fichas: 80  }, // 🎚️ chegar na semi-final
+      win:           { pe: 500,  fichas: 150 }, // 🎚️ ser campeão regional
+    },
+    fst: { // First Stand Tournament (Split 1)
+      participation: { pe: 300,  fichas: 50  }, // 🎚️
+      top4:          { pe: 500,  fichas: 100 }, // 🎚️
+      win:           { pe: 800,  fichas: 200 }, // 🎚️
+    },
+    msi: { // Mid-Season Invitational (Split 2)
+      participation: { pe: 500,  fichas: 100 }, // 🎚️
+      top4:          { pe: 800,  fichas: 200 }, // 🎚️
+      win:           { pe: 1200, fichas: 400 }, // 🎚️
+    },
+    worlds: { // Campeonato Mundial (Split 3)
+      participation: { pe: 700,  fichas: 150 }, // 🎚️
+      top4:          { pe: 1200, fichas: 350 }, // 🎚️
+      win:           { pe: 2000, fichas: 700 }, // 🎚️
+    },
+  },
 };
 
 if(typeof module!=='undefined'&&module.exports)module.exports=CAREER_CONFIG;
