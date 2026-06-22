@@ -431,6 +431,44 @@
   .rg-card:hover{border-color:var(--gold);background:var(--bg4)}
   .rg-id{font-family:'Oswald';font-size:22px;font-weight:700;color:var(--gold2);margin-bottom:2px}
   .rg-label{font-size:12px;font-weight:500;margin-bottom:6px;color:var(--txt2)}
+  /* ── SEASON JOURNEY (Fase 7) ─────────────────────────────────── */
+  .sj-trophy-bar{display:flex;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);margin-bottom:14px;overflow:hidden}
+  .sj-tinfo{flex:1;padding:10px 4px;text-align:center;border-right:1px solid var(--line)}
+  .sj-tinfo:last-child{border-right:none}
+  .sj-tnum{font-family:'Oswald';font-size:24px;color:var(--gold2);line-height:1.1}
+  .sj-tlb{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:.5px;margin-top:3px}
+  .sj-phases{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+  .sj-phase{display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:12px;transition:border-color .15s,background .15s}
+  .sj-phase.active{border-color:var(--gold);background:var(--bg3);box-shadow:0 0 0 1px var(--goldDim) inset}
+  .sj-phase.won{border-color:rgba(95,214,168,.45)}
+  .sj-phase.lost{border-color:rgba(226,88,79,.38)}
+  .sj-phase.locked{opacity:.38;pointer-events:none}
+  .sj-ph-av{width:48px;height:48px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--bg4)}
+  .sj-ph-body{flex:1;min-width:0}
+  .sj-ph-title{font-family:'Oswald';font-size:16px;letter-spacing:.3px}
+  .sj-ph-sub{font-size:11px;color:var(--txt2);margin-top:3px}
+  .sj-ph-act{margin-top:10px}
+  .sj-slabel{font-family:'Oswald';font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .sj-slabel::after{content:'';flex:1;height:1px;background:var(--line)}
+  .sj-standings{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+  .sj-team-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid var(--line)}
+  .sj-team-row:last-child{border-bottom:none}
+  .sj-team-row.po{background:rgba(200,161,74,.04)}
+  .sj-team-row.intl{background:rgba(79,143,226,.06)}
+  .sj-rank{font-family:'Oswald';font-size:12px;width:18px;text-align:center;color:var(--txt3);flex-shrink:0}
+  .sj-rank.gold{color:var(--gold2)}.sj-rank.silver{color:#b0b8cc}.sj-rank.bronze{color:#b87333}
+  .sj-tname{flex:1;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sj-wl{font-family:'Oswald';font-size:11px;color:var(--txt2);flex-shrink:0}
+  .sj-bpo{font-family:'Oswald';font-size:9px;letter-spacing:.3px;padding:2px 6px;border-radius:999px;flex-shrink:0}
+  .sj-bpo.po{background:rgba(200,161,74,.15);color:var(--gold2)}
+  .sj-bpo.intl{background:rgba(79,143,226,.15);color:var(--blue)}
+  .sj-rivals{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:14px}
+  .sj-rival-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+  .sj-rival{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:9px 12px}
+  .sj-rv-info{flex:1;min-width:0}
+  .sj-rv-name{font-family:'Oswald';font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sj-rv-str{font-size:10px;color:var(--txt3)}
+  .sj-rv-rec{font-family:'Oswald';font-size:12px;color:var(--txt2);white-space:nowrap}
   .rg-bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:4px}
   .rg-fill{height:100%;background:var(--gold);border-radius:4px}
   .rg-str{font-size:10px;color:var(--txt3)}
@@ -840,6 +878,9 @@
 <script type="module" src="career/economy.js"></script>
 <script type="module" src="career/match.js"></script>
 <script type="module" src="career/journey.js"></script>
+<script type="module" src="career/season.js"></script>
+<script type="module" src="career/playoffs.js"></script>
+<script type="module" src="career/international.js"></script>
 
 <script>
 /* =======================================================================
@@ -2215,80 +2256,160 @@ async function openJourney(){
   renderJourney();
 }
 
+/* ── pixelChar: pixel art 8×8 determinístico (avatar de time) ─── */
+function pixelChar(seed,regionId,sz){
+  sz=sz||40;
+  function hs(s){let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return h>>>0;}
+  const H=hs(String(seed));
+  const TH={LCK:['#f44336','#ffd700'],LPL:['#ff7043','#ffeb3b'],LEC:['#2196f3','#ff9800'],LCS:['#4caf50','#e040fb'],LCP:['#00bcd4','#ff5722'],CBLOL:['#7c4dff','#ffca28']};
+  const[C1,C2]=TH[regionId]||['#4f8fe2','#ffd700'];
+  const SK=['#ffccaa','#e8a87c','#c68642','#8d5524'][H%4];
+  const HR=[C1,'#333','#ffd700','#a0522d'][(H>>4)%4];
+  const CM={0:'transparent',1:C1,2:SK,3:C2,4:'#111',5:'#eee',6:HR};
+  const SP=[
+    ['04444400','04113400','04222400','01333310','11111110','01111100','01100110','11000011'],
+    ['00333000','03333300','04222400','04222400','01133100','01111100','01111100','00100100'],
+    ['04444400','04444400','04422440','14333410','01111100','01141100','04100140','11000011'],
+    ['03033000','01111100','01222100','01222100','01313100','01111100','01000100','11000011'],
+    ['05355350','05222500','05222500','15111510','01333100','01111100','01001000','01100110'],
+    ['06601660','06222600','06322600','16333610','11111110','01111100','11000110','11000011'],
+  ][H%6];
+  const ps=sz/8,r=[];
+  SP.forEach((row,y)=>row.split('').forEach((ch,x)=>{const c=CM[+ch];if(c&&c!=='transparent')r.push(`<rect x="${x*ps}" y="${y*ps}" width="${ps}" height="${ps}" fill="${c}"/>`)}));
+  return`<svg viewBox="0 0 ${sz} ${sz}" xmlns="http://www.w3.org/2000/svg" style="image-rendering:pixelated;display:block"><rect width="${sz}" height="${sz}" rx="4" fill="#0d1120"/>${r.join('')}</svg>`;
+}
+
 function renderJourney(){
   const p=careerProfile||{};
   const J=_C().journey;
-  const region=J.REGION_BY_ID[p.region]||{id:'?',label:'?',strength:60};
+  const S=globalThis.Career?.season;
+  const region=J.REGION_BY_ID[p.region]||{id:'BR',label:'Brasil (CBLOL)',strength:68};
   const year=p.career_year||1;
   const ws=p.world_state||J.initialWorldState(p.region||'BR');
   const stage=ws.stage||'national';
   const tr=ws.trophies||{};
 
-  // Trofeus
-  const trophiesHtml=`<div class="j-trophies">
-    <div class="j-trophy"><div class="jt-count">${tr.nacional||tr.national||0}</div><div class="jt-label">Nacionais</div></div>
-    <div class="j-trophy"><div class="jt-count">${tr.continental||0}</div><div class="jt-label">Continentais</div></div>
-    <div class="j-trophy"><div class="jt-count">${tr.mundial||0}</div><div class="jt-label">Mundiais</div></div>
+  // Mapeia região antiga → ID do engine de temporada
+  const RG2S={KR:'LCK',CN:'LPL',EU:'LEC',NA:'LCS',BR:'CBLOL',VN:'LCP',TR:'LCK',LAS:'CBLOL',OCE:'LCP',MENA:'LEC'};
+  const sReg=RG2S[p.region]||'CBLOL';
+  const splitNum=ws.split||1;
+  const TNMS={1:'FST',2:'MSI',3:'Worlds'};
+  const tnm=TNMS[splitNum]||'FST';
+  const poSlots=S?.REGION_BY_ID?.[sReg]?.playoffSlots||6;
+  const intlSlots=splitNum===3?2:1;
+
+  // Gera standings simulados da temporada regular para exibição
+  let standings=[];
+  if(S){
+    try{
+      const teams=S.generateLeagueTeams(sReg,year,splitNum);
+      const{standings:st}=S.runRegularSeason(teams,`${sReg}_Y${year}_S${splitNum}`);
+      standings=st;
+    }catch(e){}
+  }
+
+  // ── Trophy bar ──────────────────────────────────────────────────
+  const trophyBar=`<div class="sj-trophy-bar">
+    <div class="sj-tinfo"><div class="sj-tnum">${tr.nacional||tr.national||0}</div><div class="sj-tlb">🏆 Nacionais</div></div>
+    <div class="sj-tinfo"><div class="sj-tnum">${tr.continental||0}</div><div class="sj-tlb">🌎 Continentais</div></div>
+    <div class="sj-tinfo"><div class="sj-tnum">${tr.mundial||0}</div><div class="sj-tlb">🌐 Mundiais</div></div>
   </div>`;
 
-  // Etapas do ciclo
-  const STEPS=[
-    {key:'national',    icon:'🏆', label:'Liga Nacional',   sub:`Represente ${region.id} e classifique para o Continental`},
-    {key:'continental', icon:'🌎', label:'Continental',      sub:`Enfrente as melhores regiões do continente`},
-    {key:'mundial',     icon:'🌐', label:'Mundial',          sub:`Chefe: campeão mundial vigente — o ápice da carreira`},
+  // ── Etapas do split ─────────────────────────────────────────────
+  const PHASES=[
+    {key:'national',    label:'Liga Nacional', sub:`Fase regular · Classificar top ${poSlots} para playoffs`},
+    {key:'continental', label:'Playoffs',       sub:`Top ${poSlots} times disputam o título regional`},
+    {key:'mundial',     label:tnm,              sub:tnm==='Worlds'?'Campeonato Mundial':tnm==='MSI'?'Mid-Season Invitational':'First Stand Tournament'},
   ];
-  const stepsHtml=STEPS.map(st=>{
-    const done=ws[st.key]&&ws[st.key].completed;
-    const active=stage===st.key;
-    const locked=!done&&!active&&stage!==st.key;
-    const won=done&&ws[st.key].won;
-    const cls=done?'done':active?'active':'locked';
-    const icon=done?(won?'✅':'❌'):active?st.icon:'🔒';
+  const phasesHtml=PHASES.map(ph=>{
+    const phData=ws[ph.key]||{};
+    const isDone=phData.completed;
+    const isActive=stage===ph.key;
+    const won=isDone&&phData.won;
+    const cls=isActive?'active':isDone?(won?'won':'lost'):'locked';
+    let rival=null;
+    if(isActive){try{rival=J.nextOpponent(ws,p.region,year,ph.key,false);}catch(e){}}
+    const avSeed=rival?rival.name:ph.key+(isDone?won?'W':'L':'L');
+    const avReg=isActive||won?sReg:'';
+    const avHtml=`<div class="sj-ph-av">${pixelChar(avSeed,avReg,48)}</div>`;
+    const titleSfx=isDone?(won?' 🥇':' 🥈'):'';
+    const stateIcon=isDone?(won?'✅':'❌'):isActive?'⚔':'🔒';
     let actionHtml='';
-    if(active){
-      const rival=J.nextOpponent(ws,p.region,year,st.key,false);
-      actionHtml=`<button class="btn btn-gold btn-sm ready" onclick="startJourneyMatch(false)">⚔ Disputar vs ${escHtml(rival.name)}</button>`;
+    if(isActive){
+      const rName=rival?rival.name:'adversário';
+      actionHtml=`<div class="sj-ph-act"><button class="btn btn-gold btn-sm ready" onclick="startJourneyMatch(false)">⚔ Disputar vs ${escHtml(rName)}</button></div>`;
+    }else if(isDone){
+      actionHtml=`<div style="font-size:11px;color:${won?'var(--win)':'var(--loss)'};margin-top:6px;font-weight:600">${won?'Vitória ✓':'Eliminado'}</div>`;
     }
-    return`<div class="j-step ${cls}">
-      <div class="j-step-icon">${icon}</div>
-      <div class="j-step-info">
-        <div class="j-step-title">${st.label}${done&&won?' 🥇':done&&!won?' 🥈':''}</div>
-        <div class="j-step-sub">${st.sub}</div>
+    return`<div class="sj-phase ${cls}">
+      ${avHtml}
+      <div class="sj-ph-body">
+        <div class="sj-ph-title">${stateIcon} ${ph.label}${titleSfx}</div>
+        <div class="sj-ph-sub">${ph.sub}</div>
         ${actionHtml}
       </div>
     </div>`;
   }).join('');
 
-  // Rivais recorrentes
-  const rivals=(ws.rivals||[]);
-  const rivalsHtml=rivals.length?`
-    <div style="font-size:12px;color:var(--txt3);margin:10px 0 4px;text-transform:uppercase;letter-spacing:1px">Rivais Recorrentes</div>
-    <div class="rival-row">${rivals.map(r=>`
-      <div class="rival-card">
-        <span class="rv-str">${r.strength}</span>
-        <span class="rv-name">${escHtml(r.name)}</span>
-        <span class="rv-rec">${r.winsVsMe||0}V ${r.lossesVsMe||0}D</span>
-      </div>`).join('')}
-    </div>`:'';
+  // ── Standings ──────────────────────────────────────────────────
+  let standingsHtml='';
+  if(standings.length){
+    const rankCls=['gold','silver','bronze'];
+    const rows=standings.map((s,i)=>{
+      const rk=i+1,rc=rankCls[i]||'';
+      const isIntl=i<intlSlots,isPO=i<poSlots;
+      const rowCls=isIntl?'intl':isPO?'po':'';
+      const badge=isIntl?`<span class="sj-bpo intl">★ ${tnm}</span>`:isPO?`<span class="sj-bpo po">→ PO</span>`:'';
+      const av=pixelChar(s.team.name,sReg,28);
+      return`<div class="sj-team-row ${rowCls}">
+        <span class="sj-rank ${rc}">${rk}</span>
+        <div style="width:28px;height:28px;border-radius:6px;overflow:hidden;flex-shrink:0">${av}</div>
+        <span class="sj-tname">${escHtml(s.team.name)}</span>
+        <span class="sj-wl">${s.wins}V-${s.losses}D</span>
+        ${badge}
+      </div>`;
+    }).join('');
+    standingsHtml=`<div style="margin-bottom:6px"><div class="sj-slabel">Ranking ${escHtml(sReg)}</div><div class="sj-standings">${rows}</div></div>`;
+  }
 
+  // ── Rivais recorrentes ─────────────────────────────────────────
+  const rivals=ws.rivals||[];
+  const rivalsHtml=rivals.length?`<div class="sj-rivals">
+    <div class="sj-slabel">Rivais Recorrentes</div>
+    <div class="sj-rival-list">${rivals.map(r=>`
+      <div class="sj-rival">
+        <div style="width:36px;height:36px;border-radius:8px;overflow:hidden;flex-shrink:0">${pixelChar(r.name,'',36)}</div>
+        <div class="sj-rv-info">
+          <div class="sj-rv-name">${escHtml(r.name)}</div>
+          <div class="sj-rv-str">Força ${r.strength}</div>
+        </div>
+        <div class="sj-rv-rec">${r.winsVsMe||0}V ${r.lossesVsMe||0}D</div>
+      </div>`).join('')}
+    </div>
+  </div>`:'';
+
+  // ── Off-season ──────────────────────────────────────────────────
   const offseasonHtml=stage==='offseason'?`
-    <div style="background:var(--bg3);border:1px solid var(--line);border-radius:var(--r);padding:14px;margin:12px 0;text-align:center">
-      <div style="font-family:'Oswald';font-size:16px;margin-bottom:6px">Temporada Concluída</div>
-      <div style="font-size:12px;color:var(--txt2);margin-bottom:12px">Os rivais ficaram mais fortes. Reforce seu elenco antes do próximo ano.</div>
+    <div style="background:var(--bg3);border:1px solid var(--gold);border-radius:var(--r);padding:18px;text-align:center;margin-bottom:14px">
+      <div style="font-size:32px;margin-bottom:8px">${pixelChar('champion'+year,sReg,40)}</div>
+      <div style="font-family:'Oswald';font-size:20px;color:var(--gold2);margin-bottom:4px">Temporada Concluída</div>
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:14px">Os rivais ficaram mais fortes. Reforce seu elenco.</div>
       <button class="btn btn-gold ready" onclick="nextYearJourney()">Avançar para Ano ${year+1} ➡</button>
     </div>`:'';
 
   document.getElementById('journeyPanel').innerHTML=`
     <div class="draft-head">
       <div class="title disp">Jornada — Ano ${year}</div>
-      <div class="chip">${escHtml(region.label)}</div>
+      <div class="chip">${escHtml(region.label)} · Split ${splitNum}/3 · <b style="color:var(--gold2)">${tnm}</b></div>
     </div>
-    ${trophiesHtml}
-    <div class="journey-stage">${stepsHtml}</div>
+    ${trophyBar}
+    <div style="margin-bottom:2px"><div class="sj-slabel">Split ${splitNum} — ${tnm}</div></div>
+    <div class="sj-phases">${phasesHtml}</div>
     ${offseasonHtml}
+    ${standingsHtml}
     ${rivalsHtml}
-    <div style="font-size:11px;color:var(--txt3);margin:8px 0">
-      Dificuldade atual: <b>${J.aiDifficulty(year,'national',region.strength)}</b> nac · <b>${J.aiDifficulty(year,'continental',region.strength)}</b> cont · <b>${J.aiDifficulty(year,'mundial',region.strength)}</b> mundial
+    <div style="font-size:11px;color:var(--txt3);margin:6px 0 14px">
+      Dificuldade: <b>${J.aiDifficulty(year,'national',region.strength)}</b> nac · <b>${J.aiDifficulty(year,'continental',region.strength)}</b> cont · <b>${J.aiDifficulty(year,'mundial',region.strength)}</b> mundial
     </div>
     <div class="foot">
       <button class="btn btn-ghost" onclick="goCareer()">Voltar</button>
